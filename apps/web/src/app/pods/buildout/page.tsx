@@ -25,7 +25,6 @@ import {
   Lock,
   QrCode,
   Shield,
-  Bike,
   Wrench,
   Settings,
   CheckCircle,
@@ -136,9 +135,9 @@ export default function PodsBuildoutPage() {
             
             <Card className="border-2 text-center hover:border-primary transition-colors">
               <CardContent className="p-6">
-                <Bike className="h-12 w-12 mx-auto mb-4 text-purple-500" />
-                <h3 className="font-semibold mb-2">Mobility</h3>
-                <p className="text-sm text-muted-foreground">Bike hitch, wheels, transport</p>
+                <Home className="h-12 w-12 mx-auto mb-4 text-purple-500" />
+                <h3 className="font-semibold mb-2">Portability</h3>
+                <p className="text-sm text-muted-foreground">Wheels, transport, placement</p>
               </CardContent>
             </Card>
           </div>
@@ -346,8 +345,8 @@ export default function PodsBuildoutPage() {
                     <span>1 person</span>
                   </div>
                   <div className="flex justify-between p-2 bg-muted/30 rounded">
-                    <span className="font-medium">Bike-Towable:</span>
-                    <span className="text-green-600 font-semibold">✓ Yes</span>
+                    <span className="font-medium">Transport:</span>
+                    <span className="text-green-600 font-semibold">✓ Portable</span>
                   </div>
                 </div>
               </CardContent>
@@ -376,7 +375,7 @@ export default function PodsBuildoutPage() {
                     <span>2 persons</span>
                   </div>
                   <div className="flex justify-between p-2 bg-muted/30 rounded">
-                    <span className="font-medium">Bike-Towable:</span>
+                    <span className="font-medium">Transport:</span>
                     <span className="text-red-600 font-semibold">✗ Vehicle required</span>
                   </div>
                 </div>
@@ -964,113 +963,6 @@ export default function PodsBuildoutPage() {
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Shield className="h-4 w-4 mr-2" />
                 Explore Advanced Security
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Mobility & Transport Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">MOBI Transport Systems</h2>
-            <p className="text-lg text-muted-foreground">Bike hitch, wheels, and transportation features</p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Bike className="h-5 w-5 text-green-500" />
-                    Bike Hitch System
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div>
-                      <strong>Compatibility:</strong> Model A units only (weight limit 800 lbs)
-                    </div>
-                    <div>
-                      <strong>Hitch Type:</strong> Universal ball hitch with safety chain
-                    </div>
-                    <div>
-                      <strong>Installation:</strong> Bolt-on attachment to rear frame
-                    </div>
-                    <div>
-                      <strong>Features:</strong> Quick-release mechanism, adjustable height
-                    </div>
-                    <div>
-                      <strong>Safety:</strong> Reflective tape, LED brake lights, turn signals
-                    </div>
-                  </div>
-                  <div className="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                    <div className="flex items-start gap-2">
-                      <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400 mt-0.5" />
-                      <div className="text-sm text-yellow-800 dark:text-yellow-200">
-                        <strong>Important:</strong> Requires SHELTR Mountain Bike or equivalent e-bike with 750W+ motor
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Wrench className="h-5 w-5 text-blue-500" />
-                    Wheel & Mobility System
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div>
-                      <strong>Wheels:</strong> 4× heavy-duty caster wheels (6&quot; diameter)
-                    </div>
-                    <div>
-                      <strong>Load Rating:</strong> 300 lbs per wheel (1,200 lbs total)
-                    </div>
-                    <div>
-                      <strong>Locking:</strong> Individual wheel locks for stationary placement
-                    </div>
-                    <div>
-                      <strong>Stabilizers:</strong> 4× retractable steel legs with adjustable feet
-                    </div>
-                    <div>
-                      <strong>Leveling:</strong> Built-in bubble level for proper positioning
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="space-y-6">
-              <div className="relative h-64 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/sheltr_units/closeup-wheels.jpeg"
-                  alt="SHELTR Heavy-Duty Wheels and Mobility System"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="relative h-64 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/sheltr_units/bike-2.jpeg"
-                  alt="MOBI Bike with POD Transport System"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-          
-          {/* MOBI Deep Dive Button */}
-          <div className="text-center mt-12">
-            <Link href="/pods/mobi">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
-                <Bike className="h-4 w-4 mr-2" />
-                Explore MOBI Details
               </Button>
             </Link>
           </div>

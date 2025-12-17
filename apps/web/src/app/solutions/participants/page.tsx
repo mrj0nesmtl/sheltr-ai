@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Users, QrCode, DollarSign, Home, Heart, Shield, Smartphone, CheckCircle, CreditCard, Bike, Building2 } from 'lucide-react';
+import { ArrowLeft, Users, QrCode, DollarSign, Home, Heart, Shield, Smartphone, CheckCircle, CreditCard, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -124,8 +124,8 @@ export default function ParticipantsPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Integrated Supply Chain</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Your donations directly fund emergency housing solutions through our PODS and MOBI ecosystem - 
-              creating immediate shelter and mobility options connected to your account.
+              Your donations directly fund emergency housing solutions through our POD Model A and Basecamp ecosystem - 
+              creating immediate shelter and community support connected to your account.
             </p>
           </div>
 
@@ -177,13 +177,13 @@ export default function ParticipantsPage() {
               </CardContent>
             </Card>
 
-            {/* MOBI Integration */}
+            {/* Basecamp Integration */}
             <Card className="border-2 border-orange-500/20 bg-orange-500/5">
               <CardHeader>
-                <Bike className="h-12 w-12 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
-                <CardTitle className="text-center text-2xl text-orange-600 dark:text-orange-400">MOBI Cycle</CardTitle>
+                <Users className="h-12 w-12 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
+                <CardTitle className="text-center text-2xl text-orange-600 dark:text-orange-400">Basecamp Centers</CardTitle>
                 <CardDescription className="text-center">
-                  Electric transportation and POD delivery system
+                  Community support hubs with essential services
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -191,19 +191,19 @@ export default function ParticipantsPage() {
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" />
                     <div>
-                      <strong>POD Transport:</strong> Specialized bikes for moving and positioning PODS
+                      <strong>Essential Services:</strong> Showers, laundry, meals, and healthcare access
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" />
                     <div>
-                      <strong>Personal Mobility:</strong> Transportation access for work and services
+                      <strong>Job Training:</strong> Skills development and employment support
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" />
                     <div>
-                      <strong>All-Terrain:</strong> Urban and rural capability for any environment
+                      <strong>Community Support:</strong> Counseling, case management, and peer networks
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
@@ -214,10 +214,10 @@ export default function ParticipantsPage() {
                   </div>
                 </div>
                 <div className="mt-6">
-                  <Link href="/pods/mobi">
+                  <Link href="/ecosystem">
                     <Button variant="outline" className="w-full bg-transparent border-2 border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-300">
-                      <Bike className="h-4 w-4 mr-2" />
-                      Explore MOBI
+                      <Users className="h-4 w-4 mr-2" />
+                      Explore Basecamp
                     </Button>
                   </Link>
                 </div>
@@ -245,10 +245,10 @@ export default function ParticipantsPage() {
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 border-2 border-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Bike className="h-8 w-8 text-orange-500" />
+                  <Users className="h-8 w-8 text-orange-500" />
                 </div>
-                <h4 className="font-semibold mb-2">MOBI Transport</h4>
-                <p className="text-sm text-muted-foreground">Delivery and positioning of your POD</p>
+                <h4 className="font-semibold mb-2">Basecamp Support</h4>
+                <p className="text-sm text-muted-foreground">Essential services and community connection</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 border-2 border-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">

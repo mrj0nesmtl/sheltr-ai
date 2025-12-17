@@ -87,7 +87,7 @@ function TokenomicsContent() {
       {/* Hero Section - Standardized */}
       <StandardHero
         imageUrl={heroImage.url}
-        badgeText="TOKENOMICS v2.0"
+        badgeText="TOKENOMICS v3.0 - Dual-Rail Architecture"
         badgeVariant="secondary"
         badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
         title={
@@ -95,7 +95,7 @@ function TokenomicsContent() {
             SHELTR <span className="text-emerald-400">SmartFund™</span>
           </>
         }
-        subtitle="Enterprise-grade token architecture combining virtual cards, institutional staking, and utility tracking for complete transparency, stability, and growth."
+        subtitle="Enterprise-grade token architecture with dual-rail payments (Adyen + x402), Shelter Ledger transparency, virtual cards, institutional staking, and complete public accountability."
       />
 
       {/* 1. SHELTER LEDGER - Track & Trace (NEW - TOP PRIORITY) */}

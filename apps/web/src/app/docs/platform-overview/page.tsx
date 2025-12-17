@@ -133,7 +133,7 @@ export default function PlatformOverviewPage() {
               ✓ Pilot Ready
             </Badge>
             <Badge variant="outline" className="bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700">
-              v2.90.0
+              v2.158.0
             </Badge>
             <Badge variant="outline" className="bg-purple-100 dark:bg-purple-900/30 border-purple-300 dark:border-purple-700">
               Mission: Tech for Good
@@ -352,7 +352,7 @@ export default function PlatformOverviewPage() {
                     SmartFund™ Distribution (80-15-5)
                   </CardTitle>
                   <CardDescription>
-                    Every donation automatically distributes through enterprise payment infrastructure powered by Adyen for Platforms
+                    Every donation automatically distributes through dual-rail payment infrastructure: Adyen for Platforms (traditional) + x402 Protocol (micropayments)
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -786,7 +786,7 @@ export default function PlatformOverviewPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-6 w-6 text-emerald-600" />
-                    Platform Status: Production Ready (v2.90.0)
+                    Platform Status: Production Ready (v2.158.0 - Dual-Rail Payment Architecture)
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

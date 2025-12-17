@@ -42,11 +42,12 @@ export default function WhitepaperPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  Strategic Architecture Transformation v2.0
+                  Strategic Architecture Transformation v3.0
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
-                  This whitepaper has been completely overhauled to reflect our new <strong>enterprise-grade single-token stable fund architecture</strong>, 
-                  eliminating ICO speculation and participant cryptocurrency exposure in favor of guaranteed institutional returns.
+                  This whitepaper reflects our <strong>dual-rail payment architecture</strong> (Adyen for Platforms + x402 Protocol), 
+                  <strong>Shelter Ledger dual-purpose token</strong> (track & trace + investment), and guaranteed institutional returns 
+                  while eliminating participant cryptocurrency exposure.
                 </p>
               </div>
             </div>
@@ -62,18 +63,20 @@ export default function WhitepaperPage() {
               <FileText className="h-12 w-12 text-emerald-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">White Paper v2.0</h1>
-                  <Badge className="bg-emerald-500 text-white text-sm">Peer Reviewed</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">White Paper v3.0</h1>
+                  <Badge className="bg-emerald-500 text-white text-sm">Peer Reviewed + x402 Enhanced</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture
+                  Enterprise-grade platform with dual-rail payment architecture (Adyen + x402), Shelter Ledger transparency, and guaranteed institutional returns
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.0.0</span>
+                  <span>Version 3.0.0</span>
                   <span>•</span>
-                  <span>September 26, 2025</span>
+                  <span>December 16, 2025</span>
                   <span>•</span>
                   <Badge className="bg-blue-500 text-white text-xs">Published</Badge>
+                  <span>•</span>
+                  <Badge className="bg-purple-500 text-white text-xs">x402 Ready</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

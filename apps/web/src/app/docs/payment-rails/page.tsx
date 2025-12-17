@@ -114,7 +114,7 @@ function PaymentRailsContent() {
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 leading-relaxed mb-3">
                   SHELTR implements a revolutionary <strong>dual-rail payment architecture</strong>: <strong>Adyen for Platforms</strong> for 
-                  traditional credit card donations ($5+) and <strong>x402 Protocol</strong> for micropayments (<$5), AI agent payments, and partner API monetization. 
+                  traditional credit card donations ($5+) and <strong>x402 Protocol</strong> for micropayments (&lt;$5), AI agent payments, and partner API monetization. 
                   This provides maximum flexibility while maintaining zero participant cryptocurrency exposure.
                 </p>
                 <p className="text-amber-800 dark:text-amber-200 leading-relaxed text-sm">
@@ -172,7 +172,7 @@ function PaymentRailsContent() {
                     <strong>5% shelter operations</strong>
                   </div>
                   <div className="pt-2">
-                    <strong>Micropayment Rail (x402):</strong> Micro-donations (<$5) → <strong>x402 Protocol</strong> → 
+                    <strong>Micropayment Rail (x402):</strong> Micro-donations (&lt;$5) → <strong>x402 Protocol</strong> → 
                     <strong>Fee-free USDC on Base</strong> → Same 80-15-5 split with instant on-chain settlement
                   </div>
                 </CardDescription>

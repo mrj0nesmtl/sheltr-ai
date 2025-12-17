@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CreditCard, TrendingUp, Shield, Building2, Users, CheckCircle, Eye, FileText, BookOpen, Zap, AlertTriangle } from 'lucide-react';
+import { CreditCard, TrendingUp, Shield, Building2, Users, CheckCircle, Eye, FileText, BookOpen, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -30,46 +30,6 @@ function TokenomicsContent() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation - Hide when embedded */}
       {!isEmbedded && <PublicNavigation />}
-
-      {/* Strategic Pivot Alert */}
-      <section className="py-12 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-y border-amber-200 dark:border-amber-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
-                <AlertTriangle className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  Strategic Architecture Transformation
-                </h3>
-                <p className="text-amber-800 dark:text-amber-200 leading-relaxed mb-4">
-                  October 1, 2025: Following expert peer-analysis by our colleagues and payments specialists, SHELTR is evolving from 
-                  a dual-token architecture to a <strong>Single Stable Token Investment Fund</strong> model.
-                </p>
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">❌ Eliminated:</h4>
-                    <ul className="space-y-1 text-amber-800 dark:text-amber-200">
-                      <li>• ICO speculation and volatility risks</li>
-                      <li>• Dual-token complexity</li>
-                      <li>• Participant cryptocurrency exposure</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">✅ Implemented:</h4>
-                    <ul className="space-y-1 text-amber-800 dark:text-amber-200">
-                      <li>• Enterprise payment partnerships</li>
-                      <li>• Guaranteed 4-6% APY returns</li>
-                      <li>• Zero-risk participant protection</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Hero Section - Standardized */}
       <StandardHero

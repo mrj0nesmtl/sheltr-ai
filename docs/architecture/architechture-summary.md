@@ -10,7 +10,15 @@
 
 ## 🎯 Overview
 
-Comprehensive technical architecture documentation covering system design, payment infrastructure, tokenomics, and blockchain integration for the SHELTR platform.
+Comprehensive technical architecture documentation covering system design, dual-rail payment infrastructure (Adyen + x402), tokenomics, Shelter Ledger, and blockchain integration for the SHELTR platform.
+
+### **Major Updates (December 2025)**
+
+- ✅ **x402 Protocol Integration**: Micropayments, AI agent payments, partner API monetization
+- ✅ **Shelter Ledger**: Dual-purpose token (track & trace + SmartFund™ investment)
+- ✅ **Dual-Rail Payments**: Adyen for Platforms (traditional) + x402 (Web3)
+- ✅ **Zero Crypto Exposure**: Participants receive Adyen virtual debit cards
+- ✅ **Enhanced Documentation**: All 6 core architecture documents updated with x402
 
 ---
 
@@ -84,11 +92,13 @@ architecture/
 
 **Key Components**:
 
-1. **[Unified Payment Architecture](payment-rails/unified-payment-architecture.md)**
-   - Single-token stable fund system
-   - Enterprise payment processing
-   - Blockchain transparency
-   - Guaranteed institutional returns
+1. **[Unified Payment Architecture v3.0](payment-rails/unified-payment-architecture.md)**
+   - **Dual-rail payment system** (Adyen + x402)
+   - Single-token stable fund system (SHELTR Utility Token)
+   - Enterprise payment processing (Adyen for Platforms)
+   - Micropayment support (x402 protocol)
+   - Shelter Ledger blockchain transparency
+   - Guaranteed institutional returns (4-6% APY via Coinbase Prime)
 
 2. **[Adyen Integration](payment-rails/adyen-integration.md)**
    - Payment processor setup
@@ -107,8 +117,8 @@ architecture/
    - Test scenarios
    - Integration examples
 
-**Status**: 🔄 **In Progress** - Active integration  
-**Target**: Q1 2026 completion
+**Status**: 🔄 **In Progress** - Active integration (Adyen + x402)  
+**Target**: Q2 2026 completion (Adyen), Q3 2026 (x402)
 
 ---
 
@@ -130,22 +140,30 @@ architecture/
    - Strategic vision
    - Market positioning
    - Growth strategy
-   - Risk mitigation- SmartFund™ distribution (80/15/5)
-   - Token utility
-   - Staking mechanisms
+   - Risk mitigation
+   - SmartFund™ distribution (80/15/5)
+   - **Shelter Ledger**: Dual-purpose token (track & trace + investment)
+   - Token utility (public accountability + APY generation)
+   - Staking mechanisms (Coinbase Prime institutional)
+   - **x402 micropayment integration** (future)
    - Governance model
 
 3. **[Blockchain Architecture](technical/blockchain.md)**
-   - Base Network integration
-   - Smart contract design
+   - Base Network integration (Coinbase L2)
+   - **SHELTR Utility Token** smart contract (dual-purpose)
+   - **X402PaymentProcessor** contract (micropayments)
+   - Smart contract design (80-15-5 distribution)
    - Security architecture
-   - Coinbase integration
+   - Coinbase Prime integration (institutional staking)
+   - **Shelter Ledger** public accountability system
 
 4. **[Technical Implementation Guide](technical/base_stable_coin.md)**
-   - Step-by-step implementation
-   - Code examples
-   - Testing strategies
-   - Deployment procedures   
+   - Step-by-step implementation (Coinbase Base + Prime)
+   - **x402 Payment Service Integration** (Python backend)
+   - Code examples (Solidity + TypeScript + Python)
+   - Testing strategies (testnet deployment)
+   - Deployment procedures (mainnet readiness)
+   - Shelter Ledger tracking implementation   
 
 **Status**: 📋 **Planned** - Q1 2026 implementation  
 **Innovation**: Single-token stable fund with zero risk
@@ -402,9 +420,9 @@ Key architectural decisions documented:
 
 ---
 
-**Last Updated**: November 6, 2025  
-**Architecture Version**: 2.1  
-**Status**: ✅ Production & Evolving with IR Dataroom
+**Last Updated**: December 16, 2025  
+**Architecture Version**: 3.0  
+**Status**: ✅ Production & Enhanced with x402 Protocol Integration
 
 ---
 

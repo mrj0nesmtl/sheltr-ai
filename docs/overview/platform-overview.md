@@ -4,7 +4,7 @@
 
 [![Mission Driven](https://img.shields.io/badge/mission-tech%20for%20good-brightgreen.svg)]()
 [![Pilot Ready](https://img.shields.io/badge/status-pilot%20ready-success.svg)]()
-[![Version](https://img.shields.io/badge/version-2.90.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-2.158.0-blue.svg)]()
 
 Understanding SHELTR's mission, vision, and revolutionary approach to solving homelessness through enterprise technology and blockchain innovation.
 
@@ -52,27 +52,40 @@ Unlike traditional donation platforms, SHELTR recognizes five distinct user type
 
 Every donation automatically distributes through enterprise payment infrastructure powered by **Adyen for Platforms**:
 
-**80%** → Virtual debit cards with **zero crypto exposure** for participants  
-**15%** → Housing fund with 4-6% guaranteed APY (SHELTR Stablecoin on Base)  
+**80%** → Adyen virtual debit cards with **zero crypto exposure** for participants  
+**15%** → Housing fund with 4-6% guaranteed APY (Coinbase Prime institutional staking)  
 **5%** → Platform operations for sustainable revenue
 
-*No blockchain knowledge required. Participants receive standard virtual debit cards while transparency is maintained on-chain.*
+*No blockchain knowledge required. Participants receive standard Adyen virtual debit cards (USD/CAD) while transparency is maintained on-chain via Shelter Ledger.*
 
-#### 📱 QR-Powered Direct Giving
+#### 🔗 Shelter Ledger: Dual-Purpose Blockchain
 
-- **Instant scan-and-give technology**
+The **Shelter Ledger** serves two critical functions:
+
+1. **Public Accountability (Track & Trace)**: Every donation and payout is permanently recorded on Base network for complete transparency
+2. **SmartFund™ Investment Vehicle**: Housing fund (15%) grows via Coinbase Prime staking, tracked on-chain
+
+This dual-purpose architecture enables **institutional investment growth** while maintaining **public trust** through blockchain verification.
+
+#### 📱 QR-Powered Direct Giving (QR-Scan-to-POD)
+
+- **Instant scan-and-give technology** via Adyen or x402 protocol
+- **Dual-rail payments**: Traditional credit cards ($5+) or micropayments (<$5)
 - No intermediaries or delayed transfers
-- Real-time confirmation and tracking
+- Real-time confirmation and tracking via Shelter Ledger
 - Works offline for reliability
 - Mobile-first design for accessibility
+- **Physical infrastructure funding**: Donations directly fund POD Model A housing and Basecamp community centers
 
-#### ⛓️ Blockchain Transparency
+#### ⛓️ Blockchain Transparency (Shelter Ledger)
 
-- Every transaction permanently recorded on Base (Ethereum L2)
-- Public verification of impact
-- Immutable donation history
-- Smart contract automation
-- Single-token architecture (SHELTR stablecoin)
+- **Dual-purpose SHELTR Utility Token**:
+  - **Track & Trace**: Every transaction permanently recorded on Base (Ethereum L2)
+  - **SmartFund™ Investment**: Housing fund growth vehicle (4-6% APY via Coinbase Prime)
+- Public verification of impact via blockchain explorer
+- Immutable donation history for donor confidence
+- Smart contract automation (80-15-5 distribution)
+- **x402 integration** for micropayment tracking and AI agent operations
 
 ---
 
@@ -81,20 +94,22 @@ Every donation automatically distributes through enterprise payment infrastructu
 ### For Participants
 
 ✅ **Personal QR Codes** - Unique donation identifiers  
-✅ **Virtual Debit Cards** - Direct control over received funds (via Adyen)  
-✅ **Impact Tracking** - See your progress and support  
-✅ **Verification System** - Build trust with donors  
-✅ **Mobile Access** - Manage everything from your phone  
-✅ **Zero Crypto Exposure** - Standard banking experience
+✅ **Adyen Virtual Debit Cards** - Direct control over received funds (USD/CAD, no crypto)  
+✅ **Impact Tracking** - See your progress and support via Shelter Ledger  
+✅ **Verification System** - Build trust with donors through blockchain transparency  
+✅ **Mobile Access** - Manage everything from your phone (PWA)  
+✅ **Zero Crypto Exposure** - Standard banking experience, blockchain works behind the scenes
 
 ### For Donors
 
-✅ **Instant Donations** - Scan and give in seconds  
-✅ **Full Transparency** - Track every dollar's impact on blockchain  
-✅ **Impact Analytics** - See your cumulative difference  
+✅ **Instant Donations** - Scan and give in seconds (Adyen or x402)  
+✅ **Full Transparency** - Track every dollar's impact on Shelter Ledger (Base blockchain)  
+✅ **Micropayment Support** - Donate as little as $0.10 via x402 protocol  
+✅ **Impact Analytics** - See your cumulative difference with real-time updates  
 ✅ **Social Features** - Share and engage with community  
-✅ **Tax Documentation** - Automatic receipt generation  
-✅ **Anonymous or Logged-in** - Flexible giving options
+✅ **Tax Documentation** - Automatic CRA-compliant receipt generation  
+✅ **Anonymous or Logged-in** - Flexible giving options  
+✅ **Recurring Gifts** - Schedule monthly/weekly donations with calendar integration
 
 ### For Shelter Admins
 

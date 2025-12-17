@@ -77,15 +77,16 @@ function PaymentRailsContent() {
             </div>
             <div className="flex justify-center mb-4">
               <Badge className="bg-emerald-600 text-white text-sm px-4 py-2">
-                Architecture v2.0
+                Architecture v3.0 - Dual-Rail Strategy
               </Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Payment Rail Architecture
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Revolutionary single-token stable fund system with <strong>Adyen payment processing</strong> and <strong>Coinbase institutional staking</strong>, 
-              providing zero-risk participant protection with guaranteed 4-6% APY returns.
+              Revolutionary <strong>dual-rail payment system</strong> combining <strong>Adyen for Platforms</strong> (traditional credit cards) 
+              and <strong>x402 Protocol</strong> (micropayments) with <strong>Shelter Ledger</strong> blockchain transparency and 
+              <strong>Coinbase Prime institutional staking</strong>, providing zero-risk participant protection with guaranteed 4-6% APY returns.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/payment-rails/unified-payment-architecture.md" target="_blank" rel="noopener noreferrer">
@@ -109,12 +110,16 @@ function PaymentRailsContent() {
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  Strategic Architecture Pivot
+                  Dual-Rail Payment Strategy (v3.0)
                 </h3>
-                <p className="text-amber-800 dark:text-amber-200 leading-relaxed">
-                  Following extensive analysis by our payments and blockchairn peers, SHELTR has pivoted from 
-                  a dual-token architecture to a <strong>Single Stable Token Investment Fund</strong> model. This eliminates market 
-                  volatility risks, reduces complexity, and provides guaranteed returns while maintaining complete blockchain transparency.
+                <p className="text-amber-800 dark:text-amber-200 leading-relaxed mb-3">
+                  SHELTR implements a revolutionary <strong>dual-rail payment architecture</strong>: <strong>Adyen for Platforms</strong> for 
+                  traditional credit card donations ($5+) and <strong>x402 Protocol</strong> for micropayments (<$5), AI agent payments, and partner API monetization. 
+                  This provides maximum flexibility while maintaining zero participant cryptocurrency exposure.
+                </p>
+                <p className="text-amber-800 dark:text-amber-200 leading-relaxed text-sm">
+                  All transactions tracked via <strong>Shelter Ledger</strong> (dual-purpose blockchain) for complete transparency, 
+                  with 15% housing fund allocation generating guaranteed 4-6% APY through Coinbase Prime institutional staking.
                 </p>
               </div>
             </div>
@@ -158,12 +163,18 @@ function PaymentRailsContent() {
 
             <Card className="bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 border-2">
               <CardHeader>
-                <CardTitle className="text-2xl mb-4">Key Innovation</CardTitle>
-                <CardDescription className="text-base leading-relaxed">
-                  <strong>Direct credit card donations</strong> → <strong>Adyen payment rails</strong> → 
-                  <strong>Smart contract distribution</strong> → <strong>80% participant debit cards</strong> + 
-                  <strong>15% Base SHELTR Stablecoin pool</strong> generating <strong>4-6% APY</strong> + 
-                  <strong>5% shelter operations</strong>.
+                <CardTitle className="text-2xl mb-4">Key Innovation: Dual-Rail Payment System</CardTitle>
+                <CardDescription className="text-base leading-relaxed space-y-2">
+                  <div>
+                    <strong>Traditional Rail (Adyen):</strong> Credit card donations ($5+) → <strong>Adyen for Platforms</strong> → 
+                    <strong>Smart contract distribution</strong> → <strong>80% participant virtual debit cards</strong> + 
+                    <strong>15% Shelter Ledger pool</strong> generating <strong>4-6% APY</strong> + 
+                    <strong>5% shelter operations</strong>
+                  </div>
+                  <div className="pt-2">
+                    <strong>Micropayment Rail (x402):</strong> Micro-donations (<$5) → <strong>x402 Protocol</strong> → 
+                    <strong>Fee-free USDC on Base</strong> → Same 80-15-5 split with instant on-chain settlement
+                  </div>
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -244,34 +255,67 @@ function PaymentRailsContent() {
                 </CardContent>
               </Card>
 
-              {/* SHELTR Token */}
+              {/* Shelter Ledger */}
               <Card className="border-2 hover:shadow-xl transition-all">
                 <CardHeader>
                   <div className="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center mb-4">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
-                  <CardTitle className="text-xl">SHELTR Stablecoin</CardTitle>
+                  <CardTitle className="text-xl">Shelter Ledger (Dual-Purpose)</CardTitle>
                   <CardDescription>
-                    USDT-pegged utility token for transparent housing fund tracking only
+                    SHELTR Utility Token: Track & Trace + SmartFund™ Investment Vehicle
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      1:1 USDT backing
+                      Public accountability tracking
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      Zero volatility risk
+                      4-6% APY investment growth
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      Transparent fund tracking
+                      Immutable blockchain records
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      No participant exposure
+                      Zero participant crypto exposure
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* x402 Protocol */}
+              <Card className="border-2 hover:shadow-xl transition-all">
+                <CardHeader>
+                  <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+                    <Zap className="h-6 w-6 text-white" />
+                  </div>
+                  <CardTitle className="text-xl">x402 Micropayments (Future)</CardTitle>
+                  <CardDescription>
+                    Fee-free micropayment protocol for donations under $5 and AI agent payments
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Fee-free USDC on Base network
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Instant on-chain settlement
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      AI agent autonomous payments
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Partner API monetization
                     </li>
                   </ul>
                 </CardContent>

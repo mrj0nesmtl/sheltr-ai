@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, Users, TrendingUp, Target, Heart, Brain, Zap, Shield, CreditCard, Building2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Download, Users, TrendingUp, Target, Heart, Brain, Zap, Shield, CreditCard, Building2, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,29 +35,6 @@ export default function IRIRHackingHomelessnessPage() {
           </div>
         </div>
       </nav>
-
-      {/* Strategic Pivot Alert */}
-      <section className="py-8 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-b border-amber-200 dark:border-amber-800">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
-                <AlertTriangle className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  Theory of Change v2.0 - Tech-for-Good Evolution
-                </h3>
-                <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
-                  Our foundational thesis has evolved to emphasize <strong>AI-powered resource allocation</strong>, 
-                  <strong>enterprise-grade infrastructure</strong>, and <strong>zero participant cryptocurrency exposure</strong> 
-                  while maintaining our core mission of hacking homelessness through technology.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Document Header */}
       <section className="py-12 bg-gradient-to-r from-purple-50 to-emerald-50 dark:from-purple-900/20 dark:to-emerald-900/20">

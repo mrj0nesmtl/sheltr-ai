@@ -1048,7 +1048,7 @@ export default function FoundersOnlyPage() {
       const docRef = doc(db, 'secure_documents', 'financial-overview');
       await setDoc(docRef, {
         id: 'financial-overview',
-        title: 'Seed Budget 2025-26',
+        title: '2026 Budget',
         description: 'Projected financial planning & runway analysis',
         category: 'Financial',
         isInvestorDataRoom: value,

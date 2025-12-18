@@ -75,7 +75,7 @@ export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: Budget
   }
 
   // Use loaded data or fallback to defaults
-  const seedRound = budgetData?.funding.seed_round || 250000;
+  const seedRound = budgetData?.funding.seed_round || 500000;
   const projectedBurn = budgetData?.calculated.runway.projected_allocation || 227926;
   const avgMonthlyBurn = budgetData?.calculated.runway.average_burn || 18670;
   const reserveBuffer = budgetData?.calculated.runway.reserve_buffer || (seedRound - projectedBurn);
@@ -88,7 +88,7 @@ export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: Budget
           <div className="space-y-1">
             <CardTitle className="text-2xl flex items-center gap-2">
               <DollarSign className="h-6 w-6 text-green-500" />
-              Seed Budget 2025-26
+              2026 Budget
             </CardTitle>
             <CardDescription>
               Projected financial planning & runway analysis
@@ -156,7 +156,7 @@ export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: Budget
             <Calendar className="h-4 w-4 text-green-500" />
             <div>
               <p className="text-xs text-muted-foreground">Timeline</p>
-              <p className="font-semibold">Sep 25 - Aug 26</p>
+              <p className="font-semibold">January - December 2026</p>
             </div>
           </div>
         </div>

@@ -75,8 +75,7 @@ export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: Budget
   }
 
   // Use loaded data or fallback to defaults
-  // Force $500K target raise for 2026 budget (override Firestore value)
-  const seedRound = 500000;
+  const seedRound = budgetData?.funding.seed_round || 500000;
   const projectedBurn = budgetData?.calculated.runway.projected_allocation || 227926;
   const avgMonthlyBurn = budgetData?.calculated.runway.average_burn || 18670;
   const reserveBuffer = budgetData?.calculated.runway.reserve_buffer || (seedRound - projectedBurn);

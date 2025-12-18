@@ -208,6 +208,34 @@ export default function BudgetPage() {
     }
   };
 
+  // Handle seed round change
+  const handleSeedRoundChange = (newValue: string) => {
+    if (!editedData) return;
+    
+    const numValue = parseFloat(newValue) || 0;
+    
+    const updatedData = { ...editedData };
+    updatedData.funding.seed_round = numValue;
+    
+    // Recalculate reserve buffer with new seed round
+    const projectedAllocation = updatedData.calculated.runway.projected_allocation;
+    updatedData.calculated.runway.reserve_buffer = numValue - projectedAllocation;
+    
+    setEditedData(updatedData);
+    setHasUnsavedChanges(true);
+  };
+
+  // Handle title change
+  const handleTitleChange = (newValue: string) => {
+    if (!editedData) return;
+    
+    const updatedData = { ...editedData };
+    updatedData.title = newValue;
+    
+    setEditedData(updatedData);
+    setHasUnsavedChanges(true);
+  };
+
   // Handle value change in edit mode
   const handleValueChange = (
     category: keyof BudgetData['categories'],
@@ -439,7 +467,17 @@ export default function BudgetPage() {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold">{displayData.title}</h1>
+                {isEditMode ? (
+                  <Input
+                    type="text"
+                    value={displayData.title}
+                    onChange={(e) => handleTitleChange(e.target.value)}
+                    className="text-3xl font-bold h-14 max-w-md border-2 border-blue-300 dark:border-blue-700"
+                    placeholder="Budget Title"
+                  />
+                ) : (
+                  <h1 className="text-3xl font-bold">{displayData.title}</h1>
+                )}
                 <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                   <Lock className="h-3 w-3 mr-1" />
                   Projected Allocation Plan
@@ -477,15 +515,33 @@ export default function BudgetPage() {
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <Card className="border-2 border-green-200 dark:border-green-900">
+          <Card className={`border-2 ${isEditMode ? 'border-green-500 bg-green-50/50 dark:bg-green-950/20' : 'border-green-200 dark:border-green-900'}`}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Seed Round</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Seed Round
+                {isEditMode && <span className="ml-2 text-xs text-green-600 dark:text-green-400">(editable)</span>}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                {formatCurrency(displayData.funding.seed_round)}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">Target raise amount</p>
+              {isEditMode ? (
+                <div className="space-y-2">
+                  <Input
+                    type="number"
+                    value={displayData.funding.seed_round}
+                    onChange={(e) => handleSeedRoundChange(e.target.value)}
+                    className="text-2xl font-bold text-green-600 dark:text-green-400 h-14 border-2 border-green-300 dark:border-green-700"
+                    placeholder="Enter seed round amount"
+                  />
+                  <p className="text-xs text-muted-foreground">Target raise amount</p>
+                </div>
+              ) : (
+                <>
+                  <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                    {formatCurrency(displayData.funding.seed_round)}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Target raise amount</p>
+                </>
+              )}
             </CardContent>
           </Card>
 

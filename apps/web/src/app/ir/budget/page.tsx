@@ -44,13 +44,8 @@ import { doc, getDoc } from 'firebase/firestore';
 interface BudgetItem {
   id: string;
   name: string;
-  role: string;
-  cost_type: string;
-  payment_frequency: string;
   budget_values: number[];
-  actual_values: (number | null)[];
   notes?: string;
-  vendor?: string;
 }
 
 interface BudgetCategory {
@@ -621,39 +616,36 @@ export default function IRBudgetPage() {
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto w-full">
-                <div className="min-w-[1400px]">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="sticky top-0 z-20 bg-background">
-                      <TableHead className="sticky left-0 z-30 bg-background w-[200px] border-r-2">Account</TableHead>
-                      <TableHead className="sticky left-[200px] z-30 bg-background w-[200px] border-r-2">Role/Description</TableHead>
-                      {budgetData.period.months.slice(0, 13).map((month) => (
-                        <TableHead key={month} className="text-right min-w-[100px]">{month.slice(0, 3)}</TableHead>
+                <Table className="text-sm">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[180px] text-xs">Account</TableHead>
+                      {budgetData.period.months.map((month) => (
+                        <TableHead key={month} className="text-right w-[80px] text-xs px-2">{month.slice(0, 3)}</TableHead>
                       ))}
-                      <TableHead className="text-right font-bold min-w-[120px]">Total</TableHead>
-                      </TableRow>
-                    </TableHeader>
+                      <TableHead className="text-right font-bold w-[100px] text-xs">Total</TableHead>
+                    </TableRow>
+                  </TableHeader>
                   <TableBody>
                     {/* Team Section */}
                     {(selectedCategory === 'all' || selectedCategory === 'team') && (
                       <>
                         <TableRow className="bg-blue-50 dark:bg-blue-950">
-                          <TableCell colSpan={14} className="font-bold">
-                            <Users className="h-4 w-4 inline mr-2" />
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Users className="h-3 w-3 inline mr-2" />
                             Team & Compensation
                           </TableCell>
                         </TableRow>
                         {budgetData.categories.team.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -664,22 +656,21 @@ export default function IRBudgetPage() {
                     {(selectedCategory === 'all' || selectedCategory === 'infrastructure') && (
                       <>
                         <TableRow className="bg-green-50 dark:bg-green-950">
-                          <TableCell colSpan={14} className="font-bold">
-                            <Server className="h-4 w-4 inline mr-2" />
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Server className="h-3 w-3 inline mr-2" />
                             Infrastructure & Technology
                           </TableCell>
                         </TableRow>
                         {budgetData.categories.infrastructure.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -690,22 +681,21 @@ export default function IRBudgetPage() {
                     {(selectedCategory === 'all' || selectedCategory === 'operations') && (
                       <>
                         <TableRow className="bg-orange-50 dark:bg-orange-950">
-                          <TableCell colSpan={14} className="font-bold">
-                            <Wrench className="h-4 w-4 inline mr-2" />
-                            Operations
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Wrench className="h-3 w-3 inline mr-2" />
+                            Operations & Production
                           </TableCell>
                         </TableRow>
                         {budgetData.categories.operations.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -716,22 +706,21 @@ export default function IRBudgetPage() {
                     {(selectedCategory === 'all' || selectedCategory === 'marketing') && (
                       <>
                         <TableRow className="bg-purple-50 dark:bg-purple-950">
-                          <TableCell colSpan={14} className="font-bold">
-                            <Megaphone className="h-4 w-4 inline mr-2" />
-                            Marketing
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Megaphone className="h-3 w-3 inline mr-2" />
+                            Marketing & Growth
                           </TableCell>
                         </TableRow>
                         {budgetData.categories.marketing.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -739,30 +728,29 @@ export default function IRBudgetPage() {
                     )}
 
                     {/* Totals */}
-                    <TableRow className="bg-muted font-bold">
-                      <TableCell className="sticky left-0 z-10 bg-muted" colSpan={2}>Monthly Burn</TableCell>
-                      {budgetData.calculated.budget_monthly_burn.slice(0, 13).map((burn, idx) => (
-                        <TableCell key={idx + 4} className="text-right">
+                    <TableRow className="bg-muted font-semibold">
+                      <TableCell className="text-xs">Monthly Burn</TableCell>
+                      {budgetData.calculated.budget_monthly_burn.map((burn, idx) => (
+                        <TableCell key={idx} className="text-right text-xs px-2">
                           {formatCurrency(burn)}
                         </TableCell>
                       ))}
-                      <TableCell className="text-right">{formatCurrency(budgetData.calculated.budget_monthly_burn.slice(0, 13).reduce((a, b) => a + b, 0))}</TableCell>
+                      <TableCell className="text-right text-xs font-bold">{formatCurrency(budgetData.calculated.budget_monthly_burn.reduce((a, b) => a + b, 0))}</TableCell>
                     </TableRow>
 
-                    <TableRow className="bg-muted/50 font-bold">
-                      <TableCell className="sticky left-0 z-10 bg-muted/50" colSpan={2}>Running Total</TableCell>
-                      {budgetData.calculated.budget_running_total.slice(0, 13).map((total, idx) => (
-                        <TableCell key={idx + 4} className="text-right">
+                    <TableRow className="bg-muted/50 font-semibold">
+                      <TableCell className="text-xs">Running Total</TableCell>
+                      {budgetData.calculated.budget_running_total.map((total, idx) => (
+                        <TableCell key={idx} className="text-right text-xs px-2">
                           {formatCurrency(total)}
                         </TableCell>
                       ))}
-                      <TableCell className="text-right text-blue-600 dark:text-blue-400">
-                        {formatCurrency(budgetData.calculated.budget_monthly_burn.slice(0, 13).reduce((a, b) => a + b, 0))}
+                      <TableCell className="text-right text-xs font-bold text-blue-600 dark:text-blue-400">
+                        {formatCurrency(budgetData.calculated.budget_monthly_burn.reduce((a, b) => a + b, 0))}
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
-                </div>
               </div>
             </CardContent>
           </Card>

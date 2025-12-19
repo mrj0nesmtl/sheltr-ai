@@ -30,7 +30,10 @@ import {
   Edit,
   Save,
   X as XIcon,
-  AlertTriangle
+  AlertTriangle,
+  Upload,
+  FileUp,
+  CheckCircle2
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -48,13 +51,8 @@ import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
 interface BudgetItem {
   id: string;
   name: string;
-  role: string;
-  cost_type: string;
-  payment_frequency: string;
   budget_values: number[];
-  actual_values: (number | null)[];
   notes?: string;
-  vendor?: string;
 }
 
 interface BudgetCategory {
@@ -120,6 +118,13 @@ export default function BudgetPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [editedData, setEditedData] = useState<BudgetData | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // CSV upload state
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Check if user is super admin
   const isSuperAdmin = checkIsSuperAdmin();
@@ -333,6 +338,138 @@ export default function BudgetPage() {
     }
   };
 
+  // CSV Upload Handler
+  const handleCSVUpload = async () => {
+    if (!uploadFile || !user) return;
+
+    setUploading(true);
+    setUploadError(null);
+    setUploadSuccess(false);
+
+    try {
+      const csvContent = await uploadFile.text();
+      const lines = csvContent.split('\n').filter(line => line.trim());
+
+      // Parse CSV and create budget data (same logic as upload-initial-data page)
+      const categories = {
+        team: { name: 'Team & Compensation', icon: 'Users', color: 'blue', type: 'team', items: [] as BudgetItem[] },
+        infrastructure: { name: 'Infrastructure & Technology', icon: 'Server', color: 'green', type: 'infrastructure', items: [] as BudgetItem[] },
+        operations: { name: 'Operations & Production', icon: 'Wrench', color: 'orange', type: 'operations', items: [] as BudgetItem[] },
+        marketing: { name: 'Marketing & Growth', icon: 'Megaphone', color: 'purple', type: 'marketing', items: [] as BudgetItem[] }
+      };
+
+      const dataRows = lines.slice(1, -1);
+      for (const line of dataRows) {
+        const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)?.map(v => v.replace(/^"|"$/g, '')) || [];
+        const category = values[0]?.toLowerCase() as 'team' | 'infrastructure' | 'operations' | 'marketing';
+        const accountName = values[1];
+        if (!category || !accountName) continue;
+
+        const monthlyValues: number[] = [];
+        for (let i = 2; i <= 13; i++) {
+          monthlyValues.push(parseFloat(values[i]?.replace(/,/g, '') || '0'));
+        }
+
+        const item: BudgetItem = {
+          id: accountName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+          name: accountName,
+          budget_values: monthlyValues
+        };
+
+        if (categories[category]) {
+          categories[category].items.push(item);
+        }
+      }
+
+      // Calculate totals
+      const monthlyBurn: number[] = [];
+      const runningTotal: number[] = [];
+      for (let month = 0; month < 12; month++) {
+        let monthTotal = 0;
+        Object.values(categories).forEach(cat => {
+          cat.items.forEach(item => { monthTotal += item.budget_values[month]; });
+        });
+        monthlyBurn.push(monthTotal);
+        runningTotal.push(month === 0 ? monthTotal : runningTotal[month - 1] + monthTotal);
+      }
+
+      const yearlyTotal = runningTotal[11];
+      const avgBurn = monthlyBurn.reduce((a, b) => a + b, 0) / 12;
+
+      const newBudgetData = {
+        ...budgetData,
+        categories,
+        calculated: {
+          budget_monthly_burn: monthlyBurn,
+          budget_running_total: runningTotal,
+          budget_yearly_total: yearlyTotal,
+          runway: {
+            average_burn: avgBurn,
+            projected_allocation: yearlyTotal,
+            reserve_buffer: (budgetData?.funding.seed_round || 500000) - yearlyTotal
+          }
+        },
+        metadata: {
+          ...budgetData?.metadata,
+          updated_at: new Date(),
+          last_edited_by: user.uid,
+          last_edited_by_name: user.displayName || user.email || 'Unknown',
+          version: (budgetData?.metadata?.version || 1) + 1,
+          source: uploadFile.name
+        }
+      };
+
+      const budgetRef = doc(db, 'financial_budgets', 'seed-budget-2025-2026');
+      await setDoc(budgetRef, newBudgetData);
+
+      setBudgetData(newBudgetData as BudgetData);
+      setUploadSuccess(true);
+      
+      setTimeout(() => {
+        setShowUploadDialog(false);
+        setUploadFile(null);
+        setUploadSuccess(false);
+        window.location.reload();
+      }, 2000);
+
+    } catch (err) {
+      console.error('CSV upload failed:', err);
+      setUploadError(err instanceof Error ? err.message : 'Failed to upload CSV');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // CSV Download Handler
+  const handleCSVDownload = () => {
+    if (!budgetData) return;
+
+    // Create CSV content
+    let csv = 'Category,Account,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sept,Oct,Nov,Dec,2026 Total\n';
+
+    Object.entries(budgetData.categories).forEach(([catKey, category]) => {
+      category.items.forEach(item => {
+        const total = item.budget_values.reduce((a, b) => a + b, 0);
+        const values = item.budget_values.map(v => v > 0 ? `"${v.toLocaleString()}"` : '0').join(',');
+        csv += `${catKey.charAt(0).toUpperCase() + catKey.slice(1)},${item.name},${values},"${total.toLocaleString()}"\n`;
+      });
+    });
+
+    // Add totals row
+    const totalValues = budgetData.calculated.budget_monthly_burn.map(v => `"${v.toLocaleString()}"`).join(',');
+    const yearlyTotal = budgetData.calculated.budget_monthly_burn.reduce((a, b) => a + b, 0);
+    csv += `,,${totalValues},"${yearlyTotal.toLocaleString()}"\n`;
+
+    // Download
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `budget_2026_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -505,10 +642,16 @@ export default function BudgetPage() {
                   </>
                 )}
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleCSVDownload}>
                 <Download className="h-4 w-4 mr-2" />
                 Export CSV
               </Button>
+              {isSuperAdmin && (
+                <Button variant="outline" size="sm" onClick={() => setShowUploadDialog(true)}>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Import CSV
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -827,48 +970,45 @@ export default function BudgetPage() {
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto w-full">
-                <div className="min-w-[1400px]">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="sticky top-0 z-20 bg-background">
-                      <TableHead className="sticky left-0 z-30 bg-background w-[200px] border-r-2">Account</TableHead>
-                      <TableHead className="sticky left-[200px] z-30 bg-background w-[200px] border-r-2">Role/Description</TableHead>
-                      {displayData.period.months.slice(0, 13).map((month) => (
-                        <TableHead key={month} className="text-right min-w-[100px]">{month.slice(0, 3)}</TableHead>
+                <Table className="text-sm">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[180px] text-xs">Account</TableHead>
+                      {displayData.period.months.map((month) => (
+                        <TableHead key={month} className="text-right w-[80px] text-xs px-2">{month.slice(0, 3)}</TableHead>
                       ))}
-                      <TableHead className="text-right font-bold min-w-[120px]">Total</TableHead>
-                      </TableRow>
-                    </TableHeader>
+                      <TableHead className="text-right font-bold w-[100px] text-xs">Total</TableHead>
+                    </TableRow>
+                  </TableHeader>
                   <TableBody>
                     {/* Team Section */}
                     {(selectedCategory === 'all' || selectedCategory === 'team') && (
                       <>
                         <TableRow className="bg-blue-50 dark:bg-blue-950">
-                          <TableCell colSpan={15} className="font-bold">
-                            <Users className="h-4 w-4 inline mr-2" />
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Users className="h-3 w-3 inline mr-2" />
                             Team & Compensation
                           </TableCell>
                         </TableRow>
                         {displayData.categories.team.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
                                     onChange={(e) => handleValueChange('team', item.id, idx, e.target.value)}
-                                    className="w-20 h-8 text-right"
+                                    className="w-16 h-7 text-xs text-right px-1"
                                   />
                                 ) : (
                                   value > 0 ? formatCurrency(value) : '-'
                                 )}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -879,31 +1019,30 @@ export default function BudgetPage() {
                     {(selectedCategory === 'all' || selectedCategory === 'infrastructure') && (
                       <>
                         <TableRow className="bg-green-50 dark:bg-green-950">
-                          <TableCell colSpan={15} className="font-bold">
-                            <Server className="h-4 w-4 inline mr-2" />
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Server className="h-3 w-3 inline mr-2" />
                             Infrastructure & Technology
                           </TableCell>
                         </TableRow>
                         {displayData.categories.infrastructure.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
                                     onChange={(e) => handleValueChange('infrastructure', item.id, idx, e.target.value)}
-                                    className="w-20 h-8 text-right"
+                                    className="w-16 h-7 text-xs text-right px-1"
                                   />
                                 ) : (
                                   value > 0 ? formatCurrency(value) : '-'
                                 )}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -914,31 +1053,30 @@ export default function BudgetPage() {
                     {(selectedCategory === 'all' || selectedCategory === 'operations') && (
                       <>
                         <TableRow className="bg-orange-50 dark:bg-orange-950">
-                          <TableCell colSpan={15} className="font-bold">
-                            <Wrench className="h-4 w-4 inline mr-2" />
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Wrench className="h-3 w-3 inline mr-2" />
                             Operations & Production
                           </TableCell>
                         </TableRow>
                         {displayData.categories.operations.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
                                     onChange={(e) => handleValueChange('operations', item.id, idx, e.target.value)}
-                                    className="w-20 h-8 text-right"
+                                    className="w-16 h-7 text-xs text-right px-1"
                                   />
                                 ) : (
                                   value > 0 ? formatCurrency(value) : '-'
                                 )}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -949,31 +1087,30 @@ export default function BudgetPage() {
                     {(selectedCategory === 'all' || selectedCategory === 'marketing') && (
                       <>
                         <TableRow className="bg-purple-50 dark:bg-purple-950">
-                          <TableCell colSpan={15} className="font-bold">
-                            <Megaphone className="h-4 w-4 inline mr-2" />
+                          <TableCell colSpan={14} className="font-bold text-xs">
+                            <Megaphone className="h-3 w-3 inline mr-2" />
                             Marketing & Growth
                           </TableCell>
                         </TableRow>
                         {displayData.categories.marketing.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
-                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(0, 13).map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="font-medium text-xs">{item.name}</TableCell>
+                            {item.budget_values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right text-xs px-2">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
                                     onChange={(e) => handleValueChange('marketing', item.id, idx, e.target.value)}
-                                    className="w-20 h-8 text-right"
+                                    className="w-16 h-7 text-xs text-right px-1"
                                   />
                                 ) : (
                                   value > 0 ? formatCurrency(value) : '-'
                                 )}
                               </TableCell>
                             ))}
-                            <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
+                            <TableCell className="text-right font-semibold text-xs">
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -981,30 +1118,29 @@ export default function BudgetPage() {
                     )}
 
                     {/* Totals */}
-                    <TableRow className="bg-muted font-bold">
-                      <TableCell className="sticky left-0 z-10 bg-muted" colSpan={2}>Monthly Burn</TableCell>
-                      {displayData.calculated.budget_monthly_burn.slice(0, 13).map((burn, idx) => (
-                        <TableCell key={idx} className="text-right">
+                    <TableRow className="bg-muted font-semibold">
+                      <TableCell className="text-xs">Monthly Burn</TableCell>
+                      {displayData.calculated.budget_monthly_burn.map((burn, idx) => (
+                        <TableCell key={idx} className="text-right text-xs px-2">
                           {formatCurrency(burn)}
                         </TableCell>
                       ))}
-                      <TableCell className="text-right">{formatCurrency(displayData.calculated.budget_monthly_burn.slice(0, 13).reduce((a, b) => a + b, 0))}</TableCell>
+                      <TableCell className="text-right text-xs font-bold">{formatCurrency(displayData.calculated.budget_monthly_burn.reduce((a, b) => a + b, 0))}</TableCell>
                     </TableRow>
 
-                    <TableRow className="bg-muted/50 font-bold">
-                      <TableCell className="sticky left-0 z-10 bg-muted/50" colSpan={2}>Running Total</TableCell>
-                      {displayData.calculated.budget_running_total.slice(0, 13).map((total, idx) => (
-                        <TableCell key={idx} className="text-right">
+                    <TableRow className="bg-muted/50 font-semibold">
+                      <TableCell className="text-xs">Running Total</TableCell>
+                      {displayData.calculated.budget_running_total.map((total, idx) => (
+                        <TableCell key={idx} className="text-right text-xs px-2">
                           {formatCurrency(total)}
                         </TableCell>
                       ))}
-                      <TableCell className="text-right text-blue-600 dark:text-blue-400">
-                        {formatCurrency(displayData.calculated.budget_monthly_burn.slice(0, 13).reduce((a, b) => a + b, 0))}
+                      <TableCell className="text-right text-xs font-bold text-blue-600 dark:text-blue-400">
+                        {formatCurrency(displayData.calculated.budget_monthly_burn.reduce((a, b) => a + b, 0))}
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -1032,6 +1168,87 @@ export default function BudgetPage() {
             </p>
           </CardContent>
         </Card>
+
+        {/* CSV Upload Dialog */}
+        {showUploadDialog && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="max-w-lg w-full">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileUp className="h-5 w-5" />
+                  Import Budget from CSV
+                </CardTitle>
+                <CardDescription>
+                  Upload a CSV file to update the budget. This will overwrite the current data.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                    className="block w-full text-sm text-muted-foreground
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-md file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-blue-50 file:text-blue-700
+                      hover:file:bg-blue-100
+                      dark:file:bg-blue-950 dark:file:text-blue-300"
+                  />
+                </div>
+
+                {uploadError && (
+                  <Alert className="border-red-500 bg-red-950/20">
+                    <AlertTriangle className="h-4 w-4 text-red-500" />
+                    <AlertDescription className="text-red-400">{uploadError}</AlertDescription>
+                  </Alert>
+                )}
+
+                {uploadSuccess && (
+                  <Alert className="border-green-500 bg-green-950/20">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <AlertDescription className="text-green-400">
+                      ✅ Budget imported successfully! Reloading...
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleCSVUpload}
+                    disabled={!uploadFile || uploading || uploadSuccess}
+                    className="flex-1"
+                  >
+                    {uploading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Importing...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Import
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowUploadDialog(false);
+                      setUploadFile(null);
+                      setUploadError(null);
+                      setUploadSuccess(false);
+                    }}
+                    disabled={uploading}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1996,9 +1996,8 @@ export default function IRInvestorRelationsPage() {
               Invest in the Future of HMIS Technology
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              The homeless services industry is ripe for technological disruption. Our thesis is simple: 
-              <strong className="text-white"> it's better to solve than to manage</strong>. We're leveraging cutting-edge HMIS technology 
-              and blockchain innovation to transform how communities address homelessness at its root.
+              Ripe for technological disruption, our thesis is simple: 
+              <strong className="text-white"> It's better to solve than to manage</strong>. We're leveraging cutting-edge technology to transform how communities address homelessness at its root.
             </p>
             <div className="flex justify-center">
               <Button 

@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 16, 2025  
+**Last Updated**: December 18, 2025  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -10,12 +10,55 @@
 
 ## 🎯 Quick Stats (Last 30 Days)
 
-- **Versions Released**: 2.159.0 → 2.140.0 (20 releases)
-- **Major Features**: 13 new features
-- **Bug Fixes**: 30+ critical fixes
+- **Versions Released**: 2.160.0 → 2.140.0 (21 releases)
+- **Major Features**: 15 new features
+- **Bug Fixes**: 32+ critical fixes
 - **Security Updates**: **SESSION 27 + Dependency Updates** 🔒
-- **Documentation**: 38+ docs updated/created
+- **Documentation**: 40+ docs updated/created
 - **MCP Servers**: 8 integrated (GitHub, Firebase, Google Cloud, Shadcn, Playwright, Context7)
+
+---
+
+## [2.160.0] - 2025-12-18 (Budget System Overhaul & IR Page Updates) 💰📊
+
+### 🎯 **Session Highlights**
+- **Budget System**: Complete CSV-based redesign with import/export functionality
+- **Seed Round**: Updated from $250K to $500K across all investor materials
+- **Incorporation**: Transitioned to Canadian nonprofit structure (Winnipeg, MB)
+- **Table Optimization**: Eliminated horizontal scrolling, all 12 months visible on desktop
+
+### 💰 **Budget System Redesign**
+- **CSV Management**: Uploaded `budget_2026.csv` with 33 line items
+  - Total Budget: $359,950 (12-month runway)
+  - Reserve Buffer: $140,050 from $500K seed round
+  - Categories: Team (10), Infrastructure (11), Operations (8), Marketing (4)
+- **UI Improvements**: 
+  - Removed Role/Description column
+  - Eliminated frozen columns
+  - Optimized for desktop (no horizontal scroll)
+  - Added CSV upload/download for super admins
+- **Both Portals Updated**: Founders Portal + IR Data Room
+
+### 🏢 **Investor Relations Updates**
+- **$500K Seed Round**: Updated from $250K across all materials
+- **12-Month Runway**: 6 months development + 6 months pilot launch
+- **Canadian Nonprofit**: Winnipeg, Manitoba incorporation
+  - Director: Alexander Kline | Secretary: Marc Reichel
+  - Founders: Joel Yaffe, Zaffia Laplante
+  - Advisors: Doug Kukura, Morgan Hirtle
+- **Sector Positioning**: "HMIS/Fintech Sector Investment" (was "Traditional Equity")
+- **Team Link**: Added to both IR pages
+
+### 🔧 **Technical**
+- Simplified TypeScript interfaces for budget data
+- Integrated `papaparse` for CSV handling
+- Real-time Firestore sync across portals
+- Force-committed founders-only directory for production sync
+
+### 📝 **Package Structure Analysis**
+- Investigated dual package-lock.json setup
+- **Conclusion**: Both intentional (root utilities + web app)
+- **Decision**: Keep both, ignore Turbopack warning
 
 ---
 

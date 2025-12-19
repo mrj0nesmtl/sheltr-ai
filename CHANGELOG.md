@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.160.0] - 2025-12-18 (Budget System Overhaul & IR Page Updates) 💰📊
+
+### 🎯 **Session Highlights - December 18, 2025**
+Complete redesign of budget system with CSV import/export, optimized table views, and comprehensive updates to Investor Relations pages reflecting new $500K seed round and Canadian nonprofit structure.
+
+### 💰 **Budget System Redesign**
+- **CSV-Based Budget Management**: Complete migration to CSV-driven budget system
+  - Uploaded `budget_2026.csv` with 33 line items across 4 categories
+  - Implemented CSV upload functionality for super admins
+  - Added CSV download/export for all budget data
+  - Created migration script for initial data upload
+- **Table Optimization**: Removed horizontal scrolling issues
+  - Eliminated Role/Description column (simplified data structure)
+  - Removed frozen/sticky columns for better responsiveness
+  - Optimized column widths: Account (180px), Months (80px each)
+  - Reduced font sizes to `text-xs` for desktop optimization
+  - All 12 months now visible without scrolling on standard displays
+- **Updated Both Portals**: Changes applied to Founders Portal and IR Data Room
+  - `apps/web/src/app/portal/founders-only/budget/page.tsx`
+  - `apps/web/src/app/ir/budget/page.tsx`
+
+### 📊 **2026 Budget Details**
+- **Total Budget**: $359,950 (12-month runway)
+- **Seed Round Target**: $500,000 (updated from $250K)
+- **Reserve Buffer**: $140,050
+- **Timeline**: January - December 2026
+- **Categories**: Team (10 items), Infrastructure (11 items), Operations (8 items), Marketing (4 items)
+- **Editable Fields**: Seed round target and budget title now editable in UI
+
+### 🏢 **Investor Relations Updates**
+- **Seed Round**: Updated from $250K to $500K across all pages
+- **Runway Details**: 12-month runway (6 months development + 6 months pilot launch)
+- **Incorporation**: Updated to Canadian registered nonprofit (Winnipeg, Manitoba)
+  - Director: Alexander Kline
+  - Secretary: Marc Reichel
+  - Founding Partners: Joel Yaffe, Zaffia Laplante
+  - Advisors: Doug Kukura, Morgan Hirtle
+- **Sector Positioning**: Changed from "Traditional Equity Investment" to "HMIS/Fintech Sector Investment"
+- **UI Cleanup**: Removed "Investment Opportunity" badge for cleaner presentation
+- **Team Link**: Added "Meet the Full Team" link to both IR pages
+- **Updated Pages**:
+  - `apps/web/src/app/portal/founders-only/investor-relations/page.tsx`
+  - `apps/web/src/app/ir/investor-relations/page.tsx`
+
+### 🔧 **Technical Improvements**
+- **TypeScript Interfaces**: Simplified `BudgetItem` and `BudgetCategory` types
+- **Firestore Integration**: Budget data stored in `financial_budgets` collection
+- **Real-time Updates**: Budget changes reflect immediately across both portals
+- **CSV Parser**: Integrated `papaparse` for robust CSV handling
+- **Error Handling**: Comprehensive validation for CSV uploads
+
+### 📝 **Documentation Analysis**
+- **Package Structure Investigation**: Analyzed dual package-lock.json setup
+  - Root `package.json`: Utility dependencies (mermaid, csv-parser)
+  - Web `package.json`: Full Next.js application (63 dependencies)
+  - **Conclusion**: Both lockfiles are intentional and correct (not a monorepo)
+  - **Decision**: Keep both lockfiles, ignore Next.js Turbopack warning
+
+### 🚀 **Deployment**
+- **Git Management**: Force-added founders-only directory to override .gitignore for one-time production sync
+- **Commit Strategy**: Updated to use generic commit messages (e.g., "IR fixes") to avoid exposing sensitive financial details
+
+### 📊 **Stats**
+- **Files Modified**: 4 (2 budget pages, 2 IR pages)
+- **Lines Changed**: 337 insertions, 134 deletions
+- **Budget Line Items**: 33 accounts across 12 months
+- **CSV Size**: 35 lines (including headers and totals)
+
+---
+
 ## [2.158.0] - 2025-12-15 (Dependency Updates & Google Cloud MCP Integration) 🔄☁️
 
 ### 🎯 **Session Highlights - December 15, 2025**

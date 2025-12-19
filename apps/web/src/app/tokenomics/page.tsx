@@ -34,7 +34,7 @@ function TokenomicsContent() {
       {/* Hero Section - Standardized */}
       <StandardHero
         imageUrl={heroImage.url}
-        badgeText="TOKENOMICS v3.0 - Dual-Rail Architecture"
+        badgeText="TOKENOMICS v3.0"
         badgeVariant="secondary"
         badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
         title={
@@ -42,7 +42,7 @@ function TokenomicsContent() {
             SHELTR <span className="text-emerald-400">SmartFund™</span>
           </>
         }
-        subtitle="Enterprise-grade token architecture with dual-rail payments (Adyen + x402), Shelter Ledger transparency, virtual cards, institutional staking, and complete public accountability."
+        subtitle="Every donation tracked. Every payout verified. "
       />
 
       {/* 1. SHELTER LEDGER - Track & Trace (NEW - TOP PRIORITY) */}
@@ -51,11 +51,11 @@ function TokenomicsContent() {
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 text-blue-600 border-blue-600">
               <Eye className="h-4 w-4 mr-2" />
-              PUBLIC TRANSPARENCY
+              IMMUTABLE RECORDS
             </Badge>
             <h2 className="text-4xl font-bold mb-4">The Shelter Ledger</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Every donation tracked. Every payout verified. Complete transparency through blockchain-powered public accountability.
+              Transparency through blockchain-powered public smart contract.
             </p>
           </div>
 

@@ -58,7 +58,7 @@ const investmentSlides = [
     type: 'title',
     title: 'SHELTR',
     subtitle: 'Hacking Homelessness Through Technology',
-    description: 'Pre-Seed Traditional Funding: $250K Raise',
+    description: 'Pre-Seed Traditional Funding: $500K Raise - 12-Month Runway',
     highlight: 'Enterprise Payment Infrastructure for Social Impact',
     icon: Coins,
     bgGradient: 'from-blue-600 to-purple-600',
@@ -269,7 +269,7 @@ const investmentSlides = [
     content: {
       preseed: {
         round: 'Pre-Seed Traditional Equity',
-        target: '$250K raise',
+        target: '$500K raise',
         equity: '8-10%',
         valuation: 'TBD (Pre-Revenue)',
         progress: 0
@@ -320,7 +320,7 @@ const investmentSlides = [
     bgGradient: 'from-indigo-600 to-purple-600',
     content: {
       structure: {
-        type: 'Traditional Equity Investment',
+        type: 'HMIS/Fintech Sector Investment',
         instrument: 'Preferred Stock (Series Seed)',
         governance: 'Board observer rights',
         vesting: 'Standard 4-year vesting'
@@ -2187,14 +2187,10 @@ export default function IRInvestorRelationsPage() {
       <section id="investment-overview" className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4">
-              Investment Opportunity
-            </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Traditional Equity Investment: Enterprise Payment Infrastructure
+              HMIS/Fintech Sector Investment
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-              Traditional equity investment with enterprise payment infrastructure and strategic partnerships. 
               <strong> Please explore all tabs in the toolbar below</strong> to understand the complete equity structure, 
               financial projections, and traditional funding approach.
             </p>
@@ -2203,8 +2199,8 @@ export default function IRInvestorRelationsPage() {
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Target className="h-12 w-12 mx-auto mb-4 text-green-600" />
-                <h3 className="text-2xl font-bold mb-2">$250K</h3>
-                <p className="text-muted-foreground">Pre-Seed Target</p>
+                <h3 className="text-2xl font-bold mb-2">$500K</h3>
+                <p className="text-muted-foreground">Pre-Seed Target - 12-Month Runway</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -2428,7 +2424,7 @@ export default function IRInvestorRelationsPage() {
                   <div className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-4">
-                        <h4 className="font-bold text-lg text-blue-700 dark:text-blue-300">Traditional Equity Investment Structure</h4>
+                        <h4 className="font-bold text-lg text-blue-700 dark:text-blue-300">HMIS/Fintech Sector Investment Structure</h4>
                         <div className="space-y-3">
                           <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                             <h5 className="font-semibold">SEC-Compliant Equity</h5>
@@ -2447,9 +2443,9 @@ export default function IRInvestorRelationsPage() {
                           <div className="flex justify-between items-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                             <div>
                               <h5 className="font-semibold">Pre-Seed (Current)</h5>
-                              <p className="text-sm text-muted-foreground">Platform completion & enterprise integration</p>
+                              <p className="text-sm text-muted-foreground">12-month runway: 6 months development + pilot launch</p>
                             </div>
-                            <span className="font-bold text-emerald-600">$250K</span>
+                            <span className="font-bold text-emerald-600">$500K</span>
                           </div>
                           <div className="flex justify-between items-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                             <div>
@@ -2470,7 +2466,7 @@ export default function IRInvestorRelationsPage() {
                     </div>
 
                     <div className="p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg">
-                      <h4 className="font-bold mb-3">Why Traditional Equity Investment?</h4>
+                      <h4 className="font-bold mb-3">Why HMIS/Fintech Sector Investment?</h4>
                       <div className="grid md:grid-cols-2 gap-4 text-sm">
                         <ul className="space-y-2">
                           <li className="flex items-center gap-2">
@@ -3199,7 +3195,7 @@ export default function IRInvestorRelationsPage() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Pre-Seed Fund Allocation ($250K)</CardTitle>
+                    <CardTitle>Pre-Seed Fund Allocation ($500K)</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
@@ -3363,7 +3359,7 @@ export default function IRInvestorRelationsPage() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Traditional Equity Investment</h4>
+                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">HMIS/Fintech Sector Investment</h4>
                       <div className="space-y-3 text-sm">
                         <div className="border-b pb-2">
                           <h5 className="font-semibold">Series Seed Preferred Stock</h5>
@@ -3443,14 +3439,22 @@ export default function IRInvestorRelationsPage() {
                   <CardContent className="space-y-6">
                     <div className="space-y-4">
                       <div className="p-4 border rounded-lg">
-                        <h4 className="font-semibold mb-2">Regulatory Compliance</h4>
+                        <h4 className="font-semibold mb-2">Regulatory Compliance & Structure</h4>
                         <ul className="text-sm space-y-1">
-                          <li>• Delaware C-Corp structure with standard protections</li>
-                          <li>• SEC Regulation D (506(b)) private placement</li>
+                          <li>• Canadian registered nonprofit (Winnipeg, Manitoba)</li>
+                          <li>• Director: Alexander Kline | Secretary: Marc Reichel</li>
+                          <li>• Founding Partners: Joel Yaffe, Zaffia Laplante</li>
+                          <li>• Advisors: Doug Kukura, Morgan Hirtle</li>
                           <li>• Payment processing compliance (PCI DSS)</li>
                           <li>• Privacy regulations (GDPR, CCPA, PIPEDA)</li>
                           <li>• Financial services regulations (FinCEN, BSA)</li>
                         </ul>
+                        <div className="mt-4">
+                          <Link href="/team" className="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                            <Users className="h-4 w-4" />
+                            Meet the Full Team →
+                          </Link>
+                        </div>
                       </div>
 
                       <div className="p-4 border rounded-lg">

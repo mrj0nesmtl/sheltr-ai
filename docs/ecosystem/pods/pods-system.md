@@ -2,22 +2,25 @@
 
 **Secure, Mobile, Functional Emergency Housing Units**
 
-*Version: 3.0 | Updated: December 11, 2025*
+**Version: 3.0 | Updated: December 11, 2025**
 
 ---
-
+  
 ## 🎯 Overview
 
 The SHELTR PODS (Portable Optimized Dwelling System) represents a revolutionary approach to emergency housing, combining security, mobility, and functionality in a compact, deployable unit. Each POD is designed to provide dignified temporary housing while participants work toward permanent solutions.
+  
 
 **One Model. Infinite Possibilities.**
 
 SHELTR has simplified its product line to focus on a single, optimized **Model A flat-pack design**. This strategic pivot delivers faster deployment, lower costs, and easier logistics while maintaining our commitment to dignified emergency housing. Each unit ships disassembled in flat-pack configuration and assembles in 2-4 hours with basic tools and two people.
-
+  
 The Model A is engineered for Canadian and northern climates, featuring modular construction, integrated EcoFlow power systems, and partnership with ATS Containers for world-class manufacturing quality.
+  
 
 ### Key Specifications
-
+  
+  
 | Specification | Value | Details |
 |---------------|--------|---------|
 | **Model** | Model A (Flat-Pack) | Single SKU, modular design |

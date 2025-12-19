@@ -23,6 +23,7 @@ The Model A is engineered for Canadian and northern climates, featuring modular 
   
 | Specification | Value | Details |
 |---------------|--------|---------|
+ 
 | **Model** | Model A (Flat-Pack) | Single SKU, modular design |
 | **Assembled Dimensions** | 7' L × 4' W × 6.5' H | ~28 sq ft usable floor area |
 | **Flat-Pack Dimensions** | 7' L × 4' W × 1.5' H | Ships on 3 standard pallets |
@@ -935,7 +936,9 @@ monthly_maintenance = {
 ### Operational Statistics
 
 | Metric | Target | Actual Performance |
+ 
 |--------|--------|-------------------|
+ 
 | **Deployment Time** | < 30 min | 23 min average |
 | **Power Autonomy** | 72 hours | 96 hours achieved |
 | **Climate Efficiency** | 85% uptime | 94% uptime |

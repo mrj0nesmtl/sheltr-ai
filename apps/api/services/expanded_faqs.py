@@ -2991,18 +2991,42 @@ EXPANDED_FAQS = {
         ]
     },
     
+    "how_to_participate": {
+        "questions": [
+            "how do i participate",
+            "how can i participate",
+            "how to get involved",
+            "ways to participate",
+            "participate in sheltr",
+            "get involved with sheltr",
+            "how to join sheltr",
+            "join the platform"
+        ],
+        "answer": "SHELTR has three main ways to participate: **1) Participants** - Individuals experiencing homelessness can register at partner shelters to receive a QR code for direct donations, housing fund support, and access to resources. **2) Donors** - Anyone can donate by scanning participant QR codes or giving directly through the platform. Your donations are split 80% direct support, 15% housing fund, 5% operations. **3) Shelters & Organizations** - Homeless service providers can partner with SHELTR to onboard participants, coordinate services, and access our technology platform. Visit /solutions to learn more about each role and how you can make a difference!",
+        "category": "platform_overview",
+        "agent_suggestion": "public_information",
+        "keywords": ["participate", "get involved", "how to help", "roles", "participants", "donors", "shelters", "join"],
+        "actions": [
+            {"type": "link", "text": "For Participants", "url": "/solutions/participants"},
+            {"type": "link", "text": "For Donors", "url": "/solutions/donors"},
+            {"type": "link", "text": "For Organizations", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Get Started", "url": "/register"}
+        ]
+    },
+    
     "governance_participation": {
         "questions": [
             "how do i participate in governance",
             "voting rights",
             "community governance",
             "token voting",
-            "governance participation"
+            "governance participation",
+            "token holder voting"
         ],
         "answer": "SHELTR token holders can vote on: infrastructure allocation priorities, new feature development, partnership approvals, and platform policy changes. Voting power proportional to tokens held. Transparent, blockchain-verified governance.",
         "category": "tokenomics",
         "agent_suggestion": "donor_relations",
-        "keywords": ["governance", "voting", "participate", "community", "rights"],
+        "keywords": ["governance", "voting", "token holders", "community", "rights", "blockchain governance"],
         "actions": [
             {"type": "link", "text": "Governance Model", "url": "/tokenomics"},
             {"type": "link", "text": "Whitepaper", "url": "/docs/whitepaper"}

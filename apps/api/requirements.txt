@@ -18,7 +18,7 @@ asyncpg==0.31.0
 # Authentication and Security
 python-jose[cryptography]==3.5.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.20
+python-multipart==0.0.21
 
 # AI and ML
 openai==1.99.9

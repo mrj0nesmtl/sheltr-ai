@@ -318,13 +318,10 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
         });
       }
       
-      // Show success message
-      alert(`✅ Document deleted successfully!\n\nFile: ${githubPath}`);
-      
-      // Call the callback to refresh
-      if (onSyncComplete) {
-        onSyncComplete();
-      }
+      // Show success message (non-blocking)
+      setTimeout(() => {
+        alert(`✅ Document deleted successfully!\n\nFile: ${githubPath}`);
+      }, 100);
     } catch (error) {
       console.error('Error deleting file:', error);
       setError(`Failed to delete ${githubPath}. Please try again.`);
@@ -365,19 +362,20 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
 
       const data = await response.json();
       
-      // Clear the deleted list
+      // Update the deleted list - remove successfully deleted files
+      const successfullyDeleted = data.data.results
+        .filter((r: any) => r.success)
+        .map((r: any) => r.github_path);
+      
       setChanges({
         ...changes,
-        deleted: []
+        deleted: changes.deleted.filter(f => !successfullyDeleted.includes(f))
       });
       
-      // Show success message
-      alert(`✅ Bulk deletion complete!\n\nDeleted: ${data.data.deleted_count} documents\nFailed: ${data.data.failed_count} documents`);
-      
-      // Call the callback to refresh
-      if (onSyncComplete) {
-        onSyncComplete();
-      }
+      // Show success message (non-blocking)
+      setTimeout(() => {
+        alert(`✅ Bulk deletion complete!\n\nDeleted: ${data.data.deleted_count} documents\nFailed: ${data.data.failed_count} documents`);
+      }, 100);
     } catch (error) {
       console.error('Error deleting files:', error);
       setError('Failed to delete files. Please try again.');

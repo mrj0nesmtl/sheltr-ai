@@ -65,7 +65,7 @@ export default function BasecampPage() {
         badgeClassName="bg-cyan-500/20 text-cyan-300 border-cyan-500/30"
         title={
           <>
-            <span className="text-cyan-400">Basecamp</span> Hub
+            <span className="text-cyan-400">Basecamp</span>
           </>
         }
         subtitle="Community support center providing essential services, technical assistance, and coordination for POD deployment."
@@ -90,7 +90,15 @@ export default function BasecampPage() {
             size="lg" 
             variant="outline"
             className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
-            onClick={handleChatOpen}
+            onClick={() => {
+              setIsChatOpen(true);
+              setTimeout(() => {
+                const chatbot = document.querySelector('[data-chatbot]');
+                if (chatbot) {
+                  chatbot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }, 100);
+            }}
           >
             Ask About Basecamp
           </Button>

@@ -1871,6 +1871,116 @@ EXPANDED_FAQS = {
         ]
     },
     
+    "basecamp_what_is": {
+        "questions": [
+            "what is basecamp",
+            "tell me about basecamp",
+            "basecamp hub",
+            "basecamp center",
+            "community support center",
+            "what does basecamp do"
+        ],
+        "answer": "Basecamp is a community support hub that transforms shipping containers into 24/7 staffed centers for POD communities. When SHELTR deploys PODs to a city, the initial shipment arrives in a Basecamp container which remains on-site to provide: hot meals daily, medical clinic, laundry facilities, job placement help, computer terminals, WiFi, SHELTR platform support, POD technical assistance, case management, community events, and safety/security. Basecamp operates 7 days a week with volunteer coordination and emergency response capabilities.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["basecamp", "community hub", "support center", "shipping container", "volunteer center", "essential services"],
+        "actions": [
+            {"type": "link", "text": "Explore Basecamp", "url": "/basecamp"},
+            {"type": "link", "text": "Full Ecosystem", "url": "/ecosystem"},
+            {"type": "link", "text": "POD Housing", "url": "/pods"}
+        ]
+    },
+    
+    "basecamp_services": {
+        "questions": [
+            "what services does basecamp offer",
+            "basecamp services",
+            "what can i get at basecamp",
+            "basecamp facilities",
+            "basecamp amenities"
+        ],
+        "answer": "Basecamp provides comprehensive support services: **Essential Services** - 3 hot meals daily, medical clinic with nurse practitioner, laundry facilities (washers/dryers/detergent), job placement assistance. **Technical Support** - 6 computer terminals with internet, free WiFi throughout, SHELTR platform help, POD maintenance/repairs. **Social Services** - Case management, community events, 24/7 security, life skills training. **Operations** - POD deployment coordination, volunteer management, 24/7 staffed support, emergency response (24-48 hour POD deployment).",
+        "category": "ecosystem",
+        "agent_suggestion": "participant_support",
+        "keywords": ["basecamp services", "meals", "medical", "laundry", "computers", "wifi", "job training", "case management"],
+        "actions": [
+            {"type": "link", "text": "Full Services List", "url": "/basecamp"},
+            {"type": "link", "text": "Participant Guide", "url": "/solutions/participants"}
+        ]
+    },
+    
+    "basecamp_concept": {
+        "questions": [
+            "how does basecamp work",
+            "basecamp shipping container",
+            "basecamp deployment",
+            "why shipping container",
+            "basecamp setup"
+        ],
+        "answer": "Basecamp uses a 40ft high cube shipping container with side doors (from ATS Containers, Ontario). When SHELTR deploys PODs to a city, they arrive inside the Basecamp container. Instead of removing it, the container stays on-site with proper permissions and transforms into a permanent community hub. The container's side doors create compartmentalized access for different services. PODs are then set up nearby, creating a supported community with centralized services all within walking distance. This innovative approach turns logistics into infrastructure.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["basecamp container", "shipping container", "ats containers", "deployment", "infrastructure", "40ft container"],
+        "actions": [
+            {"type": "link", "text": "Basecamp Details", "url": "/basecamp"},
+            {"type": "link", "text": "ATS Partnership", "url": "/docs/ecosystem"}
+        ]
+    },
+    
+    "basecamp_hours": {
+        "questions": [
+            "basecamp hours",
+            "when is basecamp open",
+            "basecamp operating hours",
+            "is basecamp 24/7",
+            "basecamp schedule"
+        ],
+        "answer": "Basecamp operates 24/7 with different service levels: **24/7 Access** - Security staff, emergency response, WiFi access. **Daytime Services (7am-10pm)** - Hot meals, medical clinic, laundry, computer terminals, case management, job assistance, community events. **Overnight Staff (10pm-7am)** - Security, emergency support, basic assistance. All services are free for participants and accessible through your SHELTR account.",
+        "category": "ecosystem",
+        "agent_suggestion": "participant_support",
+        "keywords": ["basecamp hours", "operating hours", "24/7", "schedule", "when open"],
+        "actions": [
+            {"type": "link", "text": "Visit Basecamp", "url": "/basecamp"},
+            {"type": "link", "text": "Participant Guide", "url": "/solutions/participants"}
+        ]
+    },
+    
+    "basecamp_access": {
+        "questions": [
+            "how do i access basecamp",
+            "basecamp eligibility",
+            "who can use basecamp",
+            "basecamp requirements",
+            "get to basecamp"
+        ],
+        "answer": "Basecamp is accessible to all SHELTR participants with a QR code and account. To access: 1) Register at any partner shelter to get your QR code, 2) Your participant account automatically grants Basecamp access, 3) Visit any Basecamp location during operating hours, 4) Check in with staff using your QR code or account. Services are free and available immediately upon registration. No additional paperwork or waiting period required. Basecamp locations are strategically placed near POD communities for easy walking access.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["basecamp access", "eligibility", "who can use", "requirements", "registration"],
+        "actions": [
+            {"type": "link", "text": "Register Now", "url": "/register"},
+            {"type": "link", "text": "Basecamp Info", "url": "/basecamp"}
+        ]
+    },
+    
+    "basecamp_volunteers": {
+        "questions": [
+            "volunteer at basecamp",
+            "basecamp volunteers",
+            "how to help at basecamp",
+            "basecamp staffing",
+            "work at basecamp"
+        ],
+        "answer": "Basecamp is staffed by community volunteers 7 days a week. Volunteer opportunities include: meal preparation/service, medical clinic support (for licensed professionals), laundry coordination, computer lab assistance, case management (for social workers), security shifts, POD deployment help, and event coordination. Volunteers receive training, flexible scheduling, and become part of a compassionate community. Contact your local shelter or visit /solutions/organizations to learn about volunteer programs and partnerships.",
+        "category": "shelter_operations",
+        "agent_suggestion": "sheltr_support",
+        "keywords": ["volunteer", "basecamp staff", "community support", "help", "work"],
+        "actions": [
+            {"type": "link", "text": "Volunteer Info", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Basecamp Details", "url": "/basecamp"}
+        ]
+    },
+    
     "mobi_drone_support": {
         "questions": [
             "mobi and drone support",

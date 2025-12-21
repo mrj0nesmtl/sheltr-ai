@@ -345,3 +345,71 @@ async def generate_embeddings_for_pending(
             detail=f"Failed to generate embeddings: {str(e)}"
         )
 
+@router.post("/secure-docs/cleanup-orphaned")
+async def cleanup_orphaned_documents(
+    current_user: dict = Depends(require_super_admin())
+):
+    """Delete orphaned documents with no content and no file path"""
+    try:
+        from services.knowledge_dashboard_service import KnowledgeDashboardService
+        
+        logger.info(f"🧹 Orphaned document cleanup triggered by {current_user.get('email', 'unknown')}")
+        
+        kb_service = KnowledgeDashboardService()
+        
+        # Query all documents
+        all_docs = kb_service.db.collection('knowledge_documents').stream()
+        
+        orphaned = []
+        deleted = 0
+        errors = 0
+        
+        for doc in all_docs:
+            doc_data = doc.to_dict()
+            doc_id = doc.id
+            
+            # Check if document is orphaned (no content AND no file_path)
+            content = doc_data.get('content', '').strip()
+            file_path = doc_data.get('file_path', '').strip()
+            title = doc_data.get('title', 'Untitled')
+            
+            if not content and not file_path:
+                orphaned.append({
+                    'id': doc_id,
+                    'title': title,
+                    'embedding_status': doc_data.get('embedding_status', 'unknown')
+                })
+                
+                try:
+                    # Delete the document
+                    doc.reference.delete()
+                    deleted += 1
+                    logger.info(f"🗑️  Deleted orphaned document: {title} ({doc_id})")
+                except Exception as e:
+                    errors += 1
+                    logger.error(f"❌ Failed to delete {doc_id}: {str(e)}")
+        
+        # Invalidate cache after cleanup
+        if deleted > 0:
+            from services.cache_service import cache
+            cache.invalidate('knowledge_documents_all')
+            cache.invalidate('knowledge_stats')
+            logger.info(f"🔄 Cache invalidated after cleanup")
+        
+        logger.info(f"🎉 Cleanup complete: {deleted} deleted, {errors} errors")
+        
+        return {
+            "success": True,
+            "deleted": deleted,
+            "errors": errors,
+            "orphaned_documents": orphaned,
+            "message": f"Deleted {deleted} orphaned documents"
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error cleaning up orphaned documents: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to cleanup orphaned documents: {str(e)}"
+        )
+

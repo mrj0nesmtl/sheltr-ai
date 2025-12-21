@@ -14,7 +14,7 @@ The flat-pack approach delivers:
 - 60% reduced shipping volume
 - Simplified manufacturing (single SKU)
 - Faster deployment (no heavy equipment)
-- Lower cost ($10,000-$12,000 CAD)
+- Lower cost ($5,000-$7,500 CAD)
 - Easier logistics (standard pallet shipping)
 - Modular expansion capability
 
@@ -515,7 +515,7 @@ The SHELTR Model A flat-pack design represents a revolutionary approach to emerg
 - **EcoFlow Power**: Integrated DELTA 2 system with 400W solar
 - **Modular Construction**: Tool-free assembly, snap-fit panels
 - **Canadian Made**: ATS Containers partnership, domestic production
-- **Cost Effective**: $10,000-$12,000 CAD (40% cost reduction)
+- **Cost Effective**: $5,000-$7,500 CAD (optimized flat-pack design)
 - **Winter Rated**: -25°C / -13°F sustained operation
 - **Dignified Living**: Compact but complete living space
 

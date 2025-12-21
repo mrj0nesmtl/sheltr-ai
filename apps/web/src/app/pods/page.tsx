@@ -220,7 +220,7 @@ export default function PodsPage() {
                   </div>
                   <div>
                     <strong>Price:</strong><br />
-                    $10K-$12K CAD
+                    $5K-$7.5K CAD
                   </div>
                 </div>
                 

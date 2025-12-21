@@ -216,7 +216,7 @@ EXPANDED_FAQS = {
             "pod specifications",
             "pod features"
         ],
-        "answer": "SHELTR POD is our revolutionary flat-pack emergency housing unit. Model A features: 28 sq ft (7' × 4' × 6.5'), assembles in 2-4 hours by 2 people, EcoFlow DELTA 2 power system (1kWh battery + 400W solar), climate control rated to -25°C, smart biometric lock, and modular design. Base price: $10,000-$12,000 CAD. Optional upgrades include electric heating and enhanced solar systems. Funded through our 15% housing fund allocation. Designed for dignity, security, and rapid deployment.",
+        "answer": "SHELTR POD is our revolutionary flat-pack emergency housing unit. Model A features: 28 sq ft (7' × 4' × 6.5'), assembles in 2-4 hours by 2 people, EcoFlow DELTA 2 power system (1kWh battery + 400W solar), climate control rated to -25°C, smart biometric lock, and modular design. Base price: $5,000-$7,500 CAD. Optional upgrades include electric heating and enhanced solar systems. Funded through our 15% housing fund allocation. Designed for dignity, security, and rapid deployment.",
         "category": "ecosystem",
         "agent_suggestion": "participant_support",
         "keywords": ["pods", "housing", "modular", "units", "shelter", "flat-pack", "model a", "ecoflow"],
@@ -279,7 +279,7 @@ EXPANDED_FAQS = {
             "how does flat-pack work",
             "pod assembly"
         ],
-        "answer": "SHELTR now offers ONE optimized Model A flat-pack POD design. This strategic simplification delivers faster deployment and lower costs. The flat-pack design ships on 3 standard pallets and assembles in 2-4 hours with basic tools and 2 people—no heavy equipment needed. Base unit: $10,000-$12,000 CAD. Optional upgrades available: Arctic Package (enhanced heating/insulation), Power Pro Package (upgraded EcoFlow system), Climate Control Pro (advanced HVAC), and Security Plus Package. All funded through the 15% housing fund allocation.",
+        "answer": "SHELTR now offers ONE optimized Model A flat-pack POD design. This strategic simplification delivers faster deployment and lower costs. The flat-pack design ships on 3 standard pallets and assembles in 2-4 hours with basic tools and 2 people—no heavy equipment needed. Base unit: $5,000-$7,500 CAD. Optional upgrades available: Arctic Package (enhanced heating/insulation), Power Pro Package (upgraded EcoFlow system), Climate Control Pro (advanced HVAC), and Security Plus Package. All funded through the 15% housing fund allocation.",
         "category": "ecosystem",
         "agent_suggestion": "public_information",
         "keywords": ["pod models", "flat-pack", "assembly", "single model", "model a", "upgrades", "options"],
@@ -302,7 +302,7 @@ EXPANDED_FAQS = {
             "pod dimensions",
             "how big is the pod"
         ],
-        "answer": "POD Model A (Flat-Pack) specifications: **Dimensions**: 7' L × 4' W × 6.5' H (~28 sq ft usable), **Assembly**: 2-4 hours with 2 people, **Power**: EcoFlow DELTA 2 (1kWh battery, 400W solar panels), **Climate**: Rated to -25°C with insulation (R-20 walls, R-30 roof), **Security**: Smart biometric lock with PIN backup, **Features**: LED lighting, USB charging, water system (10L tank), compact sink, porta potty, **Mobility**: Flat-pack ships on 3 pallets, **Price**: $10,000-$12,000 CAD base unit. Funded through housing fund. Perfect for rapid deployment with dignity.",
+        "answer": "POD Model A (Flat-Pack) specifications: **Dimensions**: 7' L × 4' W × 6.5' H (~28 sq ft usable), **Assembly**: 2-4 hours with 2 people, **Power**: EcoFlow DELTA 2 (1kWh battery, 400W solar panels), **Climate**: Rated to -25°C with insulation (R-20 walls, R-30 roof), **Security**: Smart biometric lock with PIN backup, **Features**: LED lighting, USB charging, water system (10L tank), compact sink, porta potty, **Mobility**: Flat-pack ships on 3 pallets, **Price**: $5,000-$7,500 CAD base unit. Funded through housing fund. Perfect for rapid deployment with dignity.",
         "category": "ecosystem",
         "agent_suggestion": "participant_support",
         "keywords": ["model a", "specifications", "specs", "dimensions", "technical", "pod"],
@@ -365,7 +365,7 @@ EXPANDED_FAQS = {
             "pod cost",
             "how much does a pod cost"
         ],
-        "answer": "POD Model A ($10,000-$12,000 CAD) is funded through the 15% housing fund allocation from SmartFund™. Every donation automatically contributes: 80% direct support + 15% housing fund (for POD deployment, MOBI bikes, drones) + 5% operations. The housing fund is staked with Coinbase earning 4-6% APY, with returns funding POD manufacturing through our partnership with ATS Containers. Flat-pack design reduces shipping costs by 50%, making deployment more efficient.",
+        "answer": "POD Model A ($5,000-$7,500 CAD) is funded through the 15% housing fund allocation from SmartFund™. Every donation automatically contributes: 80% direct support + 15% housing fund (for POD deployment, MOBI bikes, drones) + 5% operations. The housing fund is staked with Coinbase earning 4-6% APY, with returns funding POD manufacturing through our partnership with ATS Containers. Flat-pack design reduces shipping costs by 50%, making deployment more efficient.",
         "category": "ecosystem",
         "agent_suggestion": "donor_relations",
         "keywords": ["pod funding", "how funded", "financing", "pay for", "cost", "price"],
@@ -574,7 +574,7 @@ EXPANDED_FAQS = {
             "emergency housing vs tents",
             "anything better than tent"
         ],
-        "answer": "Anything is better than a tent. POD Model A provides winter-rated shelter (-25°C), EcoFlow DELTA 2 solar power system (1kWh battery + 400W solar), climate control, smart biometric locks for security, dry insulated storage, USB charging, water system, and flat-pack mobility. Tents offer none of this. POD Model A costs $10,000-$12,000 CAD funded through the 15% housing allocation—creating dignity, safety, and a real pathway to stability. Assembles in 2-4 hours, deploys within days.",
+        "answer": "Anything is better than a tent. POD Model A provides winter-rated shelter (-25°C), EcoFlow DELTA 2 solar power system (1kWh battery + 400W solar), climate control, smart biometric locks for security, dry insulated storage, USB charging, water system, and flat-pack mobility. Tents offer none of this. POD Model A costs $5,000-$7,500 CAD funded through the 15% housing allocation—creating dignity, safety, and a real pathway to stability. Assembles in 2-4 hours, deploys within days.",
         "category": "participant_support",
         "agent_suggestion": "public_information",
         "keywords": ["pods tents", "better than tent", "emergency housing", "mobile shelter", "winter rated"],
@@ -723,7 +723,7 @@ EXPANDED_FAQS = {
             "fund specific pods",
             "targeted pod donation"
         ],
-        "answer": "Directly fund MOBI bike access ($2,500 CAD) for transportation and work opportunities, or sponsor POD Model A ($10,000-$12,000 CAD) for emergency flat-pack housing deployment. Choose specific participants to receive MOBI or POD with blockchain-verified delivery. PODs assemble in 2-4 hours and include EcoFlow DELTA 2 power system, climate control to -25°C, and smart security. Watch your gift transform lives with real-time updates.",
+        "answer": "Directly fund MOBI bike access ($2,500 CAD) for transportation and work opportunities, or sponsor POD Model A ($5,000-$7,500 CAD) for emergency flat-pack housing deployment. Choose specific participants to receive MOBI or POD with blockchain-verified delivery. PODs assemble in 2-4 hours and include EcoFlow DELTA 2 power system, climate control to -25°C, and smart security. Watch your gift transform lives with real-time updates.",
         "category": "donor_support",
         "agent_suggestion": "donor_relations",
         "keywords": ["gift mobi", "sponsor pod", "direct funding", "targeted"],
@@ -1860,7 +1860,7 @@ EXPANDED_FAQS = {
             "how much for pod",
             "pod deployment trigger"
         ],
-        "answer": "POD Model A deployment trigger: When housing fund reaches $10,000-$12,000 CAD threshold, deployment is initiated. The flat-pack POD ships on 3 standard pallets and assembles in 2-4 hours on-site. 24-48 hour emergency response time from threshold approval to secure housing. Optional upgrade packages can be added based on additional housing fund accumulation or specific needs (Arctic Package, Power Pro, Climate Control Pro).",
+        "answer": "POD Model A deployment trigger: When housing fund reaches $5,000-$7,500 CAD threshold, deployment is initiated. The flat-pack POD ships on 3 standard pallets and assembles in 2-4 hours on-site. 24-48 hour emergency response time from threshold approval to secure housing. Optional upgrade packages can be added based on additional housing fund accumulation or specific needs (Arctic Package, Power Pro, Climate Control Pro).",
         "category": "ecosystem",
         "agent_suggestion": "public_information",
         "keywords": ["pod deployment", "threshold", "trigger", "housing fund goal"],

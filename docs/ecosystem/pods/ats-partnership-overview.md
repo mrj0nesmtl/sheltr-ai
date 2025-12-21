@@ -268,7 +268,7 @@ SHELTR has partnered with **ATS Containers** (Ontario, Canada) as the primary ma
 - SHELTR margin: $1,100
 - **Total SHELTR Cost**: $5,600
 
-**Final Retail Price**: $10,000-$12,000 CAD
+**Final Retail Price**: $5,000-$7,500 CAD
 
 ### Volume Pricing
 

@@ -31,7 +31,7 @@
 - **Power**: EcoFlow DELTA 2 (1kWh battery + 400W solar)
 - **Climate**: Rated to -25°C with R-20 walls, R-30 roof
 - **Security**: Smart biometric locks
-- **Price**: $10,000-$12,000 CAD
+- **Price**: $5,000-$7,500 CAD
 - **Funding**: 15% housing fund allocation from SmartFund™
 
 ---
@@ -196,7 +196,7 @@ Searched entire codebase for "Proof of Donation" references:
 1. **POD = Physical Housing**
    - Portable On-Demand emergency shelter
    - 28 sq ft flat-pack micro-housing
-   - $10,000-$12,000 CAD per unit
+   - $5,000-$7,500 CAD per unit
    - Funded through 15% housing allocation
 
 2. **Shelter Ledger = Donation Verification**

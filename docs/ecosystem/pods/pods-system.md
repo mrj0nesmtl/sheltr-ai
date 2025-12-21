@@ -35,7 +35,7 @@ The Model A is engineered for Canadian and northern climates, featuring modular 
 | **Solar Panels** | 400W rooftop array | EcoFlow compatible |
 | **Insulation** | R-20 walls, R-30 roof | EPS foam + Polyurea + steel composite |
 | **Winter Rating** | -25°C / -13°F | Sustained cold weather operation |
-| **Price Target** | $10,000-$12,000 CAD | Reduced from $15,000 |
+| **Price Target** | $5,000-$7,500 CAD | Optimized flat-pack design |
 | **Canadian Standards** | CSA, NBC 2020, CAN/ULC-S102 | Fully compliant |
 
 ---
@@ -949,7 +949,7 @@ monthly_maintenance = {
 
 #### Flat-Pack Model A Pricing
 
-**Base Unit Cost: $10,000 - $12,000 CAD**
+**Base Unit Cost: $5,000 - $7,500 CAD**
 
 **Cost Breakdown:**
 - **Manufacturing**: $8,000 - $9,500

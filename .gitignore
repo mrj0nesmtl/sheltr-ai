@@ -244,3 +244,5 @@ backup-full-*
 # Session work logs (local development history, not for public repo)
 docs/development/completed-work/
 **/completed-work/
+docs/development/known_issues/
+**/known_issues/

@@ -35,8 +35,8 @@ Information for shelter administrators and staff.
 ### 5. Government & Policy
 Information for government officials and policymakers.
 
-### 6. POD Security
-Technical details about the Proof of Donation system.
+### 6. POD Housing & Security
+Technical details about POD (Portable On-Demand) emergency housing units and security systems.
 
 ### 7. Business Model
 Information about SHELTR's financial model and SmartFund.
@@ -153,17 +153,18 @@ For shelter-direct donations, the split is 95% to the shelter and 5% to SHELTR.
 
 ### Blockchain & Security FAQs
 
-#### Proof of Donation (POD)
+#### Donation Verification & Blockchain Tracking
 **Questions:**
-- "what is proof of donation"
-- "what is pod"
 - "how do i verify my donation"
 - "blockchain verification"
+- "track my donation"
+- "donation receipt"
+- "proof of my contribution"
 
 **Answer:**
-Proof of Donation (POD) is our blockchain-based verification system. Every donation generates a unique transaction hash that proves your contribution. You can view this in your donor dashboard under "My Giving" and download tax receipts with full transaction details.
+SHELTR uses the Shelter Ledger blockchain for complete donation transparency and verification. Every donation generates a unique transaction hash that proves your contribution and tracks fund distribution through the 80/15/5 SmartFund™ model. You can view this in your donor dashboard under "My Giving" and download tax receipts with full blockchain transaction details. Our track & trace system provides immutable proof of your impact.
 
-**Category:** pod_security  
+**Category:** blockchain_security  
 **Agent:** technical_expert
 
 ---
@@ -183,7 +184,39 @@ Yes! SHELTR uses enterprise-grade security:
 - **PCI-compliant payment processing** via Adyen
 - **Role-based access control** to protect sensitive information
 
-**Category:** pod_security  
+**Category:** blockchain_security  
+**Agent:** technical_expert
+
+---
+
+### POD Housing FAQs
+
+#### What is a POD?
+**Questions:**
+- "what is a pod"
+- "what does pod stand for"
+- "tell me about pods"
+- "pod housing"
+- "emergency shelter pods"
+
+**Answer:**
+POD stands for "Portable On-Demand" emergency housing unit. SHELTR's POD Model A is a revolutionary flat-pack micro-housing solution (28 sq ft, 7' × 4' × 6.5') that assembles in 2-4 hours. Features include: EcoFlow DELTA 2 power system (1kWh battery + 400W solar), climate control rated to -25°C, smart biometric locks, and modular design. Base price: $10,000-$12,000 CAD, funded through the 15% housing fund allocation. PODs provide dignity, security, and rapid deployment for participants experiencing homelessness.
+
+**Category:** pod_housing  
+**Agent:** participant_support
+
+---
+
+#### POD vs Proof of Donation
+**Questions:**
+- "is pod proof of donation"
+- "what does pod mean"
+- "pod definition"
+
+**Answer:**
+**Important Clarification**: POD refers to our **Portable On-Demand emergency housing units** (physical micro-shelters), NOT "Proof of Donation." For donation verification and blockchain tracking, we use the **Shelter Ledger** system, which provides immutable track & trace for every contribution. PODs are the physical housing infrastructure funded by the 15% housing allocation from SmartFund™ donations.
+
+**Category:** pod_housing  
 **Agent:** technical_expert
 
 ---

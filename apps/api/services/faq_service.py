@@ -283,7 +283,7 @@ class FAQService:
         expanded_faqs = get_all_expanded_faqs()
         base_faqs.update(expanded_faqs)
         
-        logger.info(f"FAQ database initialized with {len(base_faqs)} FAQs (participants, donors, shelters, government, POD security, business model, ecosystem journey, architecture)")
+        logger.info(f"FAQ database initialized with {len(base_faqs)} FAQs (participants, donors, shelters, government, POD housing, business model, ecosystem journey, architecture)")
         
         return base_faqs
     

@@ -434,10 +434,11 @@ class GitHubService:
                     details.append({"file": file_path, "status": "failed", "error": str(file_error)})
                     failed += 1
             
-            # Invalidate stats cache after embeddings are generated
+            # Invalidate both documents and stats cache after embeddings are generated
             # This ensures the "Pending Embeddings" metric updates correctly
             from .cache_service import cache
-            cache.invalidate('knowledge_stats')
+            cache.invalidate('knowledge_documents_all')  # Force fresh document fetch
+            cache.invalidate('knowledge_stats')          # Force stats recalculation
             logger.info(f"🔄 Cache invalidated - stats will refresh with updated embedding counts")
             
             return {

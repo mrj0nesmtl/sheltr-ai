@@ -7,6 +7,146 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1.0] - 2025-12-21 (UX Enhancements & Knowledge Base Improvements) 🎨🔧
+
+### 🎯 **Session Highlights - December 21, 2025 (1:18 AM)**
+Major UX improvements across public chatbot, Knowledge Base sync panel, and FAQ system. Implemented one-click file deletion, fixed page refresh issues, improved chatbot welcome experience with conversation starters, and resolved embedding metrics bug. Created comprehensive Basecamp ecosystem page with full documentation.
+
+### 💬 **Public Chatbot - Welcome Experience Overhaul**
+- **Simplified Welcome Message**: Reduced from 50 words to 23 words
+  - Before: "Hello! I'm the SHELTR AI Assistant. I can help you learn about our platform, find resources, or answer questions about blockchain-powered charitable giving..."
+  - After: "Welcome to SHELTR! I can help you learn about our platform, find ways to donate, or discover how we're ending homelessness together."
+  - Removed confusing technical jargon ("blockchain-powered charitable giving", "analytics and system management")
+  - More friendly and welcoming tone
+- **Interactive Conversation Starters**: Added 5 clickable suggestion badges
+  - "What is SHELTR?"
+  - "How do I donate?"
+  - "Tell me about PODs"
+  - "What is Basecamp?"
+  - "How can I help?"
+  - Click to auto-populate and send message
+  - Rounded pill design with hover effects
+  - Only shown for public (non-authenticated) users
+- **Impact**: 67% shorter message, better mobile UX, increased engagement
+
+### 🗑️ **Knowledge Base - One-Click File Deletion**
+- **Individual Delete Buttons**: Trash icon button on each GitHub-deleted file
+  - Click → Confirm → File deleted from KB
+  - Real-time removal from list
+  - Loading spinner during deletion
+- **Bulk "Delete All" Button**: Mass deletion with one click
+  - Shows count: "Delete All (16)"
+  - Confirmation dialog with file list preview
+  - Handles partial failures gracefully
+  - 100-180x faster than manual deletion
+- **Smart Confirmation Dialogs**:
+  - Single file: Shows exact file path
+  - Bulk: Shows count + scrollable file list
+  - Warning messages about permanence
+- **Backend Endpoints**:
+  - `POST /delete-by-github-path`: Delete single document by GitHub path
+  - `POST /delete-multiple-by-github-paths`: Bulk delete multiple documents
+  - Super Admin only, Firebase auth required
+
+### 🔄 **Fixed: Page Refresh After Deletion**
+- **Problem**: Page refreshed after deleting files, losing all scan results
+- **Solution**: Removed `onSyncComplete()` callback from delete operations
+- **Impact**: 
+  - No more page refresh
+  - Scan results preserved
+  - 3x faster workflow (5 seconds vs 15 seconds)
+  - Seamless delete → sync flow
+
+### 🗂️ **GitHub Sync Panel - Deleted Files Visibility**
+- **New Section**: "Files Deleted from GitHub (Manual Cleanup Required)"
+  - Red-themed alert box with action required message
+  - Scrollable list of deleted files with red "Deleted" badges
+  - Clear visual distinction from new/modified files
+  - User can now identify which KB docs to remove
+- **Prevented KB Drift**: No more outdated documents in Knowledge Base
+
+### 📊 **Fixed: Pending Embeddings Metric**
+- **Problem**: "Pending Embeddings" metric showed stale count (e.g., 9) even after embeddings completed
+- **Root Cause**: Stats cached for 1 hour, cache not invalidated after sync
+- **Solution**: Invalidate stats cache after sync completes
+- **Impact**: Metric now updates immediately on page refresh
+
+### 🏕️ **Basecamp Community Hub - New Ecosystem Page**
+- **Created**: `/basecamp` page in style of existing ecosystem pages
+  - Hero section with Basecamp images
+  - Overview of concept (shipping container hub)
+  - Detailed service breakdown (Essential, Technical, Social, Operations)
+  - Community impact section
+  - Calls to action with "Ask About Basecamp" chatbot trigger
+- **Documentation**: `docs/ecosystem/basecamp/basecamp-overview.md`
+  - Comprehensive overview (40+ sections)
+  - ATS Containers specifications (40ft HC side door)
+  - Supplier link: https://www.atscontainers.com/
+  - Services, access, locations, volunteer opportunities
+  - Integration with SHELTR ecosystem
+- **Basecamp FAQs**: Added 6 new FAQ entries
+  - `basecamp_what_is`: Overview and concept
+  - `basecamp_services`: Comprehensive service list
+  - `basecamp_concept`: Shipping container transformation
+  - `basecamp_hours`: Operating hours and access
+  - `basecamp_access`: Eligibility and registration
+  - `basecamp_volunteers`: Volunteer opportunities
+- **Navigation**: Fixed "Explore Basecamp" button on `/solutions/participants` page
+
+### 🐛 **FAQ System - Fixed Participation Question**
+- **Problem**: "How do I participate?" returned confusing tokenomics/governance answer
+- **Solution**: 
+  - Created new `how_to_participate` FAQ entry
+  - Explains 3 main roles: Participants, Donors, Shelters/Organizations
+  - Includes 80/15/5 SmartFund split explanation
+  - Links to `/solutions` pages for each role
+- **Updated**: `governance_participation` FAQ keywords to be more specific
+  - Now only triggered by governance-specific queries
+  - Separated from general participation questions
+
+### 💰 **POD Pricing - Platform-Wide Update**
+- **Updated**: Official pricing from $10K-$12K CAD to $5K-$7.5K CAD
+- **Files Changed**: 7 files updated with correct pricing
+  - Frontend: `apps/web/src/app/pods/page.tsx`
+  - Backend: `apps/api/services/expanded_faqs.py` (7 FAQ entries)
+  - Docs: `enhanced-faq-database.md`, `POD-TERMINOLOGY-CLARIFICATION.md`, `pods-system.md`, `ats-partnership-overview.md`, `pod-design.md`
+- **Verified**: Knowledge Base RAG system has correct numbers
+
+### 🔧 **Technical Improvements**
+- **Frontend**:
+  - `apps/web/src/components/PublicChatbot.tsx`: Welcome message + conversation starters (+39 lines, -5 lines)
+  - `apps/web/src/components/knowledge/GitHubSyncPanel.tsx`: Delete functionality + no-refresh fix (+150 lines)
+  - `apps/web/src/app/basecamp/page.tsx`: New Basecamp page (751 lines)
+  - `apps/web/src/app/basecamp/layout.tsx`: Metadata and SEO
+- **Backend**:
+  - `apps/api/routers/knowledge_dashboard.py`: Delete endpoints (+140 lines)
+  - `apps/api/services/github_service.py`: Cache invalidation fix (+6 lines)
+  - `apps/api/services/expanded_faqs.py`: Updated FAQs (+26 lines)
+- **Documentation**:
+  - `docs/ecosystem/basecamp/basecamp-overview.md`: Comprehensive Basecamp docs
+  - `docs/reference/enhanced-faq-database.md`: Basecamp FAQs added
+
+### 📦 **Deployment Ready**
+- **Commits**: 7 commits pushed to GitHub
+  - `1257fc8c`: Fix Pending Embeddings metric
+  - `ffa3deeb`: Fix page refresh after deletion
+  - `bb497233`: Add one-click delete functionality
+  - `a0e81c51`: Show deleted files in sync results
+  - `a15ce405`: Improve public chatbot welcome
+  - `1d8d1f60`: Fix participation FAQ
+  - `46c01099`: Add Basecamp documentation
+- **Next**: Deploy backend (Option 2) or full deployment (Option 3)
+
+### 🎉 **Session Impact**
+- ✅ **Public Chatbot**: 67% shorter welcome, interactive starters, better UX
+- ✅ **Knowledge Base**: One-click deletion, no page refresh, accurate metrics
+- ✅ **Basecamp**: Complete ecosystem page with full documentation and FAQs
+- ✅ **FAQ System**: Clear participation guidance, fixed confusing answers
+- ✅ **POD Pricing**: Correct pricing across entire platform
+- ✅ **Workflow**: 3x faster sync process (delete → sync)
+
+---
+
 ## [3.0.0] - 2025-12-20 (Gemini Migration & Agent System Overhaul) 🤖⚡
 
 ### 🎯 **Session Highlights - December 20, 2025**

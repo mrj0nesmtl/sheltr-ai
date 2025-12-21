@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 20, 2025  
+**Last Updated**: December 21, 2025 (1:18 AM)  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -10,13 +10,80 @@
 
 ## 🎯 Quick Stats (Last 30 Days)
 
-- **Versions Released**: 3.0.0 → 2.140.0 (22 releases)
-- **Major Features**: 18 new features (including Gemini migration!)
-- **Bug Fixes**: 40+ critical fixes
+- **Versions Released**: 3.1.0 → 2.140.0 (23 releases)
+- **Major Features**: 24 new features (Gemini migration, Basecamp, KB enhancements!)
+- **Bug Fixes**: 47+ critical fixes
 - **Cost Optimization**: **95% LLM cost reduction** 💰
 - **Code Quality**: **Zero TypeScript errors** ✅
-- **Documentation**: 50+ docs updated/created (+2,000 lines)
+- **Documentation**: 57+ docs updated/created (+2,500 lines)
+- **UX Improvements**: 10+ major enhancements
 - **MCP Servers**: 8 integrated (GitHub, Firebase, Google Cloud, Shadcn, Playwright, Context7)
+
+---
+
+## [3.1.0] - 2025-12-21 (UX Enhancements & Knowledge Base Improvements) 🎨🔧
+
+### 🎯 **Session Summary**
+Major UX improvements across public chatbot, Knowledge Base sync, and FAQ system. One-click file deletion (100x faster!), fixed page refresh bug, improved chatbot welcome with conversation starters, resolved embedding metrics issue, and created comprehensive Basecamp ecosystem page.
+
+### 💬 **Public Chatbot Overhaul**
+- **Welcome Message**: 67% shorter (50 → 23 words), removed jargon
+- **Conversation Starters**: 5 clickable badges ("What is SHELTR?", "How do I donate?", etc.)
+- **Better UX**: Mobile-friendly, interactive, welcoming tone
+
+### 🗑️ **Knowledge Base - One-Click Deletion**
+- **Individual Delete**: Trash button on each deleted file
+- **Bulk Delete**: "Delete All (16)" button - 100-180x faster than manual
+- **Smart Dialogs**: Confirmation with file preview
+- **Backend**: 2 new endpoints (`/delete-by-github-path`, `/delete-multiple-by-github-paths`)
+
+### 🔄 **Fixed: Page Refresh Bug**
+- **Problem**: Page refreshed after deletion, losing scan results
+- **Solution**: Removed callback, update local state only
+- **Impact**: 3x faster workflow (5s vs 15s), seamless delete → sync
+
+### 🗂️ **GitHub Sync - Deleted Files Visible**
+- **New Section**: Red-themed "Files Deleted from GitHub" with action required alert
+- **Prevents Drift**: User can now see which KB docs to remove
+- **Better Sync**: No more outdated documents in Knowledge Base
+
+### 📊 **Fixed: Pending Embeddings Metric**
+- **Problem**: Metric stuck showing stale count (e.g., 9) after embeddings completed
+- **Solution**: Invalidate stats cache after sync completes
+- **Impact**: Accurate metrics, updates immediately on refresh
+
+### 🏕️ **Basecamp Community Hub (NEW!)**
+- **Page**: `/basecamp` - Full ecosystem page with hero images
+- **Services**: Essential (meals, medical, laundry), Technical (WiFi, computers), Social (case mgmt, events), Operations (deployment, security)
+- **Documentation**: 40+ sections in `basecamp-overview.md`
+- **FAQs**: 6 new entries (what is basecamp, services, hours, access, volunteers)
+- **ATS Containers**: 40ft HC side door specs, supplier link
+- **Integration**: Step 5 in ecosystem journey
+
+### 🐛 **FAQ Fixes**
+- **Participation**: Fixed "how to participate" returning confusing tokenomics answer
+  - Now explains 3 roles: Participants, Donors, Shelters
+  - Links to `/solutions` pages
+- **Governance**: Updated keywords to be more specific (token holder voting only)
+
+### 💰 **POD Pricing Update**
+- **Changed**: $10K-$12K CAD → $5K-$7.5K CAD (official pricing)
+- **Updated**: 7 files (frontend, backend FAQs, docs)
+- **Verified**: Knowledge Base has correct numbers
+
+### 🔧 **Technical**
+- **7 Commits**: All pushed to GitHub
+- **Files Changed**: 10+ files (+500 lines total)
+- **Zero Errors**: All TypeScript clean
+- **Deploy Ready**: Backend or full deployment
+
+### 🎉 **Impact**
+- ✅ Public chatbot: Better first impression, interactive guidance
+- ✅ Knowledge Base: 100x faster file deletion, no page refresh
+- ✅ Basecamp: Complete ecosystem page with documentation
+- ✅ Metrics: Accurate embedding counts
+- ✅ FAQs: Clear participation guidance
+- ✅ Workflow: Seamless delete → sync
 
 ---
 

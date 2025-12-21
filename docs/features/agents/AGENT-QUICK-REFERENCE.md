@@ -1,19 +1,22 @@
 # AI Agent Quick Reference Guide
 
 **For:** SHELTR Platform Users  
-**Updated:** October 15, 2025
+**Updated:** December 20, 2025  
+**Status:** ✅ Gemini-Optimized with Flexible Model Selection
 
 ---
 
 ## 🎯 Which Agent Should You Use?
 
-| Your Need | Best Agent | Why |
-|-----------|------------|-----|
-| General platform questions | **General Assistant** | Accessible, comprehensive overview |
-| Platform feature help | **SHELTR Support** | Step-by-step guidance, troubleshooting |
-| Technical/dev questions | **Technical Expert** | Security, architecture, code |
-| Business strategy | **Business Analyst** | Metrics, ROI, impact measurement |
-| Content creation | **Creative Writer** | Marketing copy, storytelling, brand |
+| Your Need | Best Agent | Default Model | Why |
+|-----------|------------|---------------|-----|
+| General platform questions | **General Assistant** | Gemini 2.5 Flash ⚡ | Fast, accessible, cost-effective |
+| Platform feature help | **SHELTR Support** | Gemini 2.5 Flash ⚡ | Step-by-step guidance, processes |
+| Technical/dev questions | **Technical Expert** | GPT-4o Mini 💻 | Best for code, architecture |
+| Business strategy | **Business Analyst** | Gemini 2.5 Flash ⚡ | Quick analytics, metrics |
+| Content creation | **Creative Writer** | Gemini 2.5 Flash ⚡ | Creative baseline, fast drafts |
+
+**💡 Pro Tip:** Use "Agent Default (Auto) ⭐" in the model selector to automatically use each agent's optimized model!
 
 ---
 
@@ -39,7 +42,8 @@
 Warm greeting → Clear explanation → Practical next steps → Compassionate closing
 ```
 
-**Model:** GPT-4o Mini | **Temp:** 0.7 (Balanced) | **Length:** Medium
+**Default Model:** Gemini 2.5 Flash ⚡ | **Temp:** 0.7 (Balanced) | **Length:** Medium  
+**Cost:** ~$0.0001/request | **Speed:** Very Fast | **Override:** Any model available
 
 ---
 
@@ -63,7 +67,8 @@ Warm greeting → Clear explanation → Practical next steps → Compassionate c
 Feature overview → Step-by-step process → Technical details → Links to docs
 ```
 
-**Model:** GPT-4o | **Temp:** 0.5 (Precise) | **Length:** Detailed
+**Default Model:** Gemini 2.5 Flash ⚡ | **Temp:** 0.5 (Precise) | **Length:** Detailed  
+**Cost:** ~$0.0001/request | **Speed:** Very Fast | **Override:** GPT-4o for complex issues
 
 ---
 
@@ -111,7 +116,8 @@ Technical context → Implementation details → Code examples → Best practice
 Strategic context → Data analysis → Recommendations → Metrics/KPIs
 ```
 
-**Model:** GPT-4o Mini | **Temp:** 0.6 (Balanced) | **Length:** Analytical
+**Default Model:** Gemini 2.5 Flash ⚡ | **Temp:** 0.6 (Balanced) | **Length:** Analytical  
+**Cost:** ~$0.0001/request | **Speed:** Very Fast | **Override:** GPT-4o for complex analysis
 
 ---
 
@@ -135,7 +141,74 @@ Strategic context → Data analysis → Recommendations → Metrics/KPIs
 Engaging hook → Compelling narrative → Emotional connection → Clear CTA
 ```
 
-**Model:** GPT-4o | **Temp:** 0.8 (Creative) | **Length:** Engaging
+**Default Model:** Gemini 2.5 Flash ⚡ | **Temp:** 0.8 (Creative) | **Length:** Engaging  
+**Cost:** ~$0.0001/request | **Speed:** Very Fast  
+**Premium Option:** Claude 3.5 Haiku 🎭 (~$0.0008/request) for critical content  
+**Override:** Claude for premium campaigns, GPT-4o for complex storytelling
+
+---
+
+## 🎯 Model Selection Made Easy
+
+### **"Agent Default (Auto)" ⭐ Recommended**
+
+The dashboard features an intelligent model selector that automatically picks the best model for each agent:
+
+```
+┌─────────────────────────────────────┐
+│  Model Selector (Top Right)         │
+├─────────────────────────────────────┤
+│  ⭐ Agent Default (Auto)  ← Default │
+│  ⚡ Gemini 2.5 Flash                │
+│  🪶 Gemini 2.5 Flash-Lite           │
+│  💻 GPT-4o Mini                     │
+│  🚀 GPT-4o                          │
+│  🎭 Claude 3.5 Haiku                │
+│  🎨 Claude 3.5 Sonnet               │
+└─────────────────────────────────────┘
+```
+
+### **How It Works**
+
+1. **Select "Agent Default (Auto)"** (recommended)
+   - General Assistant → Uses Gemini 2.5 Flash
+   - SHELTR Support → Uses Gemini 2.5 Flash
+   - Technical Expert → Uses GPT-4o Mini
+   - Business Analyst → Uses Gemini 2.5 Flash
+   - Creative Writer → Uses Gemini 2.5 Flash
+
+2. **Or Choose Manually**
+   - Override with any model for specific needs
+   - Switch models mid-conversation
+   - Each message shows which model answered
+
+3. **Visual Indicators**
+   - Model badges on messages: "⚡ Gemini 2.5 Flash"
+   - Chat header shows current model
+   - Quick actions bar displays active model
+
+### **When to Override**
+
+| Situation | Recommended Model | Why |
+|-----------|------------------|-----|
+| **Quick general queries** | Gemini 2.5 Flash | Fastest, cheapest |
+| **Code debugging** | GPT-4o Mini | Best code understanding |
+| **Complex architecture** | GPT-4o | Deep reasoning |
+| **Premium marketing** | Claude 3.5 Haiku | Creative excellence |
+| **Critical content** | Claude 3.5 Sonnet | Highest quality |
+
+### **Cost Comparison**
+
+| Model | Cost/Request | When to Use |
+|-------|-------------|-------------|
+| Gemini 2.5 Flash ⚡ | $0.0001 | Default for most tasks (95% savings) |
+| Gemini 2.5 Flash-Lite 🪶 | $0.00005 | Testing, simple Q&A |
+| GPT-4o Mini 💻 | $0.0002 | Code, technical docs |
+| GPT-4o 🚀 | $0.002 | Complex reasoning (20x more expensive) |
+| Claude 3.5 Haiku 🎭 | $0.0008 | Creative content (8x more expensive) |
+| Claude 3.5 Sonnet 🎨 | $0.003 | Premium content (30x more expensive) |
+
+**💡 Pro Tip:** Start with "Agent Default (Auto)" and only switch if you need specific capabilities!
 
 ---
 
@@ -172,7 +245,9 @@ User: "How do I set up the donation API?"
 | **Creativity** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
 | **Data Analysis** | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐ |
 | **Storytelling** | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **Response Speed** | Fast | Medium | Medium | Fast | Medium |
+| **Default Model** | Gemini ⚡ | Gemini ⚡ | GPT-4o Mini 💻 | Gemini ⚡ | Gemini ⚡ |
+| **Cost/Request** | $0.0001 | $0.0001 | $0.0002 | $0.0001 | $0.0001 |
+| **Response Speed** | Very Fast | Very Fast | Fast | Very Fast | Very Fast |
 | **Response Length** | Medium | Long | Very Long | Long | Medium |
 
 ---
@@ -235,5 +310,96 @@ User: "How do I set up the donation API?"
 
 ---
 
+## 💡 Advanced Tips
+
+### **Maximize Cost Efficiency**
+
+1. **Use "Agent Default (Auto)"** for 95% of tasks
+   - Automatically uses cost-optimized models
+   - Only switch when you need specific capabilities
+
+2. **Start Cheap, Upgrade if Needed**
+   ```
+   Gemini Flash → Quick answer
+   ↓ (if not satisfied)
+   GPT-4o Mini → Better quality
+   ↓ (if still not enough)
+   GPT-4o/Claude → Premium response
+   ```
+
+3. **Know When to Splurge**
+   - **Gemini Flash:** General queries, drafts, iterations
+   - **GPT-4o Mini:** Code, technical docs, debugging
+   - **GPT-4o:** Complex reasoning, critical decisions
+   - **Claude:** Premium content, brand-defining copy
+
+### **Model Switching Workflow**
+
+**Example: Creating a Marketing Campaign**
+
+1. **Brainstorm** (Creative Writer + Gemini Flash)
+   - Fast idea generation
+   - Multiple iterations
+   - Cost: ~$0.0005 for 5 drafts
+
+2. **Refine** (Creative Writer + Claude 3.5 Haiku)
+   - Polish final copy
+   - Premium quality
+   - Cost: ~$0.0008 for final version
+
+3. **Total:** $0.0013 vs. $0.015 if using GPT-4o for everything (87% savings!)
+
+### **Conversation History**
+
+All agents maintain conversation history within a session:
+- ✅ Build on previous responses
+- ✅ Reference earlier context
+- ✅ Model switches preserved in history
+- ✅ Each message shows which model answered
+
+### **Keyboard Shortcuts**
+
+- **Shift + Enter:** New line in message
+- **Enter:** Send message
+- **Ctrl/Cmd + K:** Focus model selector
+- **Ctrl/Cmd + N:** New chat session
+
+---
+
+## 🎓 Learning Path
+
+### **New Users**
+1. Start with **General Assistant** (Gemini Flash)
+2. Learn basic platform features
+3. Explore other agents as needs arise
+
+### **Power Users**
+1. Use **"Agent Default (Auto)"** for efficiency
+2. Switch models strategically
+3. Combine multiple agents for complex projects
+4. Monitor costs and optimize usage
+
+### **Developers**
+1. **Technical Expert** (GPT-4o Mini) for code
+2. **General Assistant** (Gemini) for quick questions
+3. **Business Analyst** (Gemini) for metrics
+4. Switch to GPT-4o for complex architecture
+
+---
+
+## 📈 Success Metrics
+
+**After Gemini Migration (December 2025):**
+- ✅ **95% cost reduction** vs. all-GPT-4o
+- ✅ **Same or better response quality** for most tasks
+- ✅ **Faster response times** (Gemini is very fast)
+- ✅ **More flexible** with model switching
+- ✅ **Better cost transparency** with per-model pricing
+
+---
+
 **Remember:** All agents have access to SHELTR's knowledge base and use RAG (Retrieval-Augmented Generation) for enhanced, factual responses! 🧠✨
+
+**Last Updated:** December 20, 2025  
+**Status:** ✅ Gemini-Optimized with Flexible Model Selection
 

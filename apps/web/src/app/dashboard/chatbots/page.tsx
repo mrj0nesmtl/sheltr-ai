@@ -9,65 +9,30 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Plus, 
   MessageSquare, 
   Settings, 
-  History, 
   Send, 
-  Paperclip, 
   Globe, 
-  Upload,
   Search,
-  Filter,
   MoreHorizontal,
   Bot,
-  User,
-  Clock,
-  Hash,
-  Zap,
-  Brain,
-  Target,
-  TrendingUp,
   FileText,
-  Users,
-  Shield,
-  Star,
   BookOpen,
   Lightbulb,
-  Sparkles,
-  ArrowUp,
-  ArrowDown,
   RefreshCw,
   Trash2,
   Edit,
-  Copy,
-  Download,
   Share2,
-  Volume2,
-  Mic,
-  Video,
   Image,
-  File,
-  Link,
-  ExternalLink,
-  ChevronDown,
-  ChevronUp,
   ChevronLeft,
-  Maximize2,
-  Minimize2,
   Grid3X3,
   List,
-  BarChart3,
-  Activity,
-  AlertCircle,
-  CheckCircle,
-  XCircle,
-  Info
+  XCircle
 } from 'lucide-react';
 import { chatbotDashboardService, ChatSession, ChatMessage, AgentConfig } from '@/services/chatbotDashboardService';
 import { useAuth } from '@/contexts/AuthContext';
@@ -96,12 +61,10 @@ export default function ChatbotDashboard() {
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState('');
   const [selectedAgent, setSelectedAgent] = useState<string>('');
-  const [selectedModel, setSelectedModel] = useState<string>('gpt-4o-mini');
+  const [selectedModel, setSelectedModel] = useState<string>('agent-default');
   const [isTyping, setIsTyping] = useState(false);
   const [showAgentConfig, setShowAgentConfig] = useState(false);
   const [editingAgent, setEditingAgent] = useState<AgentConfig | null>(null);
-  const [viewMode, setViewMode] = useState<'chat' | 'analytics'>('chat');
-  const [isFullScreen, setIsFullScreen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sessionFilter, setSessionFilter] = useState<string>('all');
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
@@ -112,22 +75,25 @@ export default function ChatbotDashboard() {
   const [kbDocCount, setKbDocCount] = useState<{ documents: number; faqs: number } | null>(null);
   const [showKBPicker, setShowKBPicker] = useState(false);
   const [attachedDocs, setAttachedDocs] = useState<string[]>([]);
-  const [attachedKBDocuments, setAttachedKBDocuments] = useState<Array<{ id: string; title: string }>>([]);
+  const [attachedKBDocuments, setAttachedKBDocuments] = useState<Array<{
+    id: string;
+    title: string;
+    category: string;
+    file_path?: string;
+    source_directory?: string;
+    synced_from_github?: boolean;
+    word_count?: number;
+    chunk_count?: number;
+  }>>([]);
 
   // Toolbar state
-  const [showToolbar, setShowToolbar] = useState(true);
   const [layoutMode, setLayoutMode] = useState<'modern' | 'compact'>('modern');
-  const [quickActions, setQuickActions] = useState([
-    { id: 'new-chat', label: 'New Chat', icon: Plus, action: () => createNewSession() },
-    { id: 'search', label: 'Search', icon: Search, action: () => {} },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3, action: () => setViewMode('analytics') },
-    { id: 'settings', label: 'Settings', icon: Settings, action: () => setShowAgentConfig(true) }
-  ]);
 
   useEffect(() => {
     if (user) {
       loadInitialData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadInitialData = async () => {
@@ -157,7 +123,7 @@ When responding:
 • Always respect privacy and confidentiality
 
 Remember that every interaction supports SHELTR's mission to create sustainable solutions for homelessness through technology, compassion, and community engagement.`,
-          model: 'gpt-4o-mini',
+          model: 'gemini-2.5-flash',
           knowledge_bases: ['general', 'platform_help', 'shelter_info'],
           temperature: 0.7,
           max_tokens: 1000,
@@ -188,7 +154,7 @@ When providing support:
 • Help optimize their use of SHELTR's features
 
 Focus on enabling users to effectively leverage SHELTR's technology to maximize their impact in addressing homelessness.`,
-          model: 'gpt-4o',
+          model: 'gemini-2.5-flash',
           knowledge_bases: ['sheltr_docs', 'user_guides', 'platform_features'],
           temperature: 0.5,
           max_tokens: 1500,
@@ -218,7 +184,7 @@ When providing technical guidance:
 • Break down complex technical concepts clearly
 
 Always provide actionable, production-ready technical advice.`,
-          model: 'gpt-4o',
+          model: 'gpt-4o-mini',
           knowledge_bases: ['technical_docs', 'architecture', 'development_guides', 'api_docs'],
           temperature: 0.3,
           max_tokens: 2000,
@@ -248,7 +214,7 @@ When providing business insights:
 • Connect business decisions to mission alignment
 
 Focus on practical, actionable business intelligence that advances SHELTR's social mission.`,
-          model: 'gpt-4o-mini',
+          model: 'gemini-2.5-flash',
           knowledge_bases: ['business', 'analytics', 'impact', 'financial_models', 'market_research'],
           temperature: 0.6,
           max_tokens: 1500,
@@ -278,7 +244,7 @@ When creating content:
 • Balance creativity with clarity and purpose
 
 Help tell SHELTR's story in ways that inspire action and build community.`,
-          model: 'gpt-4o',
+          model: 'gemini-2.5-flash',
           knowledge_bases: ['content', 'marketing', 'communications', 'brand_guidelines', 'storytelling'],
           temperature: 0.8,
           max_tokens: 1500,
@@ -423,6 +389,18 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
     try {
       setIsTyping(true);
       
+      // Use the session's agent type (not the dropdown selection)
+      // This ensures consistency: once a session is created with an agent, it stays with that agent
+      const sessionAgentType = currentSession.agent_type || selectedAgent || 'general';
+      
+      // IMPORTANT: Resolve actual model FIRST (handles "agent-default" selection)
+      // If user selected "agent-default", use the agent's recommended model
+      // Otherwise, use their explicit model selection
+      const actualModel = getActualModel(
+        selectedModel || currentSession.model || 'agent-default',
+        sessionAgentType
+      );
+      
       // Add user message
       const userMessage: ChatMessage = {
         id: `msg-${Date.now()}`,
@@ -430,7 +408,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         role: 'user',
         timestamp: new Date().toISOString(),
         metadata: {
-          model: selectedModel,
+          model: actualModel,  // Use resolved model, not "agent-default"
           tokens_used: 0,
           response_time: 0
         }
@@ -442,10 +420,6 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       // Send message to backend
       try {
         const startTime = Date.now();
-        
-        // Use the session's agent type (not the dropdown selection)
-        // This ensures consistency: once a session is created with an agent, it stays with that agent
-        const sessionAgentType = currentSession.agent_type || selectedAgent || 'general';
         
         // Find the agent configuration for this session
         const baseAgentConfig = agents.find(agent => agent.id === sessionAgentType) || {
@@ -460,11 +434,9 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
           status: 'active' as const
         };
         
-        // IMPORTANT: Use user-selected model (from dropdown), NOT agent's hardcoded model
-        // This allows users to choose any model for any agent
         const selectedAgentConfig = {
           ...baseAgentConfig,
-          model: selectedModel || currentSession.model || baseAgentConfig.model
+          model: actualModel
         };
         
         // Extract KB document IDs to send to backend
@@ -493,7 +465,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
             role: 'assistant',
             timestamp: new Date().toISOString(),
             metadata: {
-              model: selectedModel,
+              model: actualModel,  // Use resolved model, not "agent-default"
               tokens_used: response.data.metadata?.tokens_used || 150,
               response_time: response.data.metadata?.response_time || responseTime
             }
@@ -508,12 +480,15 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
             last_message: aiMessage.content.slice(0, 50) + (aiMessage.content.length > 50 ? '...' : ''),
             updated_at: new Date().toISOString(),
             // Update title if backend generated one
-            title: response.data.session_title || currentSession.title
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            title: (response.data as any).session_title || currentSession.title
           };
           
           // Log if title was auto-generated
-          if (response.data.session_title) {
-            console.log('[ChatbotDashboard] 🎉 Auto-generated title:', response.data.session_title);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          if ((response.data as any).session_title) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            console.log('[ChatbotDashboard] 🎉 Auto-generated title:', (response.data as any).session_title);
           }
           
           setCurrentSession(updatedSession);
@@ -536,7 +511,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
           role: 'assistant',
           timestamp: new Date().toISOString(),
           metadata: {
-            model: selectedModel,
+            model: actualModel,  // Use resolved model, not "agent-default"
             tokens_used: 0,
             response_time: 1.0
           }
@@ -551,6 +526,15 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       console.error('Error sending message:', error);
       setIsTyping(false);
     }
+  };
+
+  // Helper function to resolve actual model when "agent-default" is selected
+  const getActualModel = (modelSelection: string, agentId: string): string => {
+    if (modelSelection === 'agent-default') {
+      const agent = agents.find(a => a.id === agentId);
+      return agent?.model || 'gemini-2.5-flash';
+    }
+    return modelSelection;
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -682,7 +666,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
   }
 
   return (
-    <div className={`h-screen flex flex-col ${isFullScreen ? 'fixed inset-0 z-50 bg-background' : ''}`}>
+    <div className="h-screen flex flex-col">
       {/* Header - Mobile Optimized */}
       <div className="border-b bg-card/50 backdrop-blur-sm flex-shrink-0">
         {/* Top Row - Title and Actions */}
@@ -965,10 +949,17 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                       <h2 className="font-semibold text-base">{currentSession.title}</h2>
                       <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <Badge variant="outline" className={`text-xs ${getAgentColorClass(currentSession.agent_type)}`}>
-                          {currentSession.agent_type}
+                          {agents.find(a => a.id === currentSession.agent_type)?.name || currentSession.agent_type}
                         </Badge>
                         <Badge variant="secondary" className="text-xs">
-                          {selectedModel}
+                          {selectedModel === 'agent-default' 
+                            ? `⭐ ${getActualModel(selectedModel, currentSession.agent_type)}`
+                            : selectedModel === 'gemini-2.5-flash'
+                            ? '⚡ Gemini 2.5 Flash'
+                            : selectedModel === 'gemini-2.5-flash-lite'
+                            ? '🚀 Gemini Flash-Lite'
+                            : selectedModel
+                          }
                         </Badge>
                         <Badge variant="outline" className="text-xs">
                           {messages.length} messages
@@ -1042,36 +1033,52 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                               : 'bg-muted'
                           }`}
                         >
+                          {/* Show model badge for assistant messages */}
+                          {message.role === 'assistant' && message.metadata?.model && (
+                            <div className="flex items-center gap-2 mb-2 pb-2 border-b border-border/50">
+                              <Bot className="h-4 w-4" />
+                              <Badge variant="secondary" className="text-xs">
+                                {message.metadata.model === 'gemini-2.5-flash' && '⚡ Gemini 2.5 Flash'}
+                                {message.metadata.model === 'gemini-2.5-flash-lite' && '🚀 Gemini Flash-Lite'}
+                                {message.metadata.model === 'gpt-4o' && 'GPT-4o'}
+                                {message.metadata.model === 'gpt-4o-mini' && 'GPT-4o Mini'}
+                                {message.metadata.model === 'claude-3-5-sonnet-20241022' && 'Claude 3.5 Sonnet'}
+                                {message.metadata.model === 'claude-3-5-haiku-20241022' && 'Claude 3.5 Haiku'}
+                                {!['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gpt-4o', 'gpt-4o-mini', 'claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022'].includes(message.metadata.model) && message.metadata.model}
+                              </Badge>
+                            </div>
+                          )}
                           <div className="text-sm prose prose-sm dark:prose-invert max-w-none">
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               components={{
                                 // Style headers
-                                h1: ({node, ...props}) => <h1 className="text-xl font-bold mt-4 mb-2" {...props} />,
-                                h2: ({node, ...props}) => <h2 className="text-lg font-bold mt-3 mb-2" {...props} />,
-                                h3: ({node, ...props}) => <h3 className="text-base font-bold mt-2 mb-1" {...props} />,
-                                h4: ({node, ...props}) => <h4 className="text-sm font-bold mt-2 mb-1" {...props} />,
+                                h1: (props) => <h1 className="text-xl font-bold mt-4 mb-2" {...props} />,
+                                h2: (props) => <h2 className="text-lg font-bold mt-3 mb-2" {...props} />,
+                                h3: (props) => <h3 className="text-base font-bold mt-2 mb-1" {...props} />,
+                                h4: (props) => <h4 className="text-sm font-bold mt-2 mb-1" {...props} />,
                                 // Style paragraphs
-                                p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                                p: (props) => <p className="mb-2 last:mb-0" {...props} />,
                                 // Style lists
-                                ul: ({node, ...props}) => <ul className="list-disc list-inside mb-2 space-y-1" {...props} />,
-                                ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-2 space-y-1" {...props} />,
-                                li: ({node, ...props}) => <li className="ml-2" {...props} />,
+                                ul: (props) => <ul className="list-disc list-inside mb-2 space-y-1" {...props} />,
+                                ol: (props) => <ol className="list-decimal list-inside mb-2 space-y-1" {...props} />,
+                                li: (props) => <li className="ml-2" {...props} />,
                                 // Style code
-                                code: ({node, inline, ...props}: any) => 
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                code: ({inline, ...props}: any) => 
                                   inline ? (
                                     <code className="bg-black/10 dark:bg-white/10 px-1 py-0.5 rounded text-xs" {...props} />
                                   ) : (
                                     <code className="block bg-black/10 dark:bg-white/10 p-2 rounded text-xs overflow-x-auto" {...props} />
                                   ),
                                 // Style links
-                                a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
+                                a: (props) => <a className="text-blue-500 hover:underline" {...props} />,
                                 // Style blockquotes
-                                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-gray-300 pl-4 italic my-2" {...props} />,
+                                blockquote: (props) => <blockquote className="border-l-4 border-gray-300 pl-4 italic my-2" {...props} />,
                                 // Style strong/bold
-                                strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
+                                strong: (props) => <strong className="font-bold" {...props} />,
                                 // Style emphasis/italic
-                                em: ({node, ...props}) => <em className="italic" {...props} />,
+                                em: (props) => <em className="italic" {...props} />,
                               }}
                             >
                               {message.content}
@@ -1145,7 +1152,10 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                 {/* Quick Actions */}
                 <div className="flex items-center justify-between mt-2 pt-2 border-t">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>Model: {currentSession.model || selectedModel}</span>
+                    <span>Model: {selectedModel === 'agent-default' 
+                      ? `⭐ ${getActualModel(selectedModel, currentSession.agent_type)} (Auto)`
+                      : (currentSession.model || selectedModel)
+                    }</span>
                     <span className="hidden sm:inline">•</span>
                     <span className="hidden sm:inline">Agent: {agents.find(a => a.id === currentSession.agent_type)?.name || 'None'}</span>
                   </div>
@@ -1158,6 +1168,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                       title="Upload image to gallery (Vision AI coming soon)"
                       disabled={true}
                     >
+                      {/* eslint-disable-next-line jsx-a11y/alt-text */}
                       <Image className="h-3 w-3 mr-1" />
                       Gallery
                     </Button>
@@ -1271,6 +1282,8 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                 <CardContent>
                   <div className="grid gap-3">
                     {[
+                      { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash ⚡', description: 'Fast, cost-effective (20x cheaper than GPT-4o)', status: 'Available' },
+                      { id: 'gemini-2.5-flash-lite', name: 'Gemini 2.5 Flash-Lite 🚀', description: 'Ultra-fast responses, lowest cost', status: 'Available' },
                       { id: 'gpt-4o', name: 'GPT-4o', description: 'Most capable OpenAI model', status: 'Available' },
                       { id: 'gpt-4o-mini', name: 'GPT-4o Mini', description: 'Fast and efficient', status: 'Available' },
                       { id: 'claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet', description: 'Advanced reasoning, 200K context', status: 'Available' },
@@ -1303,6 +1316,14 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
+                          <SelectItem value="agent-default">
+                            <div className="flex items-center gap-2">
+                              <span>Agent Default (Auto)</span>
+                              <span className="text-xs">⭐ Recommended</span>
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="gemini-2.5-flash">Gemini 2.5 Flash ⚡</SelectItem>
+                          <SelectItem value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite 🚀</SelectItem>
                           <SelectItem value="gpt-4o">GPT-4o</SelectItem>
                           <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
                           <SelectItem value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</SelectItem>
@@ -1372,6 +1393,130 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Agent Dialog */}
+      <Dialog open={!!editingAgent} onOpenChange={(open) => !open && setEditingAgent(null)}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Agent Configuration</DialogTitle>
+          </DialogHeader>
+          {editingAgent && (
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Agent Name</label>
+                <Input
+                  value={editingAgent.name}
+                  onChange={(e) => setEditingAgent({ ...editingAgent, name: e.target.value })}
+                  placeholder="Agent name..."
+                />
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium mb-2 block">Description</label>
+                <Input
+                  value={editingAgent.description}
+                  onChange={(e) => setEditingAgent({ ...editingAgent, description: e.target.value })}
+                  placeholder="Brief description..."
+                />
+              </div>
+              
+              <div>
+                <label className="text-sm font-medium mb-2 block">Instructions</label>
+                <Textarea
+                  value={editingAgent.instructions}
+                  onChange={(e) => setEditingAgent({ ...editingAgent, instructions: e.target.value })}
+                  placeholder="Agent instructions and behavior..."
+                  className="min-h-[200px]"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Model</label>
+                  <Select 
+                    value={editingAgent.model} 
+                    onValueChange={(value) => setEditingAgent({ ...editingAgent, model: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="gemini-2.5-flash">Gemini 2.5 Flash ⚡</SelectItem>
+                      <SelectItem value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite 🚀</SelectItem>
+                      <SelectItem value="gpt-4o">GPT-4o</SelectItem>
+                      <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
+                      <SelectItem value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</SelectItem>
+                      <SelectItem value="claude-3-5-haiku-20241022">Claude 3.5 Haiku</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Status</label>
+                  <Select 
+                    value={editingAgent.status} 
+                    onValueChange={(value) => setEditingAgent({ ...editingAgent, status: value as 'active' | 'inactive' })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Temperature</label>
+                  <Input
+                    type="number"
+                    min="0"
+                    max="2"
+                    step="0.1"
+                    value={editingAgent.temperature}
+                    onChange={(e) => setEditingAgent({ ...editingAgent, temperature: parseFloat(e.target.value) })}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">0 = Focused, 2 = Creative</p>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Max Tokens</label>
+                  <Input
+                    type="number"
+                    min="100"
+                    max="4000"
+                    step="100"
+                    value={editingAgent.max_tokens}
+                    onChange={(e) => setEditingAgent({ ...editingAgent, max_tokens: parseInt(e.target.value) })}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Response length limit</p>
+                </div>
+              </div>
+              
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => setEditingAgent(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    // Update the agent in the agents array
+                    setAgents(agents.map(a => a.id === editingAgent.id ? editingAgent : a));
+                    setEditingAgent(null);
+                  }}
+                >
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 

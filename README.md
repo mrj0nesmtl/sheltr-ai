@@ -16,11 +16,11 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ---
 
-**SHELTR has achieved full production readiness with advanced AI agents, comprehensive security, and complete multi-tenant architecture.** We've built a revolutionary platform that combines transparent charitable giving with cutting-edge AI technology and blockchain verification.
+**SHELTR has achieved production readiness with advanced AI agents, comprehensive security, and complete multi-tenant architecture.** We've built a disruptive platform that combines transparent charitable giving with cutting-edge HMIS technology and blockchain immutability.
 
 ### 🎯 **Live Platform Status**
-- **🌐 Production Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app) - **FULLY OPERATIONAL**
-- **🤖 AI Chatbot System**: **LIVE** with role-aware MCP integration
+- **🌐 Production Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app) - **ONLINE**
+- **🤖 AI Chatbot System**: **LIVE** with role-awareness, MCP integration, KB Vector Data
 - **📊 Multi-Tenant Dashboards**: **5-ROLE RBAC** system operational
 - **🔔 Notification System**: **REDESIGNED** - Unified real-time notifications with CSV export & preferences 🆕
 - **🔐 Enterprise Security**: **ZERO VULNERABILITIES** - Dependabot: 0/0, CodeQL: Fixed, npm audit: 0 ✅
@@ -51,10 +51,10 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ---
 
-## 🌟 **Features - OCTOBER 2025**
+## 🌟 **Features - December 2025**
 
-### 💰 **Complete Donation System** 🆕
-- **✅ Dual Donation Flows** - Participant (80-15-5 SmartProof™) + Shelter (95-5 direct support)
+### 💰 **Complete Donation System** 
+- **✅ Dual Donation Flows** - Participant (80-15-5 SmartFund™) + Shelter (95-5 direct support)
 - **✅ Account Connection UI** - Login/register prompts for guests, personalized welcome for authenticated users
 - **✅ Smart Routing** - Automatic detection and handling of participant vs shelter donations
 - **✅ Transparent Breakdowns** - Beautiful gradient cards showing exact fund distribution
@@ -62,7 +62,7 @@ The next generation platform for transparent charitable giving and homelessness 
 - **✅ Housing Fund Tracking** - Real-time progress visualization for participant housing goals
 - **✅ Production Ready** - Framework ready for Adyen payment integration
 
-### 🏠 **Public Page Excellence** 🆕
+### 🏠 **Public Page Excellence**
 - **✅ Shelter Pages Redesigned** - Modern hero sections with image galleries and service grids
 - **✅ Participant Profiles Enhanced** - Professional layouts with housing fund progress components
 - **✅ Email Signup Integration** - Shelter-specific lead capture with real-time Firebase submission
@@ -70,7 +70,7 @@ The next generation platform for transparent charitable giving and homelessness 
 - **✅ Mobile Optimized** - Perfect responsive design across all devices
 - **✅ QR Code Integration** - Easy donation access via QR codes on public pages
 
-### 🔔 **Enterprise Notification System** 🆕 **OCT 21**
+### 🔔 **Enterprise Notification System**
 - **✅ Complete Overhaul** - Unified notification system with 60% code reduction
 - **✅ Real-Time Updates** - Firebase snapshot listeners for instant notifications
 - **✅ 5-Role Dashboards** - Dedicated notification centers for all user roles
@@ -83,7 +83,7 @@ The next generation platform for transparent charitable giving and homelessness 
 - **✅ Bulk Operations** - Mark all as read with one click
 - **📊 Impact**: 1,476 spam notifications cleaned, 823 lines simplified
 
-### 🤖 **Advanced AI Agent System** 🆕
+### 🤖 **Advanced AI Agent System**
 - **✅ Role-Aware Chatbots** - Dynamic behavior based on user authentication
 - **✅ Model Context Protocol (MCP)** - 36 specialized tools for real-world actions  
 - **✅ Multi-Agent Architecture** - Analytics, Knowledge, Research, Support agents
@@ -174,7 +174,7 @@ Users can hold multiple roles simultaneously:
 - [Payment Rails](docs/architecture/payment-rails/unified-payment-architecture.md) - Enterprise payment infrastructure
 
 ### 🔌 [API Documentation](docs/api/)
-- [API Summary](docs/api/api%20summary.md) - API overview and quick reference
+- [API Summary](docs/api/api_20summary.md) - API overview and quick reference
 - [Database Schema](docs/api/database-schema.md) - Firestore collection structure
 - [Firestore Setup](docs/api/firestore-setup.md) - Firebase configuration guide
 
@@ -185,7 +185,7 @@ Users can hold multiple roles simultaneously:
 
 ### ✨ [Features](docs/features/)
 - [Knowledge Base](docs/features/knowledge-base/knowledge-architechture.md) - Complete RAG system
-- [Chatbot System](docs/features/chatbot/AGENT-ARCHITECTURE.md) - AI agent architecture
+- [Chatbot System](docs/features/agents/AGENT-ARCHITECTURE.md) - AI agent architecture
 - [Blog System](docs/features/blog-system/blog_system.md) - Content management
 - [Messaging](docs/features/messaging/internal-messaging-system.md) - Internal messaging
 - [Notifications](docs/features/notifications/NOTIFICATION-ARCHITECTURE.md) - Real-time notifications
@@ -195,10 +195,6 @@ Users can hold multiple roles simultaneously:
 - [Donor Guide](docs/user-guides/donor-guide.md) - For donors and supporters  
 - [Shelter Admin Guide](docs/user-guides/shelter-admin-guide.md) - For shelter staff
 - [User Journeys](docs/user-guides/user-journeys.md) - Complete user flows
-
-### 🤖 AI Agent Documentation
-- [Claude Agent Briefing](docs/CLAUDE-AGENT-BRIEFING.md)
-- [Agent Communication Protocols](docs/CLAUDE-AGENT-COMMUNICATION.md)
 
 ### 🪙 **🆕 [SHELTR Enterprise Token Ecosystem](sheltr-tokens/docs/)**
 - [Token Ecosystem Overview](sheltr-tokens/docs/README.md) - Single-token stable fund architecture  
@@ -309,9 +305,9 @@ Every donation automatically distributes through dual-rail payment infrastructur
 - **✅ Scalable**: Base Network enables global expansion with minimal transaction costs
 - **✅ Measurable Impact**: Complete blockchain verification via Shelter Ledger
 
-**→ [Complete Enterprise Token Documentation](sheltr-tokens/docs/README.md)**  
-**→ [Enterprise Strategy Guide](sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md)**  
-**→ [Technical Implementation](sheltr-tokens/docs/TECHNICAL-IMPLEMENTATION-GUIDE.md)**
+**→ [Complete Enterprise Token Documentation](docs/architecture/technical/tokenomics.md)**  
+**→ [Enterprise Strategy Guide](docs/architecture/payment-rails/unified-payment-architecture.md)**  
+**→ [Technical Implementation](docs/architecture/payment-rails/adyen-integration.md)**
 
 ---
 
@@ -459,7 +455,7 @@ Every donation automatically distributes through dual-rail payment infrastructur
 - 🔄 **NEXT: PAYMENT INTEGRATION**: Adyen + x402 integration for live transaction processing
 - ⏳ Mobile app development and production launch preparation
 
-### **📅 Upcoming Milestones**
+### **📅 Milestones**
 - **Week 3-4**: ✅ **COMPLETED EARLY** - Authentication system fully operational
 - **Week 5-6**: ✅ **COMPLETED** - Session 5.5 About & Solutions redesign  
 - **Week 7-8**: ✅ **COMPLETED** - Session 8 Core Business Logic + Mobile Dashboard Polish
@@ -471,7 +467,7 @@ Every donation automatically distributes through dual-rail payment infrastructur
 - **Week 19-20**: 🔄 **CURRENT** - Payment integration (Adyen) + Mobile app development + Production polish
 - **Week 21-22**: Public launch + Stakeholder onboarding + Marketing campaigns
 
-**→ [Complete Roadmap](docs/04-development/dev-roadmap.md)**
+**→ [Complete Roadmap](docs/development/roadmap.md)**
 
 ---
 
@@ -480,19 +476,18 @@ Every donation automatically distributes through dual-rail payment infrastructur
 ### **For Users & Organizations**
 - 📧 **General Support**: joel@arcanaconcept.com
 - 🏠 **Shelter Partnerships**: joel@arcanaconcept.com  
-- 📚 **User Guides**: [Complete User Documentation](docs/06-user-guides/) (Participant, Admin, Donor)
+- 📚 **User Guides**: [Complete User Documentation](docs/user-guides/) (Participant, Admin, Donor)
 - 🔧 **Technical Support**: joel@arcanaconcept.com
 - 🌐 **Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app)
 
 ### **For Developers**
 - 📖 **Documentation Hub**: [Complete Documentation](docs/TABLE_OF_CONTENTS.md)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/mrj0nesmtl/sheltr-ai/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/mrj0nesmtl/sheltr-ai/discussions)
-- 🔧 **API Reference**: [FastAPI Docs](docs/03-api/README.md)
-- 🏗️ **Development Guide**: [Development Roadmap](docs/04-development/dev-roadmap.md)
-- 🪙 **Blockchain Docs**: [Token Ecosystem](sheltr-tokens/docs/README.md)
-- 🆕 **Blog System**: [Blog Management](docs/03-api/blog-schema.md)
-- 🆕 **Chatbot System**: [Agent Architecture](docs/04-development/CHATBOT-AGENT-ARCHITECTURE.md)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/mrj0nesmtl/sheltr-ai/docs/development/known-issues)
+- 🔧 **API Reference**: [FastAPI Docs](docs/api/api_summary.md)
+- 🏗️ **Development Guide**: [Development Roadmap](docs/development/roadmap.md)
+- 🪙 **Blockchain Docs**: [Token Ecosystem](sheltr-tokens/README.md)
+- 🆕 **Blog System**: [Blog Management](docs/features/blog-system/blog_system.md)
+- 🆕 **Chatbot System**: [Agent Architecture](docs/features/agents/AGENT-QUICK-REFERENCE.md)
 
 ---
 
@@ -500,4 +495,4 @@ Every donation automatically distributes through dual-rail payment infrastructur
 
 *Last Updated: December 16, 2025 - Session 29 Documentation v3.0 Complete: Updated 13 web pages with dual-rail payment architecture (Adyen + x402), enhanced Shelter Ledger messaging, removed MOBI references, added Basecamp community centers, and achieved complete ecosystem alignment. All documentation now reflects v3.0 specifications with zero crypto exposure for participants and guaranteed institutional returns.*
 
-**🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md) | 🪙 [Token Ecosystem](sheltr-tokens/docs/README.md)**
+**🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/overview/platform-overview.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](https://sheltr-ai.web.app/docs) | 🪙 [Tokenonmics](https://sheltr-ai.web.app/tokenomics)**

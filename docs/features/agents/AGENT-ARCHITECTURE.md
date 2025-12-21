@@ -1,8 +1,8 @@
 # SHELTR Agent Architecture - Comprehensive Guide
 
-**Version:** 2.53.1  
-**Last Updated:** October 16, 2025  
-**Status:** ✅ Production Ready
+**Version:** 3.0.0  
+**Last Updated:** December 20, 2025  
+**Status:** ✅ Production Ready - Gemini Optimized
 
 ---
 
@@ -101,14 +101,16 @@ graph TD
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| **AI Engine** | OpenAI GPT-4o-mini | Natural language processing |
+| **AI Engine (Primary)** | Google Gemini 2.5 Flash | Fast, cost-effective natural language processing |
+| **AI Engine (Alternative)** | OpenAI GPT-4o-mini | Code-focused tasks, fallback |
+| **AI Engine (Premium)** | Claude 3.5 Haiku/Sonnet | Creative writing, complex reasoning |
 | **Embeddings** | OpenAI text-embedding-ada-002 | Semantic search (1536 dimensions) |
 | **Backend** | FastAPI (Python 3.11) | API endpoints & orchestration |
-| **Frontend** | Next.js 14 + React | User interfaces |
+| **Frontend** | Next.js 15 + React | User interfaces |
 | **Database** | Firebase Firestore | Conversation & knowledge storage |
 | **Storage** | Firebase Storage | Document files |
 | **Auth** | Firebase Auth | User authentication |
-| **Deployment** | Google Cloud Run | Serverless backend |
+| **Deployment** | Google Cloud Run | Serverless backend on GCP |
 
 ---
 
@@ -333,18 +335,38 @@ Authenticated User Message
 ## 🎛️ **Dashboard Agent System**
 
 ### **Purpose**
-Provide specialized AI agents for internal platform management and content creation.
+Provide specialized AI agents for internal platform management and content creation with intelligent model selection.
 
 ### **Endpoint**
 ```
 POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 ```
 
+### **Model Selection Strategy**
+
+#### **"Agent Default (Auto)" ⭐ Recommended**
+The dashboard features an intelligent model selector with a special "Agent Default (Auto)" option that automatically uses each agent's optimized model:
+
+```typescript
+// Model resolution hierarchy:
+1. User's explicit model selection (if changed from default)
+2. Session's saved model preference
+3. Agent's recommended default model (when "Agent Default (Auto)" is selected)
+```
+
+**Benefits:**
+- ✅ **Cost-optimized** - Each agent uses the most cost-effective model for its task
+- ✅ **Performance-optimized** - Models matched to agent capabilities
+- ✅ **Flexible** - Users can override with any model mid-conversation
+- ✅ **Transparent** - Model badges show which model answered each message
+
 ### **5 Specialized Agents**
 
 #### **1. General Assistant** 🔵
 **Agent ID:** `general`  
-**Color:** Blue outline badge
+**Color:** Blue outline badge  
+**Default Model:** Gemini 2.5 Flash ⚡  
+**Cost:** ~$0.0001/request
 
 **Capabilities:**
 - General platform questions
@@ -357,6 +379,11 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 - Clear and concise
 - Helpful without overwhelming
 
+**Why Gemini Flash:**
+- Fast response times for quick queries
+- Cost-effective for high-volume general questions
+- Excellent at clear, accessible explanations
+
 **Use Cases:**
 - "How do I access the analytics dashboard?"
 - "What's the difference between platform admin and super admin?"
@@ -366,7 +393,9 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 
 #### **2. SHELTR Support** 🟢
 **Agent ID:** `sheltr_support`  
-**Color:** Green outline badge
+**Color:** Green outline badge  
+**Default Model:** Gemini 2.5 Flash ⚡  
+**Cost:** ~$0.0001/request
 
 **Capabilities:**
 - Platform-specific support
@@ -379,6 +408,11 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 - Patient and thorough
 - Focused on SHELTR ecosystem
 
+**Why Gemini Flash:**
+- Handles structured information well (processes, features)
+- Fast enough for real-time support
+- Cost-effective for frequent support queries
+
 **Use Cases:**
 - "How does the SmartFund allocation work?"
 - "Explain the PODS deployment process"
@@ -388,7 +422,9 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 
 #### **3. Technical Expert** 🟣
 **Agent ID:** `technical_expert`  
-**Color:** Purple outline badge
+**Color:** Purple outline badge  
+**Default Model:** GPT-4o Mini 💻  
+**Cost:** ~$0.0002/request
 
 **Capabilities:**
 - Full-stack development guidance
@@ -396,22 +432,32 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 - API documentation
 - Database schema details
 - Debugging assistance
+- Code generation and review
 
 **Personality:**
 - Senior engineer mindset
 - Technical precision
 - Code-focused responses
 
+**Why GPT-4o Mini:**
+- Superior code understanding and generation
+- Better at technical documentation
+- Excellent for debugging and architecture
+- Worth the slightly higher cost for technical accuracy
+
 **Use Cases:**
 - "How is the RAG orchestrator implemented?"
 - "Explain the Firebase security rules structure"
 - "What's the best way to optimize Firestore queries?"
+- "Debug this TypeScript error"
 
 ---
 
 #### **4. Business Analyst** 🟠
 **Agent ID:** `business_analyst`  
-**Color:** Orange outline badge
+**Color:** Orange outline badge  
+**Default Model:** Gemini 2.5 Flash ⚡  
+**Cost:** ~$0.0001/request
 
 **Capabilities:**
 - Social impact analysis
@@ -425,6 +471,11 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 - Big-picture thinker
 - Results-oriented
 
+**Why Gemini Flash:**
+- Fast analytical processing
+- Good at structured data interpretation
+- Cost-effective for frequent business queries
+
 **Use Cases:**
 - "Analyze our donor retention rates"
 - "What's the cost-effectiveness of PODS deployment?"
@@ -434,7 +485,10 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 
 #### **5. Creative Writer** 🩷
 **Agent ID:** `creative_writer`  
-**Color:** Pink outline badge
+**Color:** Pink outline badge  
+**Default Model:** Gemini 2.5 Flash ⚡  
+**Cost:** ~$0.0001/request  
+**Alternative:** Claude 3.5 Haiku (for premium content)
 
 **Capabilities:**
 - Content creation
@@ -448,6 +502,17 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 - Emotionally resonant
 - Brand-conscious
 
+**Why Gemini Flash (Default):**
+- Fast content generation
+- Good creative capabilities
+- Cost-effective for drafts and iterations
+
+**When to Switch to Claude:**
+- Premium marketing campaigns
+- Critical donor communications
+- Brand-defining content
+- Complex storytelling
+
 **Use Cases:**
 - "Write a donor thank-you email"
 - "Create social media posts about our impact"
@@ -455,7 +520,7 @@ POST /api/v1/chatbot-dashboard/sessions/{session_id}/send
 
 ---
 
-### **Agent Selection & Consistency**
+### **Agent Selection & Model Flexibility**
 
 ```typescript
 // When creating a new chat session
@@ -463,14 +528,36 @@ const newSession = {
   id: generateId(),
   title: "New Chat",
   agent_type: selectedAgent || 'general',  // Locked to session
-  model: 'gpt-4o-mini',
+  model: 'agent-default',  // Uses agent's recommended model
   created_at: timestamp
 };
 
 // Agent stays consistent throughout session
-// User can't change agent mid-conversation
-// Ensures coherent, specialized assistance
+// User CAN change model mid-conversation for flexibility
+// Model badges show which model answered each message
 ```
+
+**Key Features:**
+
+1. **Agent Consistency** 🔒
+   - Agent type locked to session
+   - Ensures coherent personality and expertise
+   - Cannot switch agent mid-conversation
+
+2. **Model Flexibility** 🔄
+   - Can switch models anytime during conversation
+   - "Agent Default (Auto)" uses agent's optimized model
+   - Manual override available for specific needs
+
+3. **Visual Indicators** 👁️
+   - Model badges on each message (e.g., "⚡ Gemini 2.5 Flash")
+   - Chat header shows current model
+   - Quick actions bar displays active model
+
+4. **Cost Transparency** 💰
+   - Model costs shown in settings
+   - Per-request pricing displayed
+   - Helps users make informed choices
 
 ### **Agent Color Coding**
 
@@ -828,11 +915,21 @@ apps/web/
 ### **Environment Variables**
 
 ```bash
-# OpenAI
+# OpenAI (for embeddings and GPT models)
 OPENAI_API_KEY=sk-proj-...
 OPENAI_MODEL=gpt-4o-mini
 OPENAI_MAX_TOKENS=2000
 OPENAI_TEMPERATURE=0.7
+
+# Google Gemini (primary LLM)
+GEMINI_API_KEY=AIza...
+GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MAX_TOKENS=2000
+GEMINI_TEMPERATURE=0.7
+
+# Anthropic Claude (premium content)
+ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_MODEL=claude-3-5-haiku-20241022
 
 # Firebase
 FIREBASE_STORAGE_BUCKET=sheltr-ai.firebasestorage.app
@@ -855,6 +952,138 @@ Firestore:
 ├── analytics_events        # Usage tracking
 └── users                   # User profiles
 ```
+
+---
+
+## 🎯 **Model Selection System**
+
+### **Available Models**
+
+| Model | Provider | Speed | Cost/1K | Best For | Dashboard |
+|-------|----------|-------|---------|----------|-----------|
+| **Gemini 2.5 Flash** ⚡ | Google | ⚡⚡⚡ | $0.0001 | General queries, support | ✅ Default |
+| **Gemini 2.5 Flash-Lite** 🪶 | Google | ⚡⚡⚡⚡ | $0.00005 | Simple Q&A, testing | ✅ Available |
+| **GPT-4o Mini** 💻 | OpenAI | ⚡⚡ | $0.0002 | Code, technical | ✅ Available |
+| **GPT-4o** 🚀 | OpenAI | ⚡ | $0.002 | Complex reasoning | ✅ Available |
+| **Claude 3.5 Haiku** 🎭 | Anthropic | ⚡⚡ | $0.0008 | Creative writing | ✅ Available |
+| **Claude 3.5 Sonnet** 🎨 | Anthropic | ⚡ | $0.003 | Premium content | ✅ Available |
+
+### **Cost Comparison**
+
+**Monthly Cost Estimates (1000 requests/month):**
+
+| Model | Cost/Request | Monthly Cost | Savings vs GPT-4o |
+|-------|-------------|--------------|-------------------|
+| Gemini 2.5 Flash | $0.0001 | $0.10 | **95% cheaper** ✅ |
+| Gemini 2.5 Flash-Lite | $0.00005 | $0.05 | **97.5% cheaper** ✅ |
+| GPT-4o Mini | $0.0002 | $0.20 | **90% cheaper** ✅ |
+| GPT-4o | $0.002 | $2.00 | Baseline |
+| Claude 3.5 Haiku | $0.0008 | $0.80 | **60% cheaper** ✅ |
+| Claude 3.5 Sonnet | $0.003 | $3.00 | 50% more expensive ⚠️ |
+
+**Why Gemini Flash is Default:**
+- ✅ **95% cost savings** vs GPT-4o
+- ✅ **Deployed on Google Cloud** (same infrastructure)
+- ✅ **Fast response times** (comparable to GPT-4o Mini)
+- ✅ **Good quality** for most tasks
+- ✅ **No embeddings** needed (handled by OpenAI separately)
+
+### **Model Selection Logic**
+
+```typescript
+// Frontend: apps/web/src/app/dashboard/chatbots/page.tsx
+
+// Helper function to resolve actual model
+const getActualModel = (modelSelection: string, agentId: string): string => {
+  if (modelSelection === 'agent-default') {
+    // Look up agent's recommended model
+    const agent = agents.find(a => a.id === agentId);
+    return agent?.model || 'gemini-2.5-flash';
+  }
+  return modelSelection;  // Use explicit selection
+};
+
+// When sending a message
+const actualModel = getActualModel(
+  selectedModel || currentSession.model || 'agent-default',
+  sessionAgentType
+);
+
+// Store resolved model in message metadata
+const userMessage: ChatMessage = {
+  id: `msg-${Date.now()}`,
+  content: newMessage.trim(),
+  role: 'user',
+  timestamp: new Date().toISOString(),
+  metadata: {
+    model: actualModel,  // Resolved model, not "agent-default"
+    tokens_used: 0,
+    response_time: 0
+  }
+};
+```
+
+```python
+# Backend: apps/api/services/chatbot_dashboard_service.py
+
+async def send_message(session_id, message, agent_config, kb_document_ids):
+    # Extract model from agent config
+    model = agent_config.get('model', 'gemini-2.5-flash')
+    
+    # Route to appropriate service based on model prefix
+    if model.startswith('gemini'):
+        response = await gemini_service.generate_response(
+            messages=conversation_history,
+            model=model,
+            temperature=agent_config.get('temperature', 0.7)
+        )
+    elif model.startswith('claude'):
+        response = await anthropic_service.generate_response(
+            messages=conversation_history,
+            model=model
+        )
+    else:  # OpenAI models (gpt-4o, gpt-4o-mini)
+        response = await openai_service.generate_response(
+            messages=conversation_history,
+            model=model
+        )
+    
+    return response
+```
+
+### **Model Switching Mid-Conversation**
+
+**Scenario:** User starts with Gemini Flash, realizes they need better code help
+
+```
+1. User: "Explain the chatbot architecture" 
+   → Gemini 2.5 Flash responds (fast, general)
+
+2. User switches model dropdown to "GPT-4o Mini"
+
+3. User: "Show me the code implementation"
+   → GPT-4o Mini responds (better code understanding)
+
+4. Both messages preserved with model badges:
+   - Message 1: [⚡ Gemini 2.5 Flash]
+   - Message 2: [💻 GPT-4o Mini]
+```
+
+**Benefits:**
+- ✅ Start fast and cheap (Gemini)
+- ✅ Switch for specific needs (GPT/Claude)
+- ✅ Full conversation history maintained
+- ✅ Visual indicators show which model answered
+
+### **Agent Default Models (December 2025)**
+
+| Agent | Default Model | Rationale | Override Recommendation |
+|-------|--------------|-----------|------------------------|
+| **General Assistant** | Gemini 2.5 Flash | Fast, cheap, good quality | None needed |
+| **SHELTR Support** | Gemini 2.5 Flash | Handles structured info well | None needed |
+| **Technical Expert** | GPT-4o Mini | Best for code | Keep as-is |
+| **Business Analyst** | Gemini 2.5 Flash | Fast analytical processing | None needed |
+| **Creative Writer** | Gemini 2.5 Flash | Good creative baseline | Claude 3.5 Haiku for premium |
 
 ---
 
@@ -923,7 +1152,26 @@ For questions or issues:
 
 ---
 
-**Last Updated:** October 16, 2025  
-**Version:** 2.53.1  
-**Status:** ✅ Production Ready
+## 📝 **Changelog**
+
+### **Version 3.0.0 - December 20, 2025**
+- ✅ **Gemini 2.5 Flash** as default model (95% cost savings)
+- ✅ **Agent Default (Auto)** model selection feature
+- ✅ **Mid-conversation model switching** capability
+- ✅ **Visual model badges** on messages
+- ✅ **Multi-provider support** (Google, OpenAI, Anthropic)
+- ✅ **Cost transparency** in model selection
+- ✅ **Updated agent default models** for cost optimization
+
+### **Version 2.53.1 - October 16, 2025**
+- Initial comprehensive documentation
+- 5 specialized agents defined
+- RAG and FAQ integration documented
+- MCP tool integration outlined
+
+---
+
+**Last Updated:** December 20, 2025  
+**Version:** 3.0.0  
+**Status:** ✅ Production Ready - Gemini Optimized
 

@@ -211,15 +211,19 @@ EXPANDED_FAQS = {
             "tell me about pods housing",
             "sheltr pods units",
             "modular housing pods",
-            "what is a pod"
+            "what is a pod",
+            "tell me about the pod",
+            "pod specifications",
+            "pod features"
         ],
-        "answer": "PODS are revolutionary modular housing units (64-96 sq ft) with solar power, climate control, smart locks, and mobility features. The base model starts at $5,000 per unit and is funded through our housing fund. Designed for dignity, security, and rapid deployment.",
+        "answer": "SHELTR POD is our revolutionary flat-pack emergency housing unit. Model A features: 28 sq ft (7' × 4' × 6.5'), assembles in 2-4 hours by 2 people, EcoFlow DELTA 2 power system (1kWh battery + 400W solar), climate control rated to -25°C, smart biometric lock, and modular design. Base price: $10,000-$12,000 CAD. Optional upgrades include electric heating and enhanced solar systems. Funded through our 15% housing fund allocation. Designed for dignity, security, and rapid deployment.",
         "category": "ecosystem",
         "agent_suggestion": "participant_support",
-        "keywords": ["pods", "housing", "modular", "units", "shelter"],
+        "keywords": ["pods", "housing", "modular", "units", "shelter", "flat-pack", "model a", "ecoflow"],
         "actions": [
-            {"type": "link", "text": "PODs Specifications", "url": "/solutions/participants"},
-            {"type": "link", "text": "How to Get a POD", "url": "/contact"}
+            {"type": "link", "text": "POD Specifications", "url": "/solutions/participants"},
+            {"type": "link", "text": "How to Get a POD", "url": "/contact"},
+            {"type": "link", "text": "Assembly Guide", "url": "/docs/pods"}
         ]
     },
     
@@ -261,7 +265,7 @@ EXPANDED_FAQS = {
         ]
     },
     
-    "pod_models_comparison": {
+    "pod_flat_pack_design": {
         "questions": [
             "what are the different pod models",
             "pod models",
@@ -270,69 +274,84 @@ EXPANDED_FAQS = {
             "different types of pods",
             "pod variations",
             "compare pod models",
-            "tell me about the pod and the different models"
+            "tell me about the pod and the different models",
+            "what is flat-pack design",
+            "how does flat-pack work",
+            "pod assembly"
         ],
-        "answer": "SHELTR offers 3 POD models: **Standard POD** ($5,000) - 64 sq ft with basic amenities, solar power, climate control; **Enhanced POD** ($7,500) - 80 sq ft with bathroom, kitchenette, improved insulation; **Luxury POD** ($12,000) - 96 sq ft with modern furnishings, advanced climate control, smart home tech, and eco-friendly materials. All funded through the 15% housing fund allocation.",
+        "answer": "SHELTR now offers ONE optimized Model A flat-pack POD design. This strategic simplification delivers faster deployment and lower costs. The flat-pack design ships on 3 standard pallets and assembles in 2-4 hours with basic tools and 2 people—no heavy equipment needed. Base unit: $10,000-$12,000 CAD. Optional upgrades available: Arctic Package (enhanced heating/insulation), Power Pro Package (upgraded EcoFlow system), Climate Control Pro (advanced HVAC), and Security Plus Package. All funded through the 15% housing fund allocation.",
         "category": "ecosystem",
         "agent_suggestion": "public_information",
-        "keywords": ["pod models", "different pods", "compare", "types", "variations"],
+        "keywords": ["pod models", "flat-pack", "assembly", "single model", "model a", "upgrades", "options"],
         "actions": [
             {"type": "link", "text": "POD Specifications", "url": "/solutions/participants"},
+            {"type": "link", "text": "Assembly Guide", "url": "/docs/pods"},
             {"type": "link", "text": "SmartFund Details", "url": "/tokenomics"}
         ]
     },
     
-    "standard_pod_details": {
+    "pod_model_a_specifications": {
         "questions": [
             "what is standard pod",
             "standard pod model",
             "basic pod",
-            "cheapest pod",
-            "entry level pod"
+            "pod model a",
+            "model a specifications",
+            "pod specs",
+            "pod technical details",
+            "pod dimensions",
+            "how big is the pod"
         ],
-        "answer": "Standard POD is our base model: 64 sq ft (8x8 ft), solar-powered with battery backup, heating & cooling, smart biometric lock, LED lighting, USB charging ports, and mobility-ready design. Cost: $5,000, funded through housing fund. Perfect for rapid deployment and essential dignity.",
+        "answer": "POD Model A (Flat-Pack) specifications: **Dimensions**: 7' L × 4' W × 6.5' H (~28 sq ft usable), **Assembly**: 2-4 hours with 2 people, **Power**: EcoFlow DELTA 2 (1kWh battery, 400W solar panels), **Climate**: Rated to -25°C with insulation (R-20 walls, R-30 roof), **Security**: Smart biometric lock with PIN backup, **Features**: LED lighting, USB charging, water system (10L tank), compact sink, porta potty, **Mobility**: Flat-pack ships on 3 pallets, **Price**: $10,000-$12,000 CAD base unit. Funded through housing fund. Perfect for rapid deployment with dignity.",
         "category": "ecosystem",
         "agent_suggestion": "participant_support",
-        "keywords": ["standard", "basic", "entry", "pod"],
+        "keywords": ["model a", "specifications", "specs", "dimensions", "technical", "pod"],
         "actions": [
-            {"type": "link", "text": "See All Models", "url": "/solutions/participants"},
-            {"type": "link", "text": "Get a POD", "url": "/contact"}
+            {"type": "link", "text": "Full Specifications", "url": "/docs/pods"},
+            {"type": "link", "text": "Get a POD", "url": "/contact"},
+            {"type": "link", "text": "Assembly Guide", "url": "/docs/pods"}
         ]
     },
     
-    "enhanced_pod_details": {
+    "pod_optional_upgrades": {
         "questions": [
             "what is enhanced pod",
             "enhanced pod model",
-            "mid tier pod",
-            "pod with bathroom",
-            "pod with kitchen"
+            "pod upgrades",
+            "pod options",
+            "pod customization",
+            "optional components",
+            "upgrade packages",
+            "premium features"
         ],
-        "answer": "Enhanced POD offers more: 80 sq ft (8x10 ft), built-in bathroom with composting toilet, compact kitchenette with sink & storage, superior insulation, enhanced solar system, water storage tank, and improved ventilation. Cost: $7,500, funded through housing fund. Ideal for longer-term transitional housing.",
+        "answer": "POD Model A offers optional upgrade packages: **Arctic Package** ($1,800 CAD) - Enhanced heating (2000W), upgraded insulation (R-30 walls/R-40 roof), heated floor, extra battery; **Power Pro Package** ($2,500 CAD) - EcoFlow DELTA Pro (3.6kWh), 800W solar array, extended warranty; **Climate Control Pro** ($1,600 CAD) - 12,000 BTU A/C, HEPA filtration, humidity control; **Security Plus** ($900 CAD) - HD cameras, motion lighting, perimeter sensors. All upgrades funded through housing fund allocation.",
         "category": "ecosystem",
         "agent_suggestion": "participant_support",
-        "keywords": ["enhanced", "bathroom", "kitchen", "mid", "pod"],
+        "keywords": ["upgrades", "options", "packages", "enhanced", "premium", "pod"],
         "actions": [
-            {"type": "link", "text": "Compare Models", "url": "/solutions/participants"},
+            {"type": "link", "text": "View All Upgrades", "url": "/docs/pods"},
             {"type": "link", "text": "Apply Now", "url": "/contact"}
         ]
     },
     
-    "luxury_pod_details": {
+    "pod_assembly_process": {
         "questions": [
-            "what is luxury pod",
-            "luxury pod model",
-            "premium pod",
-            "best pod",
-            "high end pod"
+            "how long does pod assembly take",
+            "pod assembly time",
+            "how to assemble pod",
+            "pod setup process",
+            "how is pod built",
+            "pod installation",
+            "assembly instructions"
         ],
-        "answer": "Luxury POD is our premium model: 96 sq ft (8x12 ft), modern furnishings & finishes, advanced HVAC system, full smart home integration (voice control, app management), premium insulation & soundproofing, larger solar array, eco-friendly sustainable materials, and enhanced privacy features. Cost: $12,000, funded through housing fund. Built for dignity and comfort.",
+        "answer": "POD Model A flat-pack assembly takes 2-4 hours with 2 people and basic tools. **Process**: (1) Foundation & Frame - 45 min: level ground, lay floor panel, assemble aluminum frame; (2) Panel Installation - 60 min: snap-fit wall/roof panels, weatherproof sealing, install door/windows; (3) Systems Integration - 45 min: connect electrical harness, mount EcoFlow DELTA 2, install solar panels, connect plumbing; (4) Interior Finishing - 30 min: install fixtures, furniture, lighting, final testing. No heavy equipment or specialized skills required. Illustrated manual and video tutorials included.",
         "category": "ecosystem",
         "agent_suggestion": "participant_support",
-        "keywords": ["luxury", "premium", "best", "high end", "pod"],
+        "keywords": ["assembly", "installation", "setup", "how to build", "construction", "pod"],
         "actions": [
-            {"type": "link", "text": "Luxury Features", "url": "/solutions/participants"},
-            {"type": "link", "text": "Contact Us", "url": "/contact"}
+            {"type": "link", "text": "Assembly Guide", "url": "/docs/pods"},
+            {"type": "link", "text": "Video Tutorial", "url": "/docs/pods"},
+            {"type": "link", "text": "Contact Support", "url": "/contact"}
         ]
     },
     
@@ -342,15 +361,18 @@ EXPANDED_FAQS = {
             "how do pods get funded",
             "pod financing",
             "who pays for pods",
-            "how to fund a pod"
+            "how to fund a pod",
+            "pod cost",
+            "how much does a pod cost"
         ],
-        "answer": "PODs are funded through the 15% housing fund allocation from SmartFund™. Every donation automatically contributes: 80% direct support + 15% housing fund (for PODS, MOBI, drones) + 5% operations. The housing fund is staked with Coinbase earning 4-6% APY, with returns funding POD manufacturing at our fabrication centers.",
+        "answer": "POD Model A ($10,000-$12,000 CAD) is funded through the 15% housing fund allocation from SmartFund™. Every donation automatically contributes: 80% direct support + 15% housing fund (for POD deployment, MOBI bikes, drones) + 5% operations. The housing fund is staked with Coinbase earning 4-6% APY, with returns funding POD manufacturing through our partnership with ATS Containers. Flat-pack design reduces shipping costs by 50%, making deployment more efficient.",
         "category": "ecosystem",
         "agent_suggestion": "donor_relations",
-        "keywords": ["pod funding", "how funded", "financing", "pay for"],
+        "keywords": ["pod funding", "how funded", "financing", "pay for", "cost", "price"],
         "actions": [
             {"type": "link", "text": "SmartFund Model", "url": "/tokenomics"},
-            {"type": "link", "text": "Donate Now", "url": "/scan-give"}
+            {"type": "link", "text": "Donate Now", "url": "/scan-give"},
+            {"type": "link", "text": "POD Details", "url": "/docs/pods"}
         ]
     },
     
@@ -454,15 +476,21 @@ EXPANDED_FAQS = {
             "path to housing",
             "15 percent housing fund",
             "how to get housing from sheltr",
-            "housing pathway for participants"
+            "housing pathway for participants",
+            "how do participants get pods",
+            "emergency pod access",
+            "pod for participants",
+            "winter housing pods",
+            "secure shelter pods"
         ],
-        "answer": "15% of all donations automatically build your housing fund, creating a foundation for urgent stability. This fund provides access to emergency PODS (64-96 sq ft micro-housing), transitional housing, and eventually permanent accommodation. Track your housing fund progress through your participant account.",
+        "answer": "15% of all donations automatically build your housing fund, creating a foundation for urgent stability. This fund provides access to emergency POD Model A (28 sq ft flat-pack housing with EcoFlow power, climate control to -25°C, smart locks), transitional housing, and eventually permanent accommodation. PODs assemble in 2-4 hours and deploy within days when your housing fund threshold is met. Track your housing fund progress and POD eligibility through your participant account. Anything is better than a tent.",
         "category": "participant_support",
         "agent_suggestion": "participant_support",
-        "keywords": ["housing pathway", "15 percent", "housing fund", "stable housing"],
+        "keywords": ["housing pathway", "15 percent", "housing fund", "stable housing", "emergency pod", "participant housing", "winter shelter"],
         "actions": [
             {"type": "link", "text": "Housing Options", "url": "/solutions/participants"},
-            {"type": "link", "text": "POD Details", "url": "/pods"}
+            {"type": "link", "text": "POD Features", "url": "/docs/pods"},
+            {"type": "link", "text": "Track Progress", "url": "/dashboard"}
         ]
     },
     
@@ -546,12 +574,13 @@ EXPANDED_FAQS = {
             "emergency housing vs tents",
             "anything better than tent"
         ],
-        "answer": "Anything is better than a tent. PODS provide winter-rated shelter (-25°C), solar power, heating/cooling, smart locks for security, dry storage, USB charging, and mobility. Tents offer none of this. PODS cost $5,000-$12,000 funded through the 15% housing allocation—creating dignity, safety, and a real pathway to stability.",
+        "answer": "Anything is better than a tent. POD Model A provides winter-rated shelter (-25°C), EcoFlow DELTA 2 solar power system (1kWh battery + 400W solar), climate control, smart biometric locks for security, dry insulated storage, USB charging, water system, and flat-pack mobility. Tents offer none of this. POD Model A costs $10,000-$12,000 CAD funded through the 15% housing allocation—creating dignity, safety, and a real pathway to stability. Assembles in 2-4 hours, deploys within days.",
         "category": "participant_support",
         "agent_suggestion": "public_information",
-        "keywords": ["pods tents", "better than tent", "emergency housing", "mobile shelter"],
+        "keywords": ["pods tents", "better than tent", "emergency housing", "mobile shelter", "winter rated"],
         "actions": [
             {"type": "link", "text": "POD Solutions", "url": "/solutions/participants"},
+            {"type": "link", "text": "POD Specifications", "url": "/docs/pods"},
             {"type": "link", "text": "Ecosystem", "url": "/ecosystem"}
         ]
     },
@@ -694,12 +723,13 @@ EXPANDED_FAQS = {
             "fund specific pods",
             "targeted pod donation"
         ],
-        "answer": "Directly fund MOBI bike access ($2,500) for transportation and work opportunities, or sponsor PODS ($5,000-$12,000) for emergency micro-housing deployment. Choose specific participants to receive MOBI or PODS with blockchain-verified delivery. Watch your gift transform lives with real-time updates.",
+        "answer": "Directly fund MOBI bike access ($2,500 CAD) for transportation and work opportunities, or sponsor POD Model A ($10,000-$12,000 CAD) for emergency flat-pack housing deployment. Choose specific participants to receive MOBI or POD with blockchain-verified delivery. PODs assemble in 2-4 hours and include EcoFlow DELTA 2 power system, climate control to -25°C, and smart security. Watch your gift transform lives with real-time updates.",
         "category": "donor_support",
         "agent_suggestion": "donor_relations",
         "keywords": ["gift mobi", "sponsor pod", "direct funding", "targeted"],
         "actions": [
             {"type": "link", "text": "Gift Solutions", "url": "/solutions/donors"},
+            {"type": "link", "text": "POD Details", "url": "/docs/pods"},
             {"type": "link", "text": "Donate Now", "url": "/scan-give"}
         ]
     },
@@ -1830,13 +1860,14 @@ EXPANDED_FAQS = {
             "how much for pod",
             "pod deployment trigger"
         ],
-        "answer": "POD deployment trigger: When housing fund reaches $5,000-$15,000 threshold (depending on POD model: Standard $5K, Enhanced $7.5K, Luxury $12K), deployment is initiated. MOBI bikes deliver and position POD. 24-48 hour emergency response time from threshold to secure housing.",
+        "answer": "POD Model A deployment trigger: When housing fund reaches $10,000-$12,000 CAD threshold, deployment is initiated. The flat-pack POD ships on 3 standard pallets and assembles in 2-4 hours on-site. 24-48 hour emergency response time from threshold approval to secure housing. Optional upgrade packages can be added based on additional housing fund accumulation or specific needs (Arctic Package, Power Pro, Climate Control Pro).",
         "category": "ecosystem",
         "agent_suggestion": "public_information",
         "keywords": ["pod deployment", "threshold", "trigger", "housing fund goal"],
         "actions": [
             {"type": "link", "text": "POD Deployment", "url": "/ecosystem"},
-            {"type": "link", "text": "POD Models", "url": "/pods"}
+            {"type": "link", "text": "POD Details", "url": "/docs/pods"},
+            {"type": "link", "text": "Track Progress", "url": "/dashboard"}
         ]
     },
     

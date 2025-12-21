@@ -19,10 +19,6 @@ Documentation for SHELTR's physical infrastructure innovations including PODS, M
 - [Pod Roadmap](pod-roadmap.md) - Development timeline
 - [Pod Security](pod-security.md) - Safety and security systems
 
-### 🚴 MOBI System
-**Electric bike logistics**
-- [MOBI E-Bikes](mobi-ebike.md) - Mobility solutions
-
 ### 🚁 Drone System
 **Aerial delivery infrastructure**
 - [Drone System](drone-system.md) - Delivery and logistics

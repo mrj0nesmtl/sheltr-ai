@@ -200,7 +200,7 @@ Yes! SHELTR uses enterprise-grade security:
 - "emergency shelter pods"
 
 **Answer:**
-POD stands for "Portable On-Demand" emergency housing unit. SHELTR's POD Model A is a revolutionary flat-pack micro-housing solution (28 sq ft, 7' × 4' × 6.5') that assembles in 2-4 hours. Features include: EcoFlow DELTA 2 power system (1kWh battery + 400W solar), climate control rated to -25°C, smart biometric locks, and modular design. Base price: $10,000-$12,000 CAD, funded through the 15% housing fund allocation. PODs provide dignity, security, and rapid deployment for participants experiencing homelessness.
+POD stands for "Portable On-Demand" emergency housing unit. SHELTR's POD Model A is a revolutionary flat-pack micro-housing solution (28 sq ft, 7' × 4' × 6.5') that assembles in 2-4 hours. Features include: EcoFlow DELTA 2 power system (1kWh battery + 400W solar), climate control rated to -25°C, smart biometric locks, and modular design. Base price: $5,000-$7,500 CAD, funded through the 15% housing fund allocation. PODs provide dignity, security, and rapid deployment for participants experiencing homelessness.
 
 **Category:** pod_housing  
 **Agent:** participant_support

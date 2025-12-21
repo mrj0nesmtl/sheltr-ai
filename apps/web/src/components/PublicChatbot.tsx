@@ -113,10 +113,28 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Conversation starters for public users
+  const conversationStarters = [
+    "What is SHELTR?",
+    "How do I donate?",
+    "Tell me about PODs",
+    "What is Basecamp?",
+    "How can I help?"
+  ];
+
+  // Handle conversation starter click
+  const handleStarterClick = (starter: string) => {
+    setInputValue(starter);
+    // Auto-send the message
+    setTimeout(() => {
+      sendMessage(starter);
+    }, 100);
+  };
+
   // Get personalized welcome message
   const getWelcomeMessage = useCallback(() => {
     if (!isAuthenticated) {
-      return "👋 Hello! I'm the SHELTR AI Assistant. I can help you learn about our platform, find resources, or answer questions about blockchain-powered charitable giving. For advanced features like analytics and system management, please sign in. How can I help you today?";
+      return "👋 Welcome to SHELTR! I can help you learn about our platform, find ways to donate, or discover how we're ending homelessness together.";
     }
 
     const greeting = firstName ? `👋 Hello ${firstName}!` : "👋 Hello!";
@@ -188,12 +206,13 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     scrollToBottom();
   }, [messages, isLoading]);
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const sendMessage = async (messageText?: string) => {
+    const textToSend = messageText || inputValue.trim();
+    if (!textToSend || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue.trim(),
+      text: textToSend,
       isUser: true,
       timestamp: new Date()
     };
@@ -211,7 +230,7 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
       console.log(`[PublicChatbot] Calling: ${apiUrl}`);
       
       const requestBody = {
-        message: userMessage.text,
+        message: textToSend,
         user_id: isAuthenticated ? user?.uid : getSessionId(),
         user_role: userRole,
         conversation_context: {
@@ -543,6 +562,21 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
                           </a>
                         );
                       })}
+                    </div>
+                  )}
+                  
+                  {/* Show conversation starters only for welcome message and public users */}
+                  {message.id === 'welcome' && !isAuthenticated && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {conversationStarters.map((starter, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleStarterClick(starter)}
+                          className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-full hover:bg-blue-100 hover:border-blue-300 dark:text-blue-400 dark:bg-blue-900/20 dark:border-blue-800 dark:hover:bg-blue-900/30 transition-all duration-200 cursor-pointer"
+                        >
+                          {starter}
+                        </button>
+                      ))}
                     </div>
                   )}
                 </div>

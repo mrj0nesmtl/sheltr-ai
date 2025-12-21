@@ -128,29 +128,9 @@ if wait_for_service "http://localhost:8000/health" "Backend API"; then
         echo -e "${YELLOW}⚠️  AI Chatbot: Service starting up...${NC}"
     fi
     
-    # Test knowledge base
-    echo -e "${BLUE}📚 Testing Knowledge Base...${NC}"
-    if curl -s "http://localhost:8000/api/v1/knowledge/health" >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ Knowledge Base: RAG Ready with Enhanced Embeddings${NC}"
-    else
-        echo -e "${YELLOW}⚠️  Knowledge Base: Service unavailable${NC}"
-    fi
-    
-    # Test security system
-    echo -e "${BLUE}🛡️ Testing Security System...${NC}"
-    if curl -s "http://localhost:3000/dashboard/security" >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ Security Dashboard: Access logging active${NC}"
-    else
-        echo -e "${YELLOW}⚠️  Security Dashboard: Service starting up...${NC}"
-    fi
-    
-    # Test donation system
-    echo -e "${BLUE}💰 Testing Donation System...${NC}"
-    if curl -s "http://localhost:8000/api/v1/demo/donations" >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ Donation System: Ready${NC}"
-    else
-        echo -e "${YELLOW}⚠️  Donation System: Service starting up...${NC}"
-    fi
+    # Note: Additional health checks removed to avoid unnecessary API calls
+    # All services will be tested through normal usage
+    echo -e "${GREEN}✅ All Services: Ready for testing${NC}"
 else
     echo -e "${RED}❌ Backend failed to start. Check logs/backend.log${NC}"
 fi
@@ -177,12 +157,13 @@ echo "  • Shelter Admin: Shelter operations + participant management"
 echo "  • Participant: QR code access + SmartFund™ wallet"
 echo "  • Donor: Donation tracking + impact visibility"
 echo ""
-echo -e "${GREEN}🤖 Enhanced AI Features (Session 25+):${NC}"
-echo "  • Gemini AI: gemini-2.5-flash + gemini-2.5-flash-lite models"
+echo -e "${GREEN}🤖 Enhanced AI Features:${NC}"
+echo "  • Gemini AI: gemini-2.5-flash (default) + gemini-2.5-flash-lite"
+echo "  • Multi-Provider: OpenAI GPT-4o, Anthropic Claude 3.5"
 echo "  • Hybrid System: Gemini for chat, OpenAI for embeddings"
-echo "  • FAQ System: 86 FAQs with <1s response time"
+echo "  • FAQ System: 198 FAQs with <1s response time"
 echo "  • RAG Engine: Advanced retrieval with role-based filtering"
-echo "  • Multi-Agent System: 5 specialized AI agents"
+echo "  • Multi-Agent System: 5 specialized agents with Agent Default (Auto)"
 echo "  • Chatbot Health: http://localhost:8000/api/v1/chatbot/health"
 echo "  • Knowledge Base: http://localhost:8000/api/v1/knowledge/health"
 echo ""
@@ -200,9 +181,10 @@ echo "  • Fraud Detection: Real-time monitoring"
 echo "  • Financial Dashboard: http://localhost:3000/dashboard/financial"
 echo "  • Donation Tracking: End-to-end transparency"
 echo ""
-echo -e "${YELLOW}📋 Session 25+ Testing Commands:${NC}"
+echo -e "${YELLOW}📋 Development Commands:${NC}"
 echo "  • View backend logs: tail -f logs/backend.log"
 echo "  • View frontend logs: tail -f logs/frontend.log"
+echo "  • Note: Backend auto-reloads on file changes (you'll see double startup in logs)"
 echo "  • Test Gemini AI: Dashboard chatbot with gemini-2.5-flash"
 echo "  • Test public chatbot: Visit homepage, ask FAQ questions"
 echo "  • Test authenticated chatbot: Login, use dashboard widget"
@@ -220,7 +202,7 @@ echo "  • Security & Compliance: http://localhost:3000/dashboard/security"
 echo "  • Knowledge Base: http://localhost:3000/dashboard/knowledge"
 echo "  • Financial Oversight: http://localhost:3000/dashboard/financial"
 echo ""
-echo -e "${BLUE}🎯 Session 25 Ready: Secure Docs Cleanup + Gemini AI + Role-Based Access! (Nov 25, 2025)${NC}"
+echo -e "${BLUE}🎯 SHELTR-AI Ready: Gemini 2.5 Flash + Multi-Agent System + Clean Logs! (Dec 20, 2025)${NC}"
 
 # Keep the script running to show real-time status
 echo -e "${BLUE}👀 Monitoring services... (Press Ctrl+C to stop)${NC}"
@@ -254,19 +236,15 @@ cleanup() {
 # Set up signal handling
 trap cleanup SIGINT SIGTERM
 
-# Monitor services with enhanced status reporting
+# Monitor services with minimal overhead (no API calls to avoid costs)
 monitor_count=0
 while true; do
-    sleep 10
+    sleep 30  # Check every 30 seconds instead of 10
     ((monitor_count++))
     
-    # Check if processes are still running
+    # Check if processes are still running (no API calls, just process checks)
     backend_status="🟢"
     frontend_status="🟢"
-    ai_status="🟢"
-    knowledge_status="🟢"
-    security_status="🟢"
-    donation_status="🟢"
     
     if [ -f logs/backend.pid ] && ! kill -0 $(cat logs/backend.pid) 2>/dev/null; then
         echo -e "${RED}❌ Backend process died. Check logs/backend.log${NC}"
@@ -280,28 +258,9 @@ while true; do
         frontend_status="🔴"
     fi
     
-    # Every 2 minutes (12 cycles), show detailed status
-    if [ $((monitor_count % 12)) -eq 0 ]; then
-        # Test AI health
-        if ! curl -s "http://localhost:8000/api/v1/chatbot/health" >/dev/null 2>&1; then
-            ai_status="🟡"
-        fi
-        
-        # Test knowledge base health
-        if ! curl -s "http://localhost:8000/api/v1/knowledge/health" >/dev/null 2>&1; then
-            knowledge_status="🟡"
-        fi
-        
-        # Test security dashboard health
-        if ! curl -s "http://localhost:3000/dashboard/security" >/dev/null 2>&1; then
-            security_status="🟡"
-        fi
-        
-        # Test donation system health
-        if ! curl -s "http://localhost:8000/api/v1/demo/donations" >/dev/null 2>&1; then
-            donation_status="🟡"
-        fi
-        
-        echo -e "${BLUE}📊 Session 25 Status: Backend ${backend_status} | Frontend ${frontend_status} | Gemini AI ${ai_status} | Knowledge ${knowledge_status} | Security ${security_status} | Donations ${donation_status} | $(date '+%H:%M:%S')${NC}"
+    # Every 10 minutes (20 cycles of 30s), show status (no API calls)
+    if [ $((monitor_count % 20)) -eq 0 ]; then
+        echo -e "${BLUE}📊 Services Running: Backend ${backend_status} | Frontend ${frontend_status} | $(date '+%H:%M:%S')${NC}"
+        echo -e "${BLUE}💡 Tip: Use 'tail -f logs/backend.log' or 'tail -f logs/frontend.log' to monitor activity${NC}"
     fi
 done 

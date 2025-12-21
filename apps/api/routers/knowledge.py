@@ -458,28 +458,24 @@ async def knowledge_status():
     description="Check the health status of the knowledge base system"
 )
 async def knowledge_health():
-    """Check knowledge base system health"""
+    """Check knowledge base system health (lightweight check, no Firestore queries)"""
     try:
-        stats = await knowledge_service.get_knowledge_stats()
-        
-        # Determine health status
+        # Lightweight health check - just verify service is initialized
+        # Avoid expensive Firestore queries that cause slow request warnings
         health_status = "healthy"
         issues = []
         
-        if stats.get('total_documents', 0) == 0:
-            issues.append("No documents in knowledge base")
+        # Quick check: is the service initialized?
+        if not hasattr(knowledge_service, 'db') or knowledge_service.db is None:
             health_status = "warning"
-        
-        if stats.get('total_chunks', 0) == 0:
-            issues.append("No embeddings generated")
-            health_status = "warning"
+            issues.append("Knowledge service not fully initialized")
         
         return KnowledgeResponse(
             success=True,
             data={
                 'status': health_status,
                 'issues': issues,
-                'stats': stats
+                'message': 'Health check optimized - use /stats endpoint for detailed metrics'
             },
             message=f"Knowledge base status: {health_status}",
             timestamp=datetime.now().isoformat()

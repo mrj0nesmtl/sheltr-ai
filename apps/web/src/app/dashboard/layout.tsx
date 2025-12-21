@@ -552,16 +552,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   // 🔔 NEW: Use the unified notification hook for real-time updates
   const { notifications, unreadCount } = useNotifications();
 
-  // Debug user information (development only)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🔍 Dashboard Layout Debug:', {
-      userEmail: user?.email,
-      userRole: user?.role,
-      userDisplayName: user?.displayName,
-      userName: getUserDisplayName(user),
-      unreadNotifications: unreadCount
-    });
-  }
+  // Debug logging removed to keep logs clean
+  // User info available in React DevTools if needed
 
   // Pass unreadCount as both message and notification counts
   // (The old system separated these, but the new system unifies them)

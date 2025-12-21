@@ -1,0 +1,82 @@
+# GCP Cost Analysis Report
+# Generated: $(date)
+# Project: sheltr-ai
+
+## Current Infrastructure
+
+### Cloud Build Configuration
+- Machine Type: E2_HIGHCPU_8 (HIGH COST - 8 vCPU)
+- Builds per month: Check `gcloud builds list` output
+
+### Cloud Run Configuration
+- Service: sheltr-api
+- Region: us-central1
+- Max instances: 10 (may be high)
+- Memory per instance: 2Gi (consider reducing to 1Gi)
+- CPU per instance: 2 (consider reducing to 1)
+
+### Storage
+- Artifact Registry: Multiple Docker image layers
+- Container Registry: May have legacy images
+
+### Secrets
+- OPENAI_API_KEY: Active
+- ANTHROPIC_API_KEY: Active
+
+## Cost Optimization Recommendations
+
+### IMMEDIATE (High Impact, Low Effort)
+1. Update cloudbuild.yaml: Change E2_HIGHCPU_8 → E2_STANDARD_4
+   - Expected savings: ~50% on build costs (~$6/month)
+
+2. Delete old Docker images
+   - Expected savings: ~50% on storage (~$20/month)
+
+3. Reduce Cloud Run instances
+   - Change --max-instances from 10 to 5
+   - Expected savings: ~30% on runtime (~$2/month)
+
+### MEDIUM TERM (Medium Impact, Medium Effort)
+4. Optimize Docker image with multi-stage builds
+   - Reduces image size
+   - Faster deployments
+
+5. Enable build caching in Cloud Build
+   - Reduces build time
+
+6. Reduce Cloud Run resources
+   - Change memory from 2Gi to 1Gi
+   - Change CPU from 2 to 1 (FastAPI is I/O-bound)
+   - Expected savings: ~40% on runtime (~$2.60/month)
+
+### LONG TERM (Monitor & Adjust)
+7. Set up billing budgets and alerts
+8. Enable cost optimization recommendations
+9. Monitor BigQuery cost exports
+10. Review monthly and adjust thresholds
+
+## Expected Savings
+
+| Optimization | Current | Target | Savings |
+|--------------|---------|--------|---------|
+| Build costs | $12.08 | $6.04 | 50% |
+| Storage | $42.87 | $21.44 | 50% |
+| Runtime | $6.57 | $3.29 | 50% |
+| Unused/Optimizable | $17.11 | $0 | 100% |
+| **TOTAL** | **$113.43** | **~$60** | **~47%** |
+
+## Next Steps
+
+1. Review this report with team
+2. Prioritize optimizations
+3. Test changes in staging
+4. Deploy optimizations
+5. Monitor November billing
+6. Adjust based on actual usage
+
+## References
+
+- GCP Cost Optimization: https://cloud.google.com/architecture/best-practices-for-running-cost-effective-kubernetes-applications-on-gke
+- Cloud Build Pricing: https://cloud.google.com/build/pricing
+- Artifact Registry Pricing: https://cloud.google.com/artifact-registry/pricing
+- Cloud Run Pricing: https://cloud.google.com/run/pricing

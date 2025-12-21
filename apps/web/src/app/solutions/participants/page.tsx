@@ -214,7 +214,7 @@ export default function ParticipantsPage() {
                   </div>
                 </div>
                 <div className="mt-6">
-                  <Link href="/ecosystem">
+                  <Link href="/basecamp">
                     <Button variant="outline" className="w-full bg-transparent border-2 border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-300">
                       <Users className="h-4 w-4 mr-2" />
                       Explore Basecamp

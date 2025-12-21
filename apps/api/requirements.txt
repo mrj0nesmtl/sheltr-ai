@@ -94,4 +94,4 @@ mkdocs==1.6.1
 mkdocs-material==9.7.0
 
 # Google Generative AI (Gemini)
-google-generativeai==0.8.5
+google-generativeai==0.8.6

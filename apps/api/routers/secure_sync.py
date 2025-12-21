@@ -324,6 +324,12 @@ async def generate_embeddings_for_pending(
         
         logger.info(f"🎉 Embedding generation complete: {processed} processed, {failed} failed")
         
+        # Invalidate cache to ensure metrics update correctly
+        from services.cache_service import cache
+        cache.invalidate('knowledge_documents_all')
+        cache.invalidate('knowledge_stats')
+        logger.info(f"🔄 Cache invalidated - stats will refresh with updated embedding counts")
+        
         return {
             "success": True,
             "processed": processed,

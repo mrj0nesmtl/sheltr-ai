@@ -48,8 +48,10 @@ interface SecureDocumentSyncProps {
 export const SecureDocumentSync: React.FC<SecureDocumentSyncProps> = ({ onSyncComplete }) => {
   const [syncing, setSyncing] = useState(false);
   const [generatingEmbeddings, setGeneratingEmbeddings] = useState(false);
+  const [cleaningUp, setCleaningUp] = useState(false);
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
   const [embeddingResult, setEmbeddingResult] = useState<{processed: number; failed: number} | null>(null);
+  const [cleanupResult, setCleanupResult] = useState<{deleted: number; errors: number} | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const getAuthToken = async (): Promise<string> => {
@@ -94,6 +96,56 @@ export const SecureDocumentSync: React.FC<SecureDocumentSyncProps> = ({ onSyncCo
       throw err;
     } finally {
       setGeneratingEmbeddings(false);
+    }
+  };
+
+  const cleanupOrphanedDocs = async () => {
+    if (!confirm('⚠️ This will permanently delete documents with no content and no file path. Continue?')) {
+      return;
+    }
+
+    try {
+      setCleaningUp(true);
+      setError(null);
+      setCleanupResult(null);
+
+      const token = await getAuthToken();
+      const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+      
+      const response = await fetch(`${apiUrl}/api/v1/secure-docs/cleanup-orphaned`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to cleanup orphaned documents');
+      }
+
+      const data = await response.json();
+      setCleanupResult({
+        deleted: data.deleted,
+        errors: data.errors
+      });
+
+      // Call the callback to refresh knowledge base stats
+      if (onSyncComplete && data.deleted > 0) {
+        setTimeout(() => {
+          onSyncComplete();
+        }, 1000);
+      }
+
+      alert(`✅ Cleanup complete!\n\nDeleted: ${data.deleted} orphaned documents\nErrors: ${data.errors}\n\nThe "Pending Embeddings" metric should now be accurate.`);
+      
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(errorMessage);
+      console.error('Cleanup error:', err);
+    } finally {
+      setCleaningUp(false);
     }
   };
 
@@ -235,28 +287,49 @@ export const SecureDocumentSync: React.FC<SecureDocumentSyncProps> = ({ onSyncCo
 
         {/* Sync Button with 2-Stage Progress */}
         <div className="space-y-2">
-          <Button
-            onClick={handleSync}
-            disabled={syncing || generatingEmbeddings}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-          >
-            {syncing ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Stage 1/2: Syncing Documents...
-              </>
-            ) : generatingEmbeddings ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Stage 2/2: Generating Embeddings...
-              </>
-            ) : (
-              <>
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Sync Secure Documents
-              </>
-            )}
-          </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Button
+              onClick={handleSync}
+              disabled={syncing || generatingEmbeddings || cleaningUp}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              {syncing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Stage 1/2: Syncing...
+                </>
+              ) : generatingEmbeddings ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Stage 2/2: Embeddings...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Sync Secure Documents
+                </>
+              )}
+            </Button>
+
+            <Button
+              onClick={cleanupOrphanedDocs}
+              disabled={syncing || generatingEmbeddings || cleaningUp}
+              variant="outline"
+              className="w-full border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20"
+            >
+              {cleaningUp ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Cleaning Up...
+                </>
+              ) : (
+                <>
+                  <AlertCircle className="mr-2 h-4 w-4" />
+                  Clean Up Orphaned Docs
+                </>
+              )}
+            </Button>
+          </div>
           
           {/* Progress Indicator */}
           {(syncing || generatingEmbeddings) && (
@@ -305,6 +378,28 @@ export const SecureDocumentSync: React.FC<SecureDocumentSyncProps> = ({ onSyncCo
                     <div className="text-muted-foreground">Errors</div>
                   </div>
                 </div>
+
+                {/* Cleanup Result */}
+                {cleanupResult && (
+                  <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 rounded border border-red-200 dark:border-red-800">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="h-4 w-4 text-red-600" />
+                      <span className="text-sm font-medium text-red-900 dark:text-red-100">
+                        🧹 Orphaned Documents Cleanup Complete
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="p-2 bg-white dark:bg-slate-800 rounded border border-red-200">
+                        <div className="font-bold text-lg text-red-600">{cleanupResult.deleted}</div>
+                        <div className="text-muted-foreground">Deleted</div>
+                      </div>
+                      <div className="p-2 bg-white dark:bg-slate-800 rounded border border-red-200">
+                        <div className="font-bold text-lg text-orange-600">{cleanupResult.errors}</div>
+                        <div className="text-muted-foreground">Errors</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Embedding Generation Status */}
                 {embeddingResult && (

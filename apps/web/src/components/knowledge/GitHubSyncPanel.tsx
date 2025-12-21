@@ -454,6 +454,36 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
               </div>
             )}
 
+            {/* Deleted Files List */}
+            {changes.deleted.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="font-medium flex items-center gap-2 text-foreground">
+                  <Trash2 className="h-4 w-4 text-red-500" />
+                  Files Deleted from GitHub (Manual Cleanup Required):
+                </h4>
+                <Alert className="border-red-500 bg-red-50 dark:bg-red-900/20 dark:border-red-400">
+                  <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                  <AlertDescription className="text-red-800 dark:text-red-200 text-sm">
+                    <strong>Action Required:</strong> These files were deleted from GitHub but still exist in your Knowledge Base. 
+                    You must manually delete them from the Knowledge Base to keep it in sync.
+                  </AlertDescription>
+                </Alert>
+                <div className="max-h-40 overflow-y-auto space-y-1 bg-white dark:bg-gray-800 rounded border border-red-200 dark:border-red-700 p-2">
+                  {changes.deleted.map((file) => (
+                    <div key={file} className="flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 rounded text-sm border border-red-200 dark:border-red-800">
+                      <span className="font-mono text-xs text-red-700 dark:text-red-300">{file}</span>
+                      <Badge 
+                        variant="outline"
+                        className="text-xs border-red-500 text-red-600 bg-red-100 dark:bg-red-900/40 dark:text-red-400"
+                      >
+                        Deleted
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {totalChanges === 0 && (
               <div className="text-center py-4 text-muted-foreground">
                 <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />

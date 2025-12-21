@@ -78,6 +78,14 @@ class KnowledgeDashboardService:
                 # Look up chunk count from our pre-built dictionary (O(1) operation!)
                 chunk_count = chunk_counts.get(doc.id, 0)
                 
+                # Determine embedding status
+                # Use chunk_count as source of truth (if chunks exist, embeddings are complete)
+                embedding_status = 'completed' if chunk_count > 0 else doc_data.get('embedding_status', 'pending')
+                
+                # Debug: Log documents with 0 chunks but claiming to be processed
+                if chunk_count == 0 and doc_data.get('processed', False):
+                    logger.warning(f"⚠️  Document has processed=True but 0 chunks: {doc_data.get('title', 'Untitled')} ({doc.id})")
+                
                 # Transform Firestore data to match frontend expectations
                 transformed_doc = {
                     'id': doc_data.get('id', doc.id),
@@ -89,7 +97,7 @@ class KnowledgeDashboardService:
                     'category': doc_data.get('category', 'Platform').title(),
                     'tags': doc_data.get('tags', []),
                     'status': doc_data.get('status', 'active' if doc_data.get('processed', False) else 'processing'),
-                    'embedding_status': 'completed' if chunk_count > 0 else doc_data.get('embedding_status', 'pending'),
+                    'embedding_status': embedding_status,
                     'created_at': doc_data.get('created_at', doc_data.get('uploaded_at', datetime.now().isoformat())),
                     'updated_at': doc_data.get('updated_at', datetime.now().isoformat()),
                     'created_by': doc_data.get('created_by', doc_data.get('uploaded_by', 'System')),
@@ -267,7 +275,15 @@ class KnowledgeDashboardService:
             total_documents = len(documents)
             total_size = sum(doc.get('file_size', 0) for doc in documents)
             active_documents = len([doc for doc in documents if doc.get('status') == 'active'])
-            pending_embeddings = len([doc for doc in documents if doc.get('embedding_status') == 'pending'])
+            
+            # Debug: List documents with pending embeddings
+            pending_docs = [doc for doc in documents if doc.get('embedding_status') == 'pending']
+            pending_embeddings = len(pending_docs)
+            if pending_embeddings > 0:
+                logger.warning(f"⚠️  Found {pending_embeddings} documents with pending embeddings:")
+                for doc in pending_docs[:10]:  # Show first 10
+                    logger.warning(f"   - {doc.get('title', 'Untitled')} ({doc.get('file_path', 'unknown')})")
+            
             total_chunks = sum(doc.get('chunk_count', 0) for doc in documents)
             total_words = sum(doc.get('word_count', 0) for doc in documents)
             

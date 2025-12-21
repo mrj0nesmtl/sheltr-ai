@@ -57,7 +57,7 @@ qrcode[pil]==8.2
 pillow==10.3.0
 
 # Payment Processing (Adyen)
-Adyen==13.4.0
+Adyen==14.0.0
 requests-oauthlib==2.0.0
 
 # Monitoring and Logging

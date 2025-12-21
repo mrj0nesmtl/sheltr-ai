@@ -53,6 +53,11 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
   const [isSyncing, setIsSyncing] = useState(false);
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
+  const [isDeletingFiles, setIsDeletingFiles] = useState(false);
+  const [deletingFile, setDeletingFile] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState<string | null>(null);
+  const [showBulkDeleteConfirm, setShowBulkDeleteConfirm] = useState(false);
   const [changes, setChanges] = useState<SyncChanges | null>(null);
   
   // Debug: Log user role for Clear KB button visibility
@@ -279,6 +284,108 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
     }
   };
 
+  const deleteSingleFile = async (githubPath: string) => {
+    setDeletingFile(githubPath);
+    setError(null);
+
+    try {
+      const token = await getAuthToken();
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
+      const formData = new FormData();
+      formData.append('github_path', githubPath);
+
+      const response = await fetch(`${baseUrl}/api/v1/knowledge-dashboard/delete-by-github-path`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      // Remove the file from the deleted list
+      if (changes) {
+        setChanges({
+          ...changes,
+          deleted: changes.deleted.filter(f => f !== githubPath)
+        });
+      }
+      
+      // Show success message
+      alert(`✅ Document deleted successfully!\n\nFile: ${githubPath}`);
+      
+      // Call the callback to refresh
+      if (onSyncComplete) {
+        onSyncComplete();
+      }
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      setError(`Failed to delete ${githubPath}. Please try again.`);
+    } finally {
+      setDeletingFile(null);
+      setShowDeleteConfirm(false);
+      setFileToDelete(null);
+    }
+  };
+
+  const deleteAllDeletedFiles = async () => {
+    if (!changes || changes.deleted.length === 0) return;
+
+    setIsDeletingFiles(true);
+    setError(null);
+    setShowBulkDeleteConfirm(false);
+
+    try {
+      const token = await getAuthToken();
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
+      const formData = new FormData();
+      changes.deleted.forEach(path => {
+        formData.append('github_paths', path);
+      });
+
+      const response = await fetch(`${baseUrl}/api/v1/knowledge-dashboard/delete-multiple-by-github-paths`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      // Clear the deleted list
+      setChanges({
+        ...changes,
+        deleted: []
+      });
+      
+      // Show success message
+      alert(`✅ Bulk deletion complete!\n\nDeleted: ${data.data.deleted_count} documents\nFailed: ${data.data.failed_count} documents`);
+      
+      // Call the callback to refresh
+      if (onSyncComplete) {
+        onSyncComplete();
+      }
+    } catch (error) {
+      console.error('Error deleting files:', error);
+      setError('Failed to delete files. Please try again.');
+    } finally {
+      setIsDeletingFiles(false);
+    }
+  };
+
   const totalChanges = changes ? changes.new.length + changes.modified.length : 0;
 
   return (
@@ -457,27 +564,57 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             {/* Deleted Files List */}
             {changes.deleted.length > 0 && (
               <div className="space-y-2">
-                <h4 className="font-medium flex items-center gap-2 text-foreground">
-                  <Trash2 className="h-4 w-4 text-red-500" />
-                  Files Deleted from GitHub (Manual Cleanup Required):
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium flex items-center gap-2 text-foreground">
+                    <Trash2 className="h-4 w-4 text-red-500" />
+                    Files Deleted from GitHub ({changes.deleted.length}):
+                  </h4>
+                  <Button
+                    onClick={() => setShowBulkDeleteConfirm(true)}
+                    disabled={isDeletingFiles || deletingFile !== null}
+                    variant="destructive"
+                    size="sm"
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Delete All ({changes.deleted.length})
+                  </Button>
+                </div>
                 <Alert className="border-red-500 bg-red-50 dark:bg-red-900/20 dark:border-red-400">
                   <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
                   <AlertDescription className="text-red-800 dark:text-red-200 text-sm">
                     <strong>Action Required:</strong> These files were deleted from GitHub but still exist in your Knowledge Base. 
-                    You must manually delete them from the Knowledge Base to keep it in sync.
+                    Click the delete button on each file, or use &quot;Delete All&quot; to remove them all at once.
                   </AlertDescription>
                 </Alert>
                 <div className="max-h-40 overflow-y-auto space-y-1 bg-white dark:bg-gray-800 rounded border border-red-200 dark:border-red-700 p-2">
                   {changes.deleted.map((file) => (
-                    <div key={file} className="flex items-center justify-between p-2 bg-red-50 dark:bg-red-900/20 rounded text-sm border border-red-200 dark:border-red-800">
-                      <span className="font-mono text-xs text-red-700 dark:text-red-300">{file}</span>
-                      <Badge 
-                        variant="outline"
-                        className="text-xs border-red-500 text-red-600 bg-red-100 dark:bg-red-900/40 dark:text-red-400"
-                      >
-                        Deleted
-                      </Badge>
+                    <div key={file} className="flex items-center justify-between gap-2 p-2 bg-red-50 dark:bg-red-900/20 rounded text-sm border border-red-200 dark:border-red-800">
+                      <span className="font-mono text-xs text-red-700 dark:text-red-300 flex-1 truncate">{file}</span>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <Badge 
+                          variant="outline"
+                          className="text-xs border-red-500 text-red-600 bg-red-100 dark:bg-red-900/40 dark:text-red-400"
+                        >
+                          Deleted
+                        </Badge>
+                        <Button
+                          onClick={() => {
+                            setFileToDelete(file);
+                            setShowDeleteConfirm(true);
+                          }}
+                          disabled={isDeletingFiles || deletingFile === file}
+                          variant="destructive"
+                          size="sm"
+                          className="h-6 px-2 text-xs bg-red-600 hover:bg-red-700"
+                        >
+                          {deletingFile === file ? (
+                            <RefreshCw className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-3 w-3" />
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -592,6 +729,124 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
               disabled={isClearing}
             >
               Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Single File Delete Confirmation Dialog */}
+      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Trash2 className="h-5 w-5 text-red-600" />
+              Delete Document from Knowledge Base
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this document? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-4">
+            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+              <p className="text-sm font-mono text-red-700 dark:text-red-300 break-all">
+                {fileToDelete}
+              </p>
+            </div>
+            <p className="text-sm text-muted-foreground mt-3">
+              This will permanently remove the document and all its embeddings from the Knowledge Base.
+            </p>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowDeleteConfirm(false);
+                setFileToDelete(null);
+              }}
+              disabled={deletingFile !== null}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => fileToDelete && deleteSingleFile(fileToDelete)}
+              disabled={deletingFile !== null}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {deletingFile ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete Document
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Bulk Delete Confirmation Dialog */}
+      <Dialog open={showBulkDeleteConfirm} onOpenChange={setShowBulkDeleteConfirm}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Trash2 className="h-5 w-5 text-red-600" />
+              Delete All Deleted Files
+            </DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete all {changes?.deleted.length || 0} documents? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-4">
+            <Alert className="border-red-500 bg-red-50 dark:bg-red-900/20">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-800 dark:text-red-200 text-sm">
+                <strong>Warning:</strong> This will permanently delete {changes?.deleted.length || 0} documents 
+                and all their embeddings from the Knowledge Base.
+              </AlertDescription>
+            </Alert>
+            <div className="mt-3 max-h-32 overflow-y-auto bg-gray-50 dark:bg-gray-800 rounded p-2 border">
+              <p className="text-xs font-medium text-muted-foreground mb-1">Files to be deleted:</p>
+              {changes?.deleted.map((file, index) => (
+                <p key={index} className="text-xs font-mono text-gray-700 dark:text-gray-300 truncate">
+                  • {file}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowBulkDeleteConfirm(false)}
+              disabled={isDeletingFiles}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={deleteAllDeletedFiles}
+              disabled={isDeletingFiles}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isDeletingFiles ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete All ({changes?.deleted.length || 0})
+                </>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

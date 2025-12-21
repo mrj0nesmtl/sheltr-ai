@@ -360,6 +360,146 @@ async def delete_knowledge_document(
         logger.error(f"Failed to delete knowledge document: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to delete knowledge document: {str(e)}")
 
+@router.post("/delete-by-github-path")
+async def delete_document_by_github_path(
+    github_path: str = Form(...),
+    current_user: Dict[str, Any] = Depends(require_super_admin)
+):
+    """Delete a knowledge document by its GitHub path (Super Admin only)"""
+    
+    try:
+        knowledge_service = KnowledgeDashboardService()
+        
+        # Find document by github_path
+        documents = await knowledge_service.get_knowledge_documents()
+        document_to_delete = None
+        
+        for doc in documents:
+            # Check both github_path and file_path (with prefix stripped)
+            if doc.get('github_path') == github_path:
+                document_to_delete = doc
+                break
+            
+            # Fallback: check file_path with prefix stripped
+            doc_path = doc.get('file_path', '').replace('knowledge-base/public/', '')
+            if doc_path == github_path:
+                document_to_delete = doc
+                break
+        
+        if not document_to_delete:
+            logger.warning(f"Document not found for GitHub path: {github_path}")
+            raise HTTPException(status_code=404, detail=f"Document not found for path: {github_path}")
+        
+        # Delete the document
+        document_id = document_to_delete['id']
+        success = await knowledge_service.delete_knowledge_document(document_id)
+        
+        if success:
+            logger.info(f"Successfully deleted document {document_id} for GitHub path: {github_path}")
+            return {
+                "success": True,
+                "data": {
+                    "message": f"Document deleted successfully: {github_path}",
+                    "document_id": document_id,
+                    "github_path": github_path
+                }
+            }
+        else:
+            raise HTTPException(status_code=500, detail="Failed to delete document")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to delete document by GitHub path {github_path}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to delete document: {str(e)}")
+
+@router.post("/delete-multiple-by-github-paths")
+async def delete_multiple_documents_by_github_paths(
+    github_paths: List[str] = Form(...),
+    current_user: Dict[str, Any] = Depends(require_super_admin)
+):
+    """Delete multiple knowledge documents by their GitHub paths (Super Admin only)"""
+    
+    try:
+        knowledge_service = KnowledgeDashboardService()
+        
+        # Get all documents once
+        all_documents = await knowledge_service.get_knowledge_documents()
+        
+        deleted_count = 0
+        failed_count = 0
+        results = []
+        
+        for github_path in github_paths:
+            try:
+                # Find document by github_path
+                document_to_delete = None
+                
+                for doc in all_documents:
+                    # Check both github_path and file_path (with prefix stripped)
+                    if doc.get('github_path') == github_path:
+                        document_to_delete = doc
+                        break
+                    
+                    # Fallback: check file_path with prefix stripped
+                    doc_path = doc.get('file_path', '').replace('knowledge-base/public/', '')
+                    if doc_path == github_path:
+                        document_to_delete = doc
+                        break
+                
+                if not document_to_delete:
+                    logger.warning(f"Document not found for GitHub path: {github_path}")
+                    failed_count += 1
+                    results.append({
+                        "github_path": github_path,
+                        "success": False,
+                        "error": "Document not found"
+                    })
+                    continue
+                
+                # Delete the document
+                document_id = document_to_delete['id']
+                success = await knowledge_service.delete_knowledge_document(document_id)
+                
+                if success:
+                    deleted_count += 1
+                    results.append({
+                        "github_path": github_path,
+                        "success": True,
+                        "document_id": document_id
+                    })
+                    logger.info(f"Successfully deleted document {document_id} for GitHub path: {github_path}")
+                else:
+                    failed_count += 1
+                    results.append({
+                        "github_path": github_path,
+                        "success": False,
+                        "error": "Failed to delete"
+                    })
+                    
+            except Exception as file_error:
+                logger.error(f"Error deleting {github_path}: {str(file_error)}")
+                failed_count += 1
+                results.append({
+                    "github_path": github_path,
+                    "success": False,
+                    "error": str(file_error)
+                })
+        
+        return {
+            "success": True,
+            "data": {
+                "message": f"Deleted {deleted_count} documents, {failed_count} failed",
+                "deleted_count": deleted_count,
+                "failed_count": failed_count,
+                "results": results
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to delete multiple documents: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to delete documents: {str(e)}")
+
 @router.post("/scan-github-changes")
 async def scan_github_changes(
     current_user: Dict[str, Any] = Depends(require_super_admin)

@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 21, 2025 (1:18 AM)  
+**Last Updated**: December 21, 2025 (1:27 AM)  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -49,7 +49,9 @@ Major UX improvements across public chatbot, Knowledge Base sync, and FAQ system
 
 ### 📊 **Fixed: Pending Embeddings Metric**
 - **Problem**: Metric stuck showing stale count (e.g., 9) after embeddings completed
-- **Solution**: Invalidate stats cache after sync completes
+- **Root Cause**: Stats cached for 1 hour, cache not invalidated after sync
+- **Solution**: Invalidate stats cache after sync completes (`cache.invalidate('knowledge_stats')`)
+- **Bug Fix**: Corrected import from `services.cache` to `.cache_service` (commit 87261161)
 - **Impact**: Accurate metrics, updates immediately on refresh
 
 ### 🏕️ **Basecamp Community Hub (NEW!)**

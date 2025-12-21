@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 21, 2025 (1:27 AM)  
+**Last Updated**: December 21, 2025 (1:32 AM)  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -49,10 +49,15 @@ Major UX improvements across public chatbot, Knowledge Base sync, and FAQ system
 
 ### 📊 **Fixed: Pending Embeddings Metric**
 - **Problem**: Metric stuck showing stale count (e.g., 9) after embeddings completed
-- **Root Cause**: Stats cached for 1 hour, cache not invalidated after sync
-- **Solution**: Invalidate stats cache after sync completes (`cache.invalidate('knowledge_stats')`)
-- **Bug Fix**: Corrected import from `services.cache` to `.cache_service` (commit 87261161)
-- **Impact**: Accurate metrics, updates immediately on refresh
+- **Root Cause #1**: Stats cached for 1 hour, cache not invalidated after sync
+- **Root Cause #2**: Stats recalculated from CACHED documents (still showing old embedding_status='pending')
+- **Solution**: Invalidate BOTH document and stats cache after sync completes
+  - `cache.invalidate('knowledge_documents_all')` - Force fresh document fetch
+  - `cache.invalidate('knowledge_stats')` - Force stats recalculation
+- **Bug Fixes**: 
+  - Corrected import from `services.cache` to `.cache_service` (commit 87261161)
+  - Added documents cache invalidation (commit 2d52b75a)
+- **Impact**: Accurate metrics, updates immediately on refresh, shows 0 pending after sync
 
 ### 🏕️ **Basecamp Community Hub (NEW!)**
 - **Page**: `/basecamp` - Full ecosystem page with hero images

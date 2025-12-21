@@ -436,7 +436,7 @@ class GitHubService:
             
             # Invalidate stats cache after embeddings are generated
             # This ensures the "Pending Embeddings" metric updates correctly
-            from services.cache import cache
+            from .cache_service import cache
             cache.invalidate('knowledge_stats')
             logger.info(f"🔄 Cache invalidated - stats will refresh with updated embedding counts")
             

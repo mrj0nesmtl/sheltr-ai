@@ -49,7 +49,7 @@ numpy==1.25.2
 python-dateutil==2.9.0.post0
 
 # Email and Communications
-sendgrid==6.12.4
+sendgrid==6.12.5
 twilio==9.9.0
 
 # Image and QR Code Processing

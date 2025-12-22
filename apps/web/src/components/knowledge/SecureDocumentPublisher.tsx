@@ -2,7 +2,10 @@
 
 /**
  * SecureDocumentPublisher Component
- * Allows publishing Knowledge Base documents to Founders Portal and Investor Relations
+ * Allows publishing Knowledge Base documents to Founders Portal
+ * 
+ * Note: IR Data Room sharing is now managed exclusively from the Founders Portal
+ * to prevent dual-toggle confusion and ensure single source of truth.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -181,21 +184,10 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
         });
       }
 
-      // Publish to Investor Relations if toggled
-      if (settings.published_to_ir) {
-        await securePublishingService.publishToIR(documentId, {
-          published: true,
-          settings: {
-            ...settings,
-            ir_description: settings.ir_description || documentTitle,
-          }
-        });
-      } else if (initialSettings.published_to_ir) {
-        // Unpublish if previously published
-        await securePublishingService.publishToIR(documentId, {
-          published: false
-        });
-      }
+      // Note: IR Data Room sharing is now exclusively managed from Founders Portal
+      // This prevents dual-toggle confusion and ensures single source of truth
+      // If a document was previously shared to IR, we preserve that state
+      // (it can only be toggled OFF from Founders Portal now)
 
       // Call parent save handler if provided
       if (onSave) {
@@ -243,7 +235,7 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
           Secure Document Publishing
         </CardTitle>
         <CardDescription>
-          Publish this document to Founders Portal or Investor Relations
+          Publish this document to Founders Portal (IR sharing managed from Founders Portal)
         </CardDescription>
       </CardHeader>
 
@@ -261,6 +253,9 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
                 <p className="text-sm text-muted-foreground">
                   Visible to Super Admins and Platform Admins only
                 </p>
+                <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                  💡 Share to IR Data Room from Founders Portal after publishing
+                </p>
               </div>
             </div>
             <Switch
@@ -268,28 +263,6 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
               checked={settings.published_to_founders}
               onCheckedChange={(checked) => 
                 setSettings({ ...settings, published_to_founders: checked })
-              }
-            />
-          </div>
-
-          {/* Investor Relations Toggle */}
-          <div className="flex items-center justify-between p-4 border rounded-lg border-green-500/20">
-            <div className="flex items-center gap-3">
-              <TrendingUp className="h-5 w-5 text-green-500" />
-              <div>
-                <Label htmlFor="publish-ir" className="text-base font-medium">
-                  Investor Relations
-                </Label>
-                <p className="text-sm text-muted-foreground">
-                  Visible to Investors, Super Admins, and Platform Admins
-                </p>
-              </div>
-            </div>
-            <Switch
-              id="publish-ir"
-              checked={settings.published_to_ir}
-              onCheckedChange={(checked) => 
-                setSettings({ ...settings, published_to_ir: checked })
               }
             />
           </div>
@@ -385,21 +358,8 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
               </div>
             )}
 
-            {/* IR Description */}
-            {settings.published_to_ir && (
-              <div className="space-y-2">
-                <Label htmlFor="ir-description">
-                  Investor Relations Description
-                </Label>
-                <Textarea
-                  id="ir-description"
-                  value={settings.ir_description}
-                  onChange={(e) => setSettings({ ...settings, ir_description: e.target.value })}
-                  placeholder="Brief description for Investor Relations..."
-                  rows={2}
-                />
-              </div>
-            )}
+            {/* IR Description - Hidden, managed from Founders Portal */}
+            {/* Note: IR sharing is now exclusively managed from Founders Portal to prevent dual-toggle confusion */}
 
             {/* Preview Card */}
             <div className="p-4 border rounded-lg bg-muted/50">
@@ -467,22 +427,7 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
                 <ExternalLink className="h-3 w-3 ml-1" />
               </Button>
             )}
-            {settings.published_to_ir && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  // Add cache-busting timestamp to force fresh load
-                  const url = `/portal/investor-relations?refresh=${Date.now()}`;
-                  window.open(url, '_blank');
-                }}
-              >
-                <TrendingUp className="h-4 w-4 mr-1" />
-                View in IR
-                <ExternalLink className="h-3 w-3 ml-1" />
-              </Button>
-            )}
+            {/* IR preview button removed - IR sharing now managed from Founders Portal */}
           </div>
 
           <Button

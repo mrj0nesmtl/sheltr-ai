@@ -147,7 +147,7 @@ export default function IREcosystemPage() {
                 <div className="text-center md:text-right order-2 md:order-1">
                   <h3 className="text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400">Automated Intelligence</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    Smart contracts automatically split every donation according to our proven 80-15-5 model. 
+                    Smart contracts automatically split every donation according to our proven 85-15 model. 
                     No overhead, no delays—just instant, intelligent distribution.
                   </p>
                   <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-2">
@@ -171,13 +171,13 @@ export default function IREcosystemPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground leading-relaxed mb-6">
-                      The moment a donation is received, our smart contracts execute a three-way split designed 
-                      for maximum impact—immediate needs, long-term housing, and shelter support.
+                      The moment a donation is received, our smart contracts execute a two-way split designed 
+                      for maximum impact—immediate needs and long-term housing.
                     </p>
                     <div className="space-y-4 mb-6">
                       <div className="flex items-center gap-3">
                         <div className="w-16 h-16 rounded-lg bg-green-500/10 flex items-center justify-center flex-shrink-0">
-                          <span className="text-2xl font-bold text-green-600 dark:text-green-400">80%</span>
+                          <span className="text-2xl font-bold text-green-600 dark:text-green-400">85%</span>
                         </div>
                         <div>
                           <p className="font-semibold">Immediate Access</p>
@@ -191,15 +191,6 @@ export default function IREcosystemPage() {
                         <div>
                           <p className="font-semibold">Housing Fund</p>
                           <p className="text-sm text-muted-foreground">Staked & compounding towards POD</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-16 h-16 rounded-lg bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                          <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">5%</span>
-                        </div>
-                        <div>
-                          <p className="font-semibold">Shelter Operations</p>
-                          <p className="text-sm text-muted-foreground">Supports infrastructure & services</p>
                         </div>
                       </div>
                     </div>
@@ -274,7 +265,7 @@ export default function IREcosystemPage() {
                 <div className="text-center md:text-left">
                   <h3 className="text-2xl font-bold mb-4 text-purple-600 dark:text-purple-400">Building Towards Housing</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    While the participant uses their 80% for immediate needs, the 15% housing fund is working 
+                    While the participant uses their 85% for immediate needs, the 15% housing fund is working 
                     behind the scenes—staking, compounding, growing towards their POD deployment goal.
                   </p>
                   <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-lg p-6 border border-purple-200 dark:border-purple-800">

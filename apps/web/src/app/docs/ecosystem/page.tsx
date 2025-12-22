@@ -164,7 +164,7 @@ export default function DocsEcosystemPage() {
                 <div className="text-center md:text-right order-2 md:order-1">
                   <h3 className="text-2xl font-bold mb-4 text-blue-600 dark:text-blue-400">Automated Intelligence</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    Smart contracts automatically split every donation according to our proven 80-15-5 model. 
+                    Smart contracts automatically split every donation according to our proven 85-15 model. 
                     No overhead, no delays—just instant, intelligent distribution.
                   </p>
                   <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
@@ -293,7 +293,7 @@ export default function DocsEcosystemPage() {
                 <div className="text-center md:text-left">
                   <h3 className="text-2xl font-bold mb-4 text-purple-600 dark:text-purple-400">Building Towards Housing</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    While the participant uses their 80% for immediate needs, the 15% housing fund is working 
+                    While the participant uses their 85% for immediate needs, the 15% housing fund is working 
                     behind the scenes—staking, compounding, growing towards their POD deployment goal.
                   </p>
                   <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 rounded-lg p-6 border border-purple-200 dark:border-purple-800">

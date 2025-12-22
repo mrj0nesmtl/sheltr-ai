@@ -1,15 +1,42 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, Users, Target, Heart, Brain, Shield, Building2 } from 'lucide-react';
+import { ArrowLeft, Download, Users, Target, Heart, Brain, Shield, Building2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import { useDocumentMetadata, formatDocumentDate } from '@/hooks/useDocumentMetadata';
 
 export default function HackingHomelessnessPage() {
+  // Fetch dynamic metadata from Knowledge Base using Firestore document ID
+  // Using ID instead of slug to avoid conflicts with KB editor's auto-slug generation
+  // Document: "Hacking Homelessness" (FmqguxZcEp0lmebhsc42)
+  const { metadata, loading } = useDocumentMetadata('FmqguxZcEp0lmebhsc42');
+
+  // Fallback values if metadata fetch fails
+  const displayTitle = metadata?.title || 'Hacking Homelessness: Better to Solve than Manage';
+  const displayDate = metadata?.updated_at 
+    ? formatDocumentDate(metadata.updated_at)
+    : 'September 26, 2025';
+  const displayVersion = metadata?.version || '2.0.0';
+  const displayDescription = metadata?.description || 
+    'Revolutionary QR-Scan-to-POD ecosystem combining Shelter Ledger blockchain transparency with enterprise payment infrastructure and modular housing deployment';
+
+  // Show loading state while fetching metadata
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-purple-600" />
+          <p className="text-muted-foreground">Loading document...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -40,16 +67,16 @@ export default function HackingHomelessnessPage() {
               <Brain className="h-12 w-12 text-purple-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Hacking Homelessness: Better to Solve than Manage</h1>
-                  <Badge className="bg-purple-500 text-white text-sm">THESIS</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">{displayTitle}</h1>
+                  <Badge className="bg-purple-500 text-white text-sm">{metadata?.badge || 'THESIS'}</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Revolutionary QR-Scan-to-POD ecosystem combining Shelter Ledger blockchain transparency with enterprise payment infrastructure and modular housing deployment
+                  {displayDescription}
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.0.0 - Published</span>
+                  <span>Version {displayVersion} - Published</span>
                   <span>•</span>
-                  <span>September 26, 2025</span>
+                  <span>{displayDate}</span>
                   <span>•</span>
                   <Badge className="bg-emerald-500 text-white text-xs">TECH-FOR-GOOD</Badge>
                 </div>

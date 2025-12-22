@@ -1,15 +1,42 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, BookOpen, ExternalLink, Book } from 'lucide-react';
+import { ArrowLeft, Download, BookOpen, ExternalLink, Book, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import { useDocumentMetadata, formatDocumentDate } from '@/hooks/useDocumentMetadata';
 
 export default function KnowledgeBaseGuidePage() {
+  // Fetch dynamic metadata from Knowledge Base using Firestore document ID
+  // Using ID instead of slug to avoid conflicts with KB editor's auto-slug generation
+  // Document: "Knowledge Base Guide" (gLsTITgBedTvuAtY31PO)
+  const { metadata, loading } = useDocumentMetadata('gLsTITgBedTvuAtY31PO');
+
+  // Fallback values if metadata fetch fails
+  const displayTitle = metadata?.title || 'Knowledge Base Guide';
+  const displayDate = metadata?.updated_at 
+    ? formatDocumentDate(metadata.updated_at)
+    : 'September 21, 2025';
+  const displayVersion = metadata?.version || '2.0.0';
+  const displayDescription = metadata?.description || 
+    'Complete guide for updating SHELTR-AI Knowledge Base documents with embedding regeneration';
+
+  // Show loading state while fetching metadata
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-muted-foreground">Loading document...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -49,16 +76,16 @@ export default function KnowledgeBaseGuidePage() {
               <BookOpen className="h-12 w-12 text-blue-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Knowledge Base Guide</h1>
-                  <Badge className="bg-blue-600 text-white text-sm">AI System</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">{displayTitle}</h1>
+                  <Badge className="bg-blue-600 text-white text-sm">{metadata?.badge || 'AI System'}</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Complete guide for updating SHELTR-AI Knowledge Base documents with embedding regeneration
+                  {displayDescription}
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.0.0</span>
+                  <span>Version {displayVersion}</span>
                   <span>•</span>
-                  <span>Updated September 21, 2025</span>
+                  <span>Updated {displayDate}</span>
                   <span>•</span>
                   <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">LIVE SYSTEM</Badge>
                 </div>

@@ -23,7 +23,8 @@ import {
   Home,
   ChevronRight,
   ExternalLink,
-  Github
+  Github,
+  Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -33,8 +34,35 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import Mermaid from '@/components/Mermaid';
+import { useDocumentMetadata, formatDocumentDate } from '@/hooks/useDocumentMetadata';
 
 export default function PlatformOverviewPage() {
+  // Fetch dynamic metadata from Knowledge Base using Firestore document ID
+  // Using ID instead of slug to avoid conflicts with KB editor's auto-slug generation
+  // Document: "Platform Overview" (c7zov4ojyBz9fRzKOQwQ)
+  const { metadata, loading } = useDocumentMetadata('c7zov4ojyBz9fRzKOQwQ');
+
+  // Fallback values if metadata fetch fails
+  const displayTitle = metadata?.title || 'Platform Overview';
+  const displayDate = metadata?.updated_at 
+    ? formatDocumentDate(metadata.updated_at)
+    : 'December 22, 2025';
+  const displayVersion = metadata?.version || '3.0';
+  const displayDescription = metadata?.description || 
+    'Disrupting charitable giving and HMIS through technology-driven transparency and direct impact community funding.';
+
+  // Show loading state while fetching metadata
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-muted-foreground">Loading document...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       {/* Navigation */}
@@ -96,14 +124,15 @@ export default function PlatformOverviewPage() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Star className="h-8 w-8 text-blue-600" />
-              <Badge className="bg-blue-600 text-white px-4 py-1">PLATFORM OVERVIEW</Badge>
+              <Badge className="bg-blue-600 text-white px-4 py-1">{metadata?.badge || 'PLATFORM OVERVIEW'}</Badge>
+              <Badge variant="outline" className="text-xs">{displayVersion}</Badge>
+              <Badge variant="outline" className="text-xs">{displayDate}</Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
-              Disrupting Charitable Giving
+              {displayTitle}
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
-              Technology-driven transparency and direct impact through enterprise infrastructure, 
-              blockchain innovation, and zero-crypto participant experience
+              {displayDescription}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">

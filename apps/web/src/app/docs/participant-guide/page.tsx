@@ -1,15 +1,42 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, Users, QrCode, Book } from 'lucide-react';
+import { ArrowLeft, Download, Users, QrCode, Book, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import { useDocumentMetadata, formatDocumentDate } from '@/hooks/useDocumentMetadata';
 
 export default function ParticipantGuidePage() {
+  // Fetch dynamic metadata from Knowledge Base using Firestore document ID
+  // Using ID instead of slug to avoid conflicts with KB editor's auto-slug generation
+  // Document: "Participant Guide" (8ZHrkLiz2N5SnHSxXtgf)
+  const { metadata, loading } = useDocumentMetadata('8ZHrkLiz2N5SnHSxXtgf');
+
+  // Fallback values if metadata fetch fails
+  const displayTitle = metadata?.title || 'Participant User Guide';
+  const displayDate = metadata?.updated_at 
+    ? formatDocumentDate(metadata.updated_at)
+    : 'November 21, 2025';
+  const displayVersion = metadata?.version || '2.1';
+  const displayDescription = metadata?.description || 
+    'Your complete guide to using SHELTR as a donation recipient - from QR codes to digital wallets to POD independence';
+
+  // Show loading state while fetching metadata
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-teal-600" />
+          <p className="text-muted-foreground">Loading document...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -47,16 +74,16 @@ export default function ParticipantGuidePage() {
               <Users className="h-12 w-12 text-teal-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Participant User Guide</h1>
-                  <Badge className="bg-teal-500 text-white text-sm">User Guide</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">{displayTitle}</h1>
+                  <Badge className="bg-teal-500 text-white text-sm">{metadata?.badge || 'User Guide'}</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Your complete guide to using SHELTR as a donation recipient - from QR codes to digital wallets to POD independence
+                  {displayDescription}
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.1</span>
+                  <span>Version {displayVersion}</span>
                   <span>•</span>
-                  <span>Updated November 21, 2025</span>
+                  <span>Updated {displayDate}</span>
                   <span>•</span>
                   <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">LIVE PLATFORM</Badge>
                 </div>

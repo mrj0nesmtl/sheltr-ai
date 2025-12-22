@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CreditCard, TrendingUp, Shield, Building2, Users, CheckCircle, Eye, FileText, BookOpen, Zap } from 'lucide-react';
+import { CreditCard, TrendingUp, Shield, Building2, Users, CheckCircle, Eye, FileText, BookOpen, Zap, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
+import { useDocumentMetadata, formatDocumentDate } from '@/hooks/useDocumentMetadata';
 
 // Component that uses useSearchParams (wrapped in Suspense)
 function TokenomicsContent() {
@@ -21,10 +22,31 @@ function TokenomicsContent() {
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/tokenomics', '/backgrounds/hero-bg.jpg');
   
+  // Fetch dynamic metadata from Knowledge Base
+  const { metadata, loading } = useDocumentMetadata('tokenomics');
+
+  // Fallback values if metadata fetch fails
+  const displayVersion = metadata?.version || '3.0';
+  const displayDate = metadata?.updated_at 
+    ? formatDocumentDate(metadata.updated_at)
+    : 'December 22, 2025';
+  
   // Check if embedded in iframe
   useEffect(() => {
     setIsEmbedded(searchParams.get('embed') === 'true');
   }, [searchParams]);
+
+  // Show loading state while fetching metadata
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+          <p className="text-muted-foreground">Loading document...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -47,7 +69,7 @@ function TokenomicsContent() {
       {/* Hero Section - Standardized */}
       <StandardHero
         imageUrl={heroImage.url}
-        badgeText="TOKENOMICS v3.0"
+        badgeText={`TOKENOMICS v${displayVersion} • Updated ${displayDate}`}
         badgeVariant="secondary"
         badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
         title={

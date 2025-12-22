@@ -15,15 +15,14 @@ This directory contains comprehensive documentation for each major feature of th
 
 ## 📂 Feature Categories
 
-### 🤖 [Chatbot](chatbot/) - AI Agent System
+### 🤖 [Agents](agents/) - AI Agent System
 **Multi-agent AI chatbot with MCP-powered workflow automation**
 
 **Key Documents**:
-- [SHELTR Agent Architecture](chatbot/SHELTR-AGENT-ARCHITECTURE.md) - Complete multi-agent system
-- [MCP Integration Guide](chatbot/MCP-INTEGRATION-GUIDE.md) - Model Context Protocol setup
-- [Features Roadmap](chatbot/CHATBOT-FEATURES-ROADMAP.md) - Planned enhancements
-- [Agent Quick Reference](chatbot/AGENT-QUICK-REFERENCE.md) - Quick lookup guide
-- [Architecture Analysis](chatbot/CHATBOT-ARCHITECTURE-ANALYSIS.md) - Deep technical analysis
+- [SHELTR Agent Architecture](docs/features/agents/AGENT-ARCHITECTURE.md) - Complete multi-agent system
+- [MCP Integration Guide](docs/features/agents/MCP-INTEGRATION-GUIDE.md) - Model Context Protocol setup
+- [Features Roadmap](docs/features/agents/CHATBOT-FEATURES-ROADMAP.md) - Planned enhancements
+- [Agent Quick Reference](docs/features/agents/AGENT-QUICK-REFERENCE.md) - Quick lookup guide
 
 **Status**: ✅ **Production** - Multi-agent system operational  
 **Impact**: 200x faster responses, 97% cost reduction
@@ -52,7 +51,7 @@ This directory contains comprehensive documentation for each major feature of th
 - [Architecture Explained](notifications/NOTIFICATION-ARCHITECTURE-EXPLAINED.md) - System design
 - [Metrics Guide](notifications/NOTIFICATION-METRICS-GUIDE.md) - Performance tracking
 
-**Status**: ✅ **Production** - Real-time notifications operational  
+**Status**: 🟡 **GLITCHY - NEED REBUILDING** - Real-time notifications operational  
 **Impact**: Instant delivery, read tracking, unread counts
 
 ---
@@ -79,7 +78,27 @@ This directory contains comprehensive documentation for each major feature of th
 | 🤖 **Gemini AI** | ✅ Production | Complete | High |
 | 💝 **Recurring Gifts** | ✅ Production | Complete | High |
 | 📄 **Tax Receipts** | ✅ Production | Complete | Medium |
-| 🔔 **Notifications** | ✅ Production | Active | Medium |
+| 🔔 **Notifications** | ### 🔔 [Notifications](notifications/) - Real-time Notification System
+**Multi-channel notification delivery with real-time updates**
+
+**Key Documents**:
+- [Architecture Explained](notifications/NOTIFICATION-ARCHITECTURE-EXPLAINED.md) - System design
+- [Metrics Guide](notifications/NOTIFICATION-METRICS-GUIDE.md) - Performance tracking
+
+**Status**: ✅ **Production** - Real-time notifications operational  
+**Impact**: Instant delivery, read tracking, unread counts
+
+---
+
+### 📝 [Blog System](blog-system/) - Content Management
+**Full-featured CMS with SEO optimization and admin management**
+
+**Key Documents**:
+- [Production Status](blog-system/BLOG-PRODUCTION-STATUS.md) - Live system overview
+- [System Complete](blog-system/BLOG-SYSTEM-COMPLETE.md) - Implementation summary
+
+**Status**: ✅ **Production** - Live at sheltr-ai.web.app/blog  
+**Impact**: SEO-optimized content, admin CMS, markdown support PROBLEMATIC | Active | Medium |
 | 📝 **Blog System** | ✅ Production | Complete | Medium |
 | 💳 **Payment Rails** | 🔄 Integration | In Progress | High |
 | 🪙 **Tokenomics** | 📋 Planned | Pending | High |

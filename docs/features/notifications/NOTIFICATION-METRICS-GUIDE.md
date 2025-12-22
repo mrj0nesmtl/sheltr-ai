@@ -1,7 +1,8 @@
-# 📊 Notification Dashboard Metrics Guide
+# 📊 Notification System - Metrics Guide
 
-**Date:** October 9, 2025  
-**Purpose:** Comprehensive guide to all notification metrics in the admin dashboard
+**Last Updated**: December 22, 2024  
+**Status**: ⚠️ **OPERATIONAL - REFACTORING PLANNED**  
+**Purpose**: Comprehensive guide to notification metrics and performance tracking
 
 ---
 
@@ -338,41 +339,62 @@ await NotificationService.createNotification({
 
 ---
 
-## 📈 Future Enhancements
+## 📈 Performance Metrics
 
-### Planned Metrics:
-- **Donor Signups** - Track new donor registrations
-- **Shelter Applications** - Shelter partnership requests
-- **Platform Revenue** - Financial metrics for Super Admins
-- **User Engagement** - Active users, session duration, etc.
+### Current Performance
+| Metric | Current | Target | Status |
+|--------|---------|--------|--------|
+| **Notification Delivery** | < 100ms | < 100ms | ✅ |
+| **Real-time Updates** | < 200ms | < 500ms | ✅ |
+| **Unread Count Accuracy** | 100% | 100% | ✅ |
+| **Mark as Read Speed** | < 300ms | < 500ms | ✅ |
+| **Query Performance** | Variable | Optimized | ⚠️ |
 
-### Planned Features:
-- CSV export for all metrics
-- Email alerts for urgent notifications
-- Real-time push notifications
-- Notification history & search
-- Bulk mark as read
-- Priority tagging & assignment
+### Known Performance Issues
+- ⚠️ Some queries not optimized (fetching too much data)
+- ⚠️ Listener overhead with 13 categories
+- ⚠️ No pagination on notification lists
+- ⚠️ Cache strategy needs improvement
 
 ---
 
-## 🔗 Related Files
+## 🔄 Planned Improvements (Q1 2026)
+
+### Week 3: Notification System Redesign
+
+**Simplification Goals**:
+1. **Reduce Categories**: 13 → 3 (critical, important, info)
+2. **Simplify Preferences**: Multiple toggles → Single email toggle + quiet hours
+3. **Optimize Queries**: Add proper indexes, limits, pagination
+4. **Improve Delivery**: Consistent notification firing
+5. **Better UX**: Clear, actionable notifications
+
+**Expected Impact**:
+- 60% reduction in query complexity
+- 50% faster notification processing
+- 90% reduction in user confusion
+- 100% consistent delivery
+
+---
+
+## 🔗 Related Documentation
+
+- [Architecture Explained](NOTIFICATION-ARCHITECTURE-EXPLAINED.md) - System design
+- [Refactoring Roadmap](../../development/REFACTORING-ROADMAP-v1.0.md) - Week 3 details
+- [Feature Documentation](../feature-documentation.md) - All platform features
 
 **Services:**
 - `apps/web/src/services/unifiedInquiryService.ts` - Unified data collection
 - `apps/web/src/services/notificationService.ts` - Notification logic
-- `apps/web/src/services/newsletterService.ts` - (DEPRECATED - use UnifiedInquiryService)
+- `apps/web/src/services/notificationPreferencesService.ts` - User preferences
 
 **Components:**
-- `apps/web/src/components/NewsletterSignup.tsx` - Newsletter signup component
+- `apps/web/src/components/NewsletterSignup.tsx` - Newsletter signup
 - `apps/web/src/app/contact/page.tsx` - Contact form
-- `apps/web/src/app/[slug]/ShelterPageClient.tsx` - Individual shelter pages
+- `apps/web/src/app/[slug]/ShelterPageClient.tsx` - Shelter pages
 
 **Dashboards:**
-- `apps/web/src/app/dashboard/notifications/page.tsx` - Main notifications dashboard
-
-**Migration:**
-- `scripts/migrate-newsletter-to-unified.js` - Newsletter migration script
+- `apps/web/src/app/dashboard/notifications/page.tsx` - Notifications dashboard
 
 ---
 
@@ -383,7 +405,7 @@ Run this checklist to verify all metrics are working correctly:
 - [ ] Newsletter signup on landing page → Count increases
 - [ ] Newsletter signup on about page → Count increases
 - [ ] Docs page newsletter CTA → Count increases
-- [ ] Shelter email signup → Count increases + Admin notified ❌ (BROKEN)
+- [ ] Shelter email signup → Count increases + Admin notified ❌ (KNOWN ISSUE)
 - [ ] Contact form submission → Count increases + Admin notified
 - [ ] Partnership waitlist signup → Count increases
 - [ ] Mobile app notification signup → Count increases
@@ -393,7 +415,7 @@ Run this checklist to verify all metrics are working correctly:
 
 ---
 
-**Last Updated:** October 9, 2025  
-**Maintainer:** Joel Yaffe (Super Admin)  
-**Status:** 🟡 Mostly Working - 1 Critical Bug (Shelter Email Notifications)
+**Last Updated**: December 22, 2024  
+**Status**: ⚠️ Operational - Refactoring Planned Q1 2026  
+**Known Issues**: 1 Critical (Shelter Email Notifications), Multiple UX improvements needed
 

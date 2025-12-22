@@ -78,27 +78,7 @@ This directory contains comprehensive documentation for each major feature of th
 | 🤖 **Gemini AI** | ✅ Production | Complete | High |
 | 💝 **Recurring Gifts** | ✅ Production | Complete | High |
 | 📄 **Tax Receipts** | ✅ Production | Complete | Medium |
-| 🔔 **Notifications** | ### 🔔 [Notifications](notifications/) - Real-time Notification System
-**Multi-channel notification delivery with real-time updates**
-
-**Key Documents**:
-- [Architecture Explained](notifications/NOTIFICATION-ARCHITECTURE-EXPLAINED.md) - System design
-- [Metrics Guide](notifications/NOTIFICATION-METRICS-GUIDE.md) - Performance tracking
-
-**Status**: ✅ **Production** - Real-time notifications operational  
-**Impact**: Instant delivery, read tracking, unread counts
-
----
-
-### 📝 [Blog System](blog-system/) - Content Management
-**Full-featured CMS with SEO optimization and admin management**
-
-**Key Documents**:
-- [Production Status](blog-system/BLOG-PRODUCTION-STATUS.md) - Live system overview
-- [System Complete](blog-system/BLOG-SYSTEM-COMPLETE.md) - Implementation summary
-
-**Status**: ✅ **Production** - Live at sheltr-ai.web.app/blog  
-**Impact**: SEO-optimized content, admin CMS, markdown support PROBLEMATIC | Active | Medium |
+| 🔔 **Notifications** | ⚠️ PROBLEMATIC | Active | Medium |
 | 📝 **Blog System** | ✅ Production | Complete | Medium |
 | 💳 **Payment Rails** | 🔄 Integration | In Progress | High |
 | 🪙 **Tokenomics** | 📋 Planned | Pending | High |

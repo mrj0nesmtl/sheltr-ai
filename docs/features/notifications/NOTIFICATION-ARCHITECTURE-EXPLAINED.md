@@ -1,8 +1,9 @@
-# 🔔 Notification System Architecture
+# 🔔 Notification System - Architecture Explained
 
-**Version**: 2.57.0  
-**Date**: October 21, 2025  
-**Status**: ✅ **FULLY OPERATIONAL**
+**Last Updated**: December 22, 2024  
+**Version**: 2.57.0+  
+**Status**: ⚠️ **OPERATIONAL - REFACTORING PLANNED**  
+**Refactoring Timeline**: Q1 2026 (Week 3 of 6-week sprint)
 
 ---
 
@@ -26,6 +27,23 @@ The SHELTR notification system is a **unified, role-based, real-time notificatio
 - ✅ **Updates in real-time** using Firestore snapshot listeners
 - ✅ **Automatically recalculates** stats when marked as read
 - ✅ **Separates admin notifications** from each other
+
+### ⚠️ Current Status & Known Issues
+
+**Working Features**:
+- ✅ Real-time notification delivery
+- ✅ Role-based isolation
+- ✅ Mark as read functionality
+- ✅ Unread count tracking
+- ✅ Notification preferences
+
+**Known Issues**:
+- ⚠️ **Too Complex**: 13 notification categories (overwhelming)
+- ⚠️ **Performance**: Some queries not optimized
+- ⚠️ **Inconsistent Delivery**: Some notifications not firing
+- ⚠️ **Preference Overload**: Too many user settings
+
+**Refactoring Planned**: See [Refactoring Roadmap](../../development/REFACTORING-ROADMAP-v1.0.md) - Week 3
 
 ---
 
@@ -402,33 +420,55 @@ export default function DashboardLayout({ children }) {
 
 ---
 
-## 🚀 What's Next?
+## 🔄 Planned Refactoring (Q1 2026)
 
-### **Phase 3: Advanced Features** (Optional)
+### **Week 3: Notification System Redesign**
 
-1. ✅ Push notifications (browser API) - READY TO IMPLEMENT
-2. ✅ Email digests - READY TO IMPLEMENT
-3. ✅ Notification preferences - ALREADY IMPLEMENTED
-4. ✅ Export to CSV - ALREADY IMPLEMENTED
-5. 🔜 Notification sound effects
-6. 🔜 Notification grouping/threading
-7. 🔜 Notification snoozing
-8. 🔜 Notification scheduling
+**Goal**: Simple, reliable, non-intrusive notifications
+
+**Current Problems**:
+- 13 notification categories (overwhelming)
+- Complex preference system (too many options)
+- Inconsistent delivery
+- No clear priority system
+
+**New Architecture** (Simplified 3-Tier System):
+```typescript
+type NotificationType = 
+  | 'critical'   // Security, payments, system alerts
+  | 'important'  // New donations, participant updates
+  | 'info'       // General updates, announcements
+
+interface NotificationSettings {
+  emailEnabled: boolean;        // One toggle
+  quietHoursStart: string;      // e.g., "22:00"
+  quietHoursEnd: string;        // e.g., "08:00"
+  // That's it. No complex preferences.
+}
+```
+
+**Success Criteria**:
+- ✅ 3 notification types only
+- ✅ One email toggle
+- ✅ Quiet hours working
+- ✅ Clear, actionable notifications
+- ✅ No notification spam
 
 ---
 
 ## 📝 Related Documentation
 
-- [Notification System Overhaul Complete](./NOTIFICATION-SYSTEM-OVERHAUL-COMPLETE.md)
-- [Notification Phase 2 Complete](./NOTIFICATION-PHASE-2-COMPLETE.md)
-- [October 21 Session Summary](./OCTOBER-21-SESSION-SUMMARY.md)
+- [Notification Metrics Guide](NOTIFICATION-METRICS-GUIDE.md) - Performance tracking
+- [Refactoring Roadmap](../../development/REFACTORING-ROADMAP-v1.0.md) - Week 3 details
+- [Feature Documentation](../feature-documentation.md) - All platform features
 
 ---
 
-**✅ System Status**: Fully operational  
+**⚠️ System Status**: Operational with planned improvements  
 **📊 Collections**: 5 role-based collections  
 **⚡ Real-time**: < 100ms update latency  
 **🔒 Security**: RLS policies enforced  
-**🎯 Accuracy**: 100% isolated by user
+**🎯 Accuracy**: 100% isolated by user  
+**🔧 Refactoring**: Q1 2026 (Week 3)
 
 

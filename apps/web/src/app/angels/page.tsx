@@ -1,7 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Heart, Users, TrendingUp, ExternalLink, Play } from 'lucide-react';
+import { Heart, Users, TrendingUp, ExternalLink, Play, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,9 +18,91 @@ import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
-// TikTok video data for carousel - using clickable preview cards
-const tiktokVideos = [
+// Interface for social media video embeds
+interface SocialMediaVideo {
+  id: string;
+  embedId: string;
+  embedUrl: string;
+  embedType: 'tiktok' | 'twitter' | 'youtube';
+  embedUsername?: string;
+  title: string;
+  description: string;
+  tags: string[];
+  angelsOrder: number;
+  // For display compatibility
+  displayName?: string;
+  username?: string;
+  url?: string;
+}
+
+// Helper to render social media embed iframe
+const renderEmbed = (video: SocialMediaVideo) => {
+  const embedId = video.embedId || video.id;
+  
+  switch (video.embedType) {
+    case 'tiktok':
+      return (
+        <iframe
+          src={`https://www.tiktok.com/embed/v2/${embedId}`}
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          scrolling="no"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full pointer-events-auto"
+          style={{ border: 'none', borderRadius: '0' }}
+          onError={() => {
+            const iframe = document.querySelector(`iframe[src*="${embedId}"]`) as HTMLIFrameElement;
+            if (iframe) {
+              iframe.style.display = 'none';
+              const fallbacks = iframe.parentElement?.querySelectorAll('.embed-fallback');
+              fallbacks?.forEach((fallback) => {
+                (fallback as HTMLElement).style.display = 'block';
+              });
+            }
+          }}
+        />
+      );
+    
+    case 'twitter':
+      return (
+        <iframe
+          src={`https://platform.twitter.com/embed/Tweet.html?id=${embedId}`}
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          scrolling="no"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full pointer-events-auto"
+          style={{ border: 'none', borderRadius: '0' }}
+        />
+      );
+    
+    case 'youtube':
+      return (
+        <iframe
+          src={`https://www.youtube.com/embed/${embedId}`}
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full pointer-events-auto"
+          style={{ border: 'none', borderRadius: '0' }}
+        />
+      );
+    
+    default:
+      return null;
+  }
+};
+
+// DEPRECATED: Hardcoded array kept as fallback only
+// Videos are now loaded dynamically from Firestore
+const tiktokVideosFallback = [
   {
     id: '7539670401589218582',
     url: 'https://www.tiktok.com/@london_news_exposed/video/7539670401589218582',
@@ -133,6 +216,78 @@ const tiktokVideos = [
 export default function AngelsPage() {
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/angels', '/backgrounds/hero-bg.jpg');
+  
+  // State for dynamically loaded videos
+  const [videos, setVideos] = useState<SocialMediaVideo[]>([]);
+  const [isLoadingVideos, setIsLoadingVideos] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  // Load Angels videos from Firestore
+  useEffect(() => {
+    const loadAngelsVideos = async () => {
+      try {
+        setIsLoadingVideos(true);
+        setLoadError(null);
+        
+        const q = query(
+          collection(db, 'gallery_media'),
+          where('isAngelsVideo', '==', true),
+          where('isPublic', '==', true),
+          orderBy('angelsOrder', 'asc')
+        );
+        
+        const snapshot = await getDocs(q);
+        
+        const loadedVideos: SocialMediaVideo[] = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: data.embedId || doc.id,
+            embedId: data.embedId,
+            embedUrl: data.embedUrl || data.src,
+            embedType: data.embedType || 'tiktok',
+            embedUsername: data.embedUsername,
+            title: data.title,
+            description: data.description,
+            tags: data.tags || [],
+            angelsOrder: data.angelsOrder || 0,
+          };
+        });
+        
+        setVideos(loadedVideos);
+        console.log(`✅ Loaded ${loadedVideos.length} Angels videos from Firestore`);
+      } catch (error) {
+        console.error('❌ Error loading Angels videos:', error);
+        setLoadError('Failed to load videos');
+        // Use fallback data
+        setVideos([]);
+      } finally {
+        setIsLoadingVideos(false);
+      }
+    };
+
+    loadAngelsVideos();
+  }, []);
+
+  // Use loaded videos or fallback to hardcoded (for backwards compatibility)
+  const displayVideos = videos.length > 0 ? videos.map(v => ({
+    ...v,
+    displayName: v.title,
+    username: v.embedUsername,
+    url: v.embedUrl,
+  })) : tiktokVideosFallback.map((v, idx) => ({
+    id: v.id,
+    embedId: v.id,
+    embedUrl: v.url,
+    embedType: 'tiktok' as const,
+    embedUsername: v.username,
+    title: v.displayName,
+    description: v.description,
+    tags: v.tags,
+    angelsOrder: idx,
+    displayName: v.displayName,
+    username: v.username,
+    url: v.url,
+  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -557,9 +712,18 @@ export default function AngelsPage() {
 
           {/* TikTok Video Cards */}
           <div className="max-w-full mx-auto">
+            {/* Loading State */}
+            {isLoadingVideos && (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <span className="ml-3 text-muted-foreground">Loading powerful stories...</span>
+              </div>
+            )}
+            
             {/* Desktop Grid View - Hidden on Mobile */}
-            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {tiktokVideos.slice(0, 6).map((video) => (
+            {!isLoadingVideos && (
+              <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayVideos.slice(0, 6).map((video) => (
                 <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800"
                 >
                   <div className="aspect-[9/16] relative overflow-hidden">
@@ -580,35 +744,12 @@ export default function AngelsPage() {
                         ))}
                       </div>
                     </div>
-                    {/* TikTok Embed */}
-                    <iframe
-                      src={`https://www.tiktok.com/embed/v2/${video.id}`}
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      scrolling="no"
-                      allowFullScreen
-                      className="absolute inset-0 w-full h-full pointer-events-auto"
-                      style={{
-                        border: 'none',
-                        borderRadius: '0',
-                      }}
-                      onError={() => {
-                        // Fallback to gradient if embed fails
-                        const iframe = document.querySelector(`iframe[src*="${video.id}"]`) as HTMLIFrameElement;
-                        if (iframe) {
-                          iframe.style.display = 'none';
-                          const fallbacks = iframe.parentElement?.querySelectorAll('.tiktok-fallback');
-                          fallbacks?.forEach((fallback) => {
-                            (fallback as HTMLElement).style.display = 'block';
-                          });
-                        }
-                      }}
-                    />
+                    {/* Social Media Embed */}
+                    {renderEmbed(video)}
                     {/* Fallback gradient (hidden by default) */}
-                    <div className="tiktok-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
-                    <div className="tiktok-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
-                    <div className="tiktok-fallback absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
+                    <div className="embed-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
+                    <div className="embed-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
+                    <div className="embed-fallback absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
                       <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
                         <Play className="w-8 h-8 text-white fill-white" />
                       </div>
@@ -616,19 +757,21 @@ export default function AngelsPage() {
                   </div>
                 </Card>
               ))}
-            </div>
+              </div>
+            )}
 
             {/* Mobile Carousel - Only on Mobile */}
-            <div className="md:hidden">
-              <Carousel
-                opts={{
-                  align: "center",
-                  loop: true,
-                }}
-                className="w-full mx-auto"
-              >
-                <CarouselContent className="-ml-4">
-                  {tiktokVideos.map((video) => (
+            {!isLoadingVideos && (
+              <div className="md:hidden">
+                <Carousel
+                  opts={{
+                    align: "center",
+                    loop: true,
+                  }}
+                  className="w-full mx-auto"
+                >
+                  <CarouselContent className="-ml-4">
+                    {displayVideos.map((video) => (
                     <CarouselItem key={video.id} className="pl-4 basis-[85%]">
                       <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-b from-slate-900 to-black border-slate-800 mx-2"
                       >
@@ -650,35 +793,12 @@ export default function AngelsPage() {
                               ))}
                             </div>
                           </div>
-                          {/* TikTok Embed */}
-                          <iframe
-                            src={`https://www.tiktok.com/embed/v2/${video.id}`}
-                            width="100%"
-                            height="100%"
-                            frameBorder="0"
-                            scrolling="no"
-                            allowFullScreen
-                            className="absolute inset-0 w-full h-full pointer-events-auto"
-                            style={{
-                              border: 'none',
-                              borderRadius: '0',
-                            }}
-                            onError={() => {
-                              // Fallback to gradient if embed fails
-                              const iframe = document.querySelector(`iframe[src*="${video.id}"]`) as HTMLIFrameElement;
-                              if (iframe) {
-                                iframe.style.display = 'none';
-                                const fallbacks = iframe.parentElement?.querySelectorAll('.tiktok-fallback');
-                                fallbacks?.forEach((fallback) => {
-                                  (fallback as HTMLElement).style.display = 'block';
-                                });
-                              }
-                            }}
-                          />
+                          {/* Social Media Embed */}
+                          {renderEmbed(video)}
                           {/* Fallback gradient (hidden by default) */}
-                          <div className="tiktok-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
-                          <div className="tiktok-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
-                          <div className="tiktok-fallback absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
+                          <div className="embed-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
+                          <div className="embed-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
+                          <div className="embed-fallback absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
                             <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
                               <Play className="w-6 h-6 text-white fill-white" />
                             </div>
@@ -692,13 +812,15 @@ export default function AngelsPage() {
                 <CarouselNext className="right-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
               </Carousel>
               
-              {/* Carousel Info */}
-              <div className="text-center mt-6">
-                <p className="text-sm text-muted-foreground">
-                  Swipe to navigate • {tiktokVideos.length} powerful stories
-                </p>
-              </div>
+                {/* Carousel Info */}
+                <div className="text-center mt-6">
+                  <p className="text-sm text-muted-foreground">
+                    Swipe to navigate • {displayVideos.length} powerful stories
+                  </p>
+                </div>
+              </Carousel>
             </div>
+            )}
           </div>
 
           {/* Closing Quote */}

@@ -77,12 +77,20 @@ interface GalleryMedia {
   aspectRatio?: string;
   fileSize?: number;
   // Video-specific fields
-  mediaType: 'image' | 'video';
+  mediaType: 'image' | 'video' | 'embed'; // Added 'embed' for social media
   duration?: number; // Video duration in seconds
   thumbnailUrl?: string; // Generated thumbnail for videos
+  // Social Media Embed fields
+  embedUrl?: string; // Full social media URL (TikTok, X, YouTube)
+  embedType?: 'tiktok' | 'twitter' | 'youtube' | null; // Platform type
+  embedId?: string; // Extracted video ID for embedding
+  embedUsername?: string; // Social media username (if available)
+  // Angels Page Support
+  isAngelsVideo?: boolean; // Show in Angels "Because the System is Broken" section
+  angelsOrder?: number; // Display order in Angels carousel
 }
 
-const categories = ['pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts'];
+const categories = ['pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts', 'basecamp', 'clips', 'angels'];
 
 // Public pages that can have hero images
 const PUBLIC_PAGES = [

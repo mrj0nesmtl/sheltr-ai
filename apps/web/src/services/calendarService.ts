@@ -113,6 +113,113 @@ Visit our investor portal: https://sheltr-ai.web.app/investor-relations
     }
   }
 
+  /**
+   * Generic meeting scheduler for contact page and other general meetings
+   */
+  async scheduleMeeting(meetingData: {
+    name: string;
+    email: string;
+    company?: string;
+    meetingType?: string;
+    investmentRange?: string;
+    preferredDate: string;
+    preferredTime: string;
+    timezone: string;
+    additionalNotes?: string;
+  }): Promise<SchedulingResult> {
+    try {
+      // Combine date and time
+      const dateTimeString = `${meetingData.preferredDate}T${meetingData.preferredTime}:00`;
+      const selectedDateTime = new Date(dateTimeString).toISOString();
+
+      // Determine meeting type and use appropriate method
+      if (meetingData.meetingType === 'Investor Meeting' || meetingData.investmentRange) {
+        return await this.createInvestorMeeting(
+          meetingData.email,
+          meetingData.name,
+          selectedDateTime,
+          meetingData.additionalNotes,
+          meetingData.company,
+          meetingData.investmentRange
+        );
+      }
+
+      // General meeting (partnership, consultation, etc.)
+      const eventDetails: CalendarEvent = {
+        summary: `SHELTR-AI ${meetingData.meetingType || 'General'} Meeting`,
+        description: `
+Meeting Type: ${meetingData.meetingType || 'General Consultation'}
+
+Participant: ${meetingData.name} (${meetingData.email})
+${meetingData.company ? `Company: ${meetingData.company}` : ''}
+
+${meetingData.additionalNotes ? `Notes: ${meetingData.additionalNotes}` : ''}
+
+This meeting will cover topics related to SHELTR platform and partnerships.
+
+Visit: https://sheltr-ai.web.app
+        `.trim(),
+        start: {
+          dateTime: selectedDateTime,
+          timeZone: meetingData.timezone,
+        },
+        end: {
+          dateTime: new Date(new Date(selectedDateTime).getTime() + 45 * 60000).toISOString(),
+          timeZone: meetingData.timezone,
+        },
+        attendees: [
+          {
+            email: meetingData.email,
+            displayName: meetingData.name,
+          },
+          {
+            email: 'contact@sheltr-ai.com',
+            displayName: 'SHELTR-AI Team',
+          }
+        ],
+        location: 'Google Meet (link will be provided)',
+      };
+
+      // Call Firebase Function to create real calendar event
+      const { getFunctions, httpsCallable } = await import('firebase/functions');
+      const { functions } = await import('@/lib/firebase');
+      
+      const createMeeting = httpsCallable(functions, 'createGeneralMeeting');
+      
+      const result = await createMeeting({
+        name: meetingData.name,
+        email: meetingData.email,
+        company: meetingData.company,
+        meetingType: meetingData.meetingType,
+        selectedDateTime,
+        timezone: meetingData.timezone,
+        additionalNotes: meetingData.additionalNotes,
+      });
+      
+      const data = result.data as any;
+      
+      if (data.success) {
+        return {
+          success: true,
+          meetingLink: data.meetingLink,
+          eventId: data.eventId,
+          message: `✅ Meeting scheduled successfully! Check your email (${meetingData.email}) for confirmation and meeting link.`,
+        };
+      } else {
+        return {
+          success: false,
+          message: data.message || 'Failed to schedule meeting. Please try again.',
+        };
+      }
+    } catch (error) {
+      console.error('Error scheduling meeting:', error);
+      return {
+        success: false,
+        message: `Failed to schedule meeting: ${error instanceof Error ? error.message : 'Unknown error'}. Please contact us at contact@sheltr-ai.com`,
+      };
+    }
+  }
+
   private async createCalendarEvent(event: CalendarEvent): Promise<string> {
     // TODO: Implement actual Google Calendar API integration
     // For now, we'll simulate a successful calendar event creation

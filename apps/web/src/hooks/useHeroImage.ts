@@ -77,14 +77,31 @@ export function useHeroImage(pagePath: string, fallbackUrl: string = '/og-image.
           const data = doc.data();
           const collection = !mediaSnapshot.empty ? 'gallery_media' : 'gallery_images';
 
-          // Determine if this is a video or image
-          const mediaType = data.mediaType || data.type?.startsWith('video') ? 'video' : 'image';
+          // Determine if this is a video or image - FIXED LOGIC
+          let mediaType: 'image' | 'video' = 'image';
+          
+          // Check explicit mediaType field first
+          if (data.mediaType === 'video') {
+            mediaType = 'video';
+          } 
+          // Then check MIME type
+          else if (data.type && data.type.startsWith('video/')) {
+            mediaType = 'video';
+          }
+          // Check duration field (videos have duration)
+          else if (data.duration && data.duration > 0) {
+            mediaType = 'video';
+          }
+          // Everything else is an image
 
           console.log(`✅ Hero found in ${collection}:`, {
             src: data.src,
             url: data.url,
             title: data.title,
-            mediaType
+            type: data.type,
+            mediaType: data.mediaType,
+            duration: data.duration,
+            finalMediaType: mediaType
           });
 
           setHeroImage({

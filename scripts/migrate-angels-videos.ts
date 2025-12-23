@@ -11,7 +11,7 @@ import * as path from 'path';
 
 // Initialize Firebase Admin (only if not already initialized)
 if (!getApps().length) {
-  const serviceAccount = require(path.join(__dirname, '../serviceAccountKey.json'));
+  const serviceAccount = require(path.join(__dirname, '../apps/api/service-account-key.json'));
   
   initializeApp({
     credential: cert(serviceAccount),

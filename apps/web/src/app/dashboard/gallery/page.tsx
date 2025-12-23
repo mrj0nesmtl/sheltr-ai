@@ -594,7 +594,7 @@ export default function GalleryManagementPage() {
   const loadImages = useCallback(async () => {
     try {
       const imagesQuery = query(
-        collection(db, 'gallery_images')
+        collection(db, 'gallery_media')
       );
       const snapshot = await getDocs(imagesQuery);
       const loadedImages: GalleryMedia[] = [];
@@ -820,7 +820,7 @@ export default function GalleryManagementPage() {
         })
       };
 
-      await addDoc(collection(db, 'gallery_images'), mediaData);
+      await addDoc(collection(db, 'gallery_media'), mediaData);
       
       showAlert('success', `${mediaType === 'video' ? 'Video' : 'Image'} uploaded successfully!`);
       setUploadDialogOpen(false);
@@ -900,7 +900,7 @@ export default function GalleryManagementPage() {
         console.log('✅ New thumbnail uploaded successfully');
       }
       
-      const imageRef = doc(db, 'gallery_images', imageId);
+      const imageRef = doc(db, 'gallery_media', imageId);
       await updateDoc(imageRef, {
         ...updatedData,
         updatedAt: new Date()
@@ -978,7 +978,7 @@ export default function GalleryManagementPage() {
       await deleteObject(storageRef);
       
       // Delete from Firestore
-      await deleteDoc(doc(db, 'gallery_images', image.id));
+      await deleteDoc(doc(db, 'gallery_media', image.id));
       
       showAlert('success', 'Image deleted successfully!');
       loadImages();
@@ -1017,7 +1017,7 @@ export default function GalleryManagementPage() {
 
       // Update all affected images' order values in Firebase
       const updatePromises = newImages.map((image, index) => 
-        updateDoc(doc(db, 'gallery_images', image.id), { 
+        updateDoc(doc(db, 'gallery_media', image.id), { 
           order: index,
           updatedAt: new Date()
         })
@@ -1048,7 +1048,7 @@ export default function GalleryManagementPage() {
       const sortedImages = [...images].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
       
       const updatePromises = sortedImages.map((image, index) => 
-        updateDoc(doc(db, 'gallery_images', image.id), { 
+        updateDoc(doc(db, 'gallery_media', image.id), { 
           order: index,
           updatedAt: new Date()
         })

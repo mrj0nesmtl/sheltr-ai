@@ -187,12 +187,12 @@ Visit: https://sheltr-ai.web.app
       const createMeeting = httpsCallable(functions, 'createGeneralMeeting');
       
       const result = await createMeeting({
-        name: meetingData.name,
+        fullName: meetingData.name,  // Backend expects 'fullName'
         email: meetingData.email,
         company: meetingData.company,
         meetingType: meetingData.meetingType,
-        selectedDateTime,
-        timezone: meetingData.timezone,
+        preferredDate: meetingData.preferredDate,  // Backend expects 'preferredDate'
+        preferredTime: meetingData.preferredTime,  // Backend expects 'preferredTime'
         additionalNotes: meetingData.additionalNotes,
       });
       

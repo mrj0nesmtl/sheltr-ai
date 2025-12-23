@@ -7,6 +7,179 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.0] - 2025-12-23 (Angels Page Video System & Hero Image Fixes) 🎥✨
+
+### 🎯 **Session Highlights - December 23, 2025 (1:00 AM)**
+Major video playback enhancements for Angels page including mobile support, auto-pause functionality, and TikTok embed fixes. Fixed critical hero image bugs affecting homepage and all pages with custom hero images. Implemented dual-collection support for gallery media.
+
+### 🎬 **Angels Page - Video Playback System Overhaul**
+
+#### **1. Mobile Video Playback Fixed**
+- **Problem**: Videos on Angels page mobile carousel wouldn't play when tapped
+- **Root Cause**: Overlay elements (gradient, play icon, text) blocking touch events
+- **Solution**: Added `pointer-events-none` to all decorative overlays
+- **DOM Reordering**: Video element first (bottom layer), overlays on top
+- **Impact**: Mobile videos now fully interactive with tap-to-play
+- **Updated Help Text**: "Swipe to navigate • Tap video to play • X powerful stories"
+
+#### **2. Auto-Pause Functionality** ⭐
+- **Feature**: When user plays video #2, video #1 automatically pauses
+- **Works On**: Both desktop grid and mobile carousel
+- **Implementation**:
+  - `videoElementsRef` Set tracks all video elements globally
+  - `registerVideoElement` callback registers each video with play event listener
+  - When any video plays → all others pause automatically
+  - Cleanup on unmount prevents memory leaks
+- **Debug Logging**:
+  - `▶️ Video started playing, pausing others...`
+  - `⏸️ Pausing video: [src]`
+- **Impact**: No audio overlap, crystal clear which video is active
+- **Commits**: `e3d49953`, `06416e18`
+
+#### **3. TikTok Embed Console Error Fixes**
+- **Problem**: Thousands of `ERR_BLOCKED_BY_CLIENT` errors flooding console
+- **Root Cause**: TikTok iframes loading tracking scripts blocked by ad blockers/privacy extensions
+- **Initial Solution Attempts**:
+  - Error suppression in iframe `onError` handlers (still flooded)
+  - Sandbox attributes (didn't help)
+  - Gradient fallback with play buttons (removed interactivity)
+- **Final Solution**: TikTok embeds completely disabled
+  - Beautiful fallback UI with gradient backgrounds
+  - Thumbnail image display (if uploaded)
+  - Play button icon
+  - "Watch on TikTok" external link button
+  - Explanation: "TikTok embeds disabled to prevent console errors"
+- **Impact**: Zero console errors, cleaner UX
+- **User Action**: Manually disable TikTok videos in dashboard (toggle off Angels carousel)
+- **Commits**: `47037b97`, `0a6604e3`, `8d83f586`
+
+#### **4. Desktop Video Playback Enhancement**
+- **Problem**: Videos auto-playing on page load (unwanted)
+- **Solution**:
+  - Added `preload="metadata"` (no autoplay on load)
+  - Removed hover-to-play (was blocking native controls)
+  - Native controls fully visible and clickable
+  - Proper black background for contrast
+  - `controlsList="nodownload"` for security
+  - `playsInline` and `webkit-playsinline` for iOS support
+- **Debug Logging**: Video load/error tracking
+- **Impact**: Videos play only when user clicks
+- **Commit**: `47037b97`
+
+#### **5. Dual Collection Support**
+- **Context**: Dashboard saves to both `gallery_images` (legacy) and `gallery_media` (new)
+- **Updated**: Angels page loading to query BOTH collections
+- **Query Strategy**: Removed `orderBy` to avoid composite index requirements, client-side sorting instead
+- **Impact**: All videos now visible regardless of which collection they're in
+- **Commits**: Multiple commits for iteration
+
+### 🖼️ **Hero Image System - Critical Fixes**
+
+#### **1. Dual Collection Query Support**
+- **Problem**: `useHeroImage` hook only queried `gallery_images` collection
+- **Impact**: Hero images set in `gallery_media` collection weren't displaying
+- **Solution**: Query BOTH `gallery_images` and `gallery_media` in parallel
+- **Preference**: Prioritize `gallery_media` (newer) over `gallery_images` (legacy)
+- **Debug Logging**:
+  - `🔍 Hero search for [path]: { gallery_images: X, gallery_media: Y }`
+  - `✅ Hero found in [collection]: { src, title, mediaType }`
+  - `⚠️ No hero media found for page: [path]`
+- **Impact**: Landing page hero and all page heroes now work
+- **Commit**: `a7d07df7`
+
+#### **2. Media Type Detection Bug Fix** ⭐⭐⭐
+- **Problem**: Images displaying as black screen on hero sections
+- **Root Cause**: Flawed operator precedence in media type logic
+  ```typescript
+  // WRONG:
+  const mediaType = data.mediaType || data.type?.startsWith('video') ? 'video' : 'image';
+  // Evaluated as: (data.mediaType || ...) ? 'video' : 'image'
+  // ANY truthy mediaType (even 'image') returned 'video'!
+  ```
+- **Solution**: Explicit conditional checks
+  ```typescript
+  let mediaType: 'image' | 'video' = 'image';  // Default
+  if (data.mediaType === 'video') mediaType = 'video';
+  else if (data.type && data.type.startsWith('video/')) mediaType = 'video';
+  else if (data.duration && data.duration > 0) mediaType = 'video';
+  ```
+- **Enhanced Logging**: Shows `type`, `mediaType`, `duration`, and `finalMediaType` decision
+- **Impact**: **Homepage hero images now display correctly!** 🎉
+- **Commit**: `a8d7e98c`
+
+### 📊 **Gallery Dashboard - No Changes**
+- Angels carousel toggle already implemented
+- Thumbnail upload for embeds already supported
+- Display order field already present
+- All dashboard functionality working as designed
+
+### 📁 **Files Modified**
+- `/apps/web/src/app/angels/page.tsx` (4 commits, 100+ lines changed)
+- `/apps/web/src/hooks/useHeroImage.ts` (2 commits, 60+ lines changed)
+- `/docs/implementation/ANGELS-VIDEO-PLAYBACK-FIX.md` (created, 150+ lines)
+- `/docs/implementation/ANGELS-MANAGEMENT-COMPLETE.md` (reference)
+
+### 🐛 **Bugs Fixed**
+1. ✅ Mobile video tap-to-play not working → Fixed with pointer-events-none
+2. ✅ Multiple videos playing simultaneously → Fixed with auto-pause system
+3. ✅ TikTok console error floods → Fixed by disabling embeds
+4. ✅ Hero images not loading from gallery_media → Fixed with dual-collection query
+5. ✅ Images showing as black screen → Fixed media type detection logic
+
+### 🎨 **UX Improvements**
+- Videos now have smooth, intuitive playback on mobile
+- Auto-pause prevents confusing audio overlap
+- Clean console (no error floods)
+- Hero images display correctly across all pages
+- Professional TikTok fallback cards with external links
+
+### 🔧 **Technical Details**
+- **React Hooks**: `useRef`, `useCallback` for video tracking
+- **Event Listeners**: `play` event on all video elements
+- **Pointer Events**: CSS `pointer-events-none` for overlay transparency
+- **Firestore Queries**: Parallel queries with `Promise.all()`
+- **Type Safety**: Explicit `'image' | 'video'` type checking
+- **Debug Logging**: Extensive console logs for troubleshooting
+
+### 🎯 **Testing Checklist**
+- [x] Desktop: Click video → plays with sound
+- [x] Desktop: Click second video → first stops, second plays
+- [x] Mobile: Tap video → plays
+- [x] Mobile: Swipe, tap next video → previous stops
+- [x] Console: No error floods
+- [x] Homepage: Hero image displays
+- [x] All pages: Hero images work
+
+### 📝 **Documentation**
+- Created: `/docs/implementation/ANGELS-VIDEO-PLAYBACK-FIX.md`
+  - Problem analysis
+  - Solution details
+  - Code examples
+  - Testing checklist
+  - Status updates
+- Updated: This CHANGELOG.md
+- Updated: CHANGELOG-CAPSULE.md
+
+### 💻 **Commits (9 total)**
+1. `47037b97` - fix: Disable TikTok embeds and enhance video player
+2. `e3d49953` - fix: Enable mobile video playback with pointer-events-none overlays
+3. `06416e18` - feat: Auto-pause other videos when playing new one
+4. `a7d07df7` - fix: Query both gallery collections for hero images
+5. `a8d7e98c` - fix: Correct media type detection logic for hero images
+6. `0a6604e3` - fix: Stop TikTok console errors and fix video autoplay issues
+7. `8d83f586` - fix: Restore video playback and add thumbnail support
+8. (Plus documentation commits)
+
+### 🎉 **Impact**
+- ✅ Angels page fully functional on mobile and desktop
+- ✅ Professional video playback experience
+- ✅ Clean console (no error spam)
+- ✅ Homepage hero images working perfectly
+- ✅ All page hero images fixed
+- ✅ Better UX for video content management
+
+---
+
 ## [3.1.0] - 2025-12-21 (UX Enhancements & Knowledge Base Improvements) 🎨🔧
 
 ### 🎯 **Session Highlights - December 21, 2025 (1:18 AM)**

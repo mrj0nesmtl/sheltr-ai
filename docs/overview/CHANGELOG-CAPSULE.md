@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 21, 2025 (1:32 AM)  
+**Last Updated**: December 23, 2025 (1:00 AM)  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -10,14 +10,86 @@
 
 ## 🎯 Quick Stats (Last 30 Days)
 
-- **Versions Released**: 3.1.0 → 2.140.0 (23 releases)
-- **Major Features**: 24 new features (Gemini migration, Basecamp, KB enhancements!)
-- **Bug Fixes**: 47+ critical fixes
+- **Versions Released**: 3.2.0 → 2.140.0 (24 releases)
+- **Major Features**: 26 new features (Video system, Hero images, Gemini, Basecamp!)
+- **Bug Fixes**: 52+ critical fixes
 - **Cost Optimization**: **95% LLM cost reduction** 💰
 - **Code Quality**: **Zero TypeScript errors** ✅
-- **Documentation**: 57+ docs updated/created (+2,500 lines)
-- **UX Improvements**: 10+ major enhancements
+- **Documentation**: 60+ docs updated/created (+3,000 lines)
+- **UX Improvements**: 12+ major enhancements
 - **MCP Servers**: 8 integrated (GitHub, Firebase, Google Cloud, Shadcn, Playwright, Context7)
+
+---
+
+## [3.2.0] - 2025-12-23 (Angels Page Video System & Hero Image Fixes) 🎥✨
+
+### 🎯 **Session Summary**
+Major video playback enhancements for Angels page: mobile tap-to-play fixed, auto-pause feature (only one video plays at a time), TikTok embeds disabled (console cleaned), and critical hero image bugs fixed. Homepage hero images now display correctly!
+
+### 🎬 **Angels Page - Video Playback Overhaul**
+
+#### **1. Mobile Video Fixed**
+- **Problem**: Videos wouldn't play when tapped on mobile
+- **Cause**: Overlays blocking touch events (z-index issues)
+- **Solution**: `pointer-events-none` on all decorative overlays
+- **Impact**: Videos now fully interactive on mobile ✅
+
+#### **2. Auto-Pause Feature** ⭐
+- **What**: Playing video #2 automatically pauses video #1
+- **How**: Global video tracking with `useRef` Set + play event listeners
+- **Works**: Both desktop grid and mobile carousel
+- **Impact**: No audio overlap, clear UX
+- **Debug**: `▶️ Video started playing, pausing others...`
+
+#### **3. TikTok Embeds Disabled**
+- **Problem**: 1000s of `ERR_BLOCKED_BY_CLIENT` console errors
+- **Cause**: Ad blockers blocking TikTok tracking scripts
+- **Solution**: Disabled iframe embeds entirely
+- **Fallback UI**: Gradient + thumbnail + "Watch on TikTok" button
+- **Impact**: Zero console errors, clean logs ✅
+
+#### **4. Desktop Video Enhanced**
+- **Fixed**: Auto-play on page load (unwanted)
+- **Added**: `preload="metadata"`, proper controls, iOS support
+- **Impact**: Click-to-play, professional UX
+
+### 🖼️ **Hero Image Fixes** ⭐⭐⭐
+
+#### **1. Dual Collection Support**
+- **Problem**: Hero images in `gallery_media` collection not showing
+- **Solution**: Query BOTH `gallery_images` AND `gallery_media`
+- **Impact**: All hero images now work
+
+#### **2. Media Type Detection Bug** (CRITICAL FIX)
+- **Problem**: Images showing as black screen
+- **Cause**: Broken operator precedence
+  ```js
+  // WRONG: data.mediaType || data.type?.startsWith('video') ? 'video' : 'image'
+  // ANY truthy value returned 'video'!
+  ```
+- **Solution**: Explicit conditional checks
+- **Impact**: **Homepage hero working!** 🎉
+
+### 🐛 **Bugs Fixed**
+1. ✅ Mobile video tap-to-play
+2. ✅ Multiple videos playing simultaneously
+3. ✅ TikTok console floods
+4. ✅ Hero images not loading
+5. ✅ Images showing as black screen
+
+### 💻 **Technical**
+- **9 Commits**: All pushed to GitHub
+- **React Hooks**: `useRef`, `useCallback` for video tracking
+- **Event System**: `play` listeners on all videos
+- **Firestore**: Parallel queries with `Promise.all()`
+- **Type Safety**: Explicit `'image' | 'video'` checks
+
+### 🎉 **Impact**
+- ✅ Angels page: Mobile + desktop video fully functional
+- ✅ Homepage: Hero images working perfectly
+- ✅ Console: Clean (no error spam)
+- ✅ UX: Professional video playback
+- ✅ All pages: Hero images fixed
 
 ---
 

@@ -812,13 +812,12 @@ export default function AngelsPage() {
                 <CarouselNext className="right-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
               </Carousel>
               
-                {/* Carousel Info */}
-                <div className="text-center mt-6">
-                  <p className="text-sm text-muted-foreground">
-                    Swipe to navigate • {displayVideos.length} powerful stories
-                  </p>
-                </div>
-              </Carousel>
+              {/* Carousel Info */}
+              <div className="text-center mt-6">
+                <p className="text-sm text-muted-foreground">
+                  Swipe to navigate • {displayVideos.length} powerful stories
+                </p>
+              </div>
             </div>
             )}
           </div>

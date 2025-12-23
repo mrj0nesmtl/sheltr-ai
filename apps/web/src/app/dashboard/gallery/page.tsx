@@ -1598,8 +1598,8 @@ export default function GalleryManagementPage() {
                 />
               </div>
               
-              {/* Video Thumbnail Upload - Only for videos */}
-              {editingImage.mediaType === 'video' && (
+              {/* Video/Embed Thumbnail Upload - For videos and embeds */}
+              {(editingImage.mediaType === 'video' || editingImage.mediaType === 'embed') && (
                 <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 space-y-3">
                   <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">Video Thumbnail</h4>
                   

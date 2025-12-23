@@ -1,7 +1,7 @@
 # 🌳 SHELTR Project Tree Reference
 
-*Generated on: Sat Dec 20 20:46:28 EST 2025*
-*Last Updated: 2025-12-20*
+*Generated on: Mon Dec 22 16:29:25 EST 2025*
+*Last Updated: 2025-12-22*
 
 ## 📋 Quick Navigation
 
@@ -186,12 +186,12 @@ Directory structure for sheltr-tokens
 
 ## 📊 Project Statistics
 
-- **TypeScript Files**: 19144
+- **TypeScript Files**: 19383
 - **Python Files**: 25453
-- **Documentation Files**: 220
+- **Documentation Files**: 236
 - **Component Files**: 99
 - **API Routes**: 18
-- **Scripts**: 2041
+- **Scripts**: 2045
 
 ---
 
@@ -210,4 +210,4 @@ To regenerate this file, run:
 ---
 
 *This file is auto-generated. Do not edit manually.*
-*Last generated: Sat Dec 20 20:46:28 EST 2025*
+*Last generated: Mon Dec 22 16:29:25 EST 2025*

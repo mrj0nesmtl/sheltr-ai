@@ -47,6 +47,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SocialMediaEmbedForm, type EmbedFormData } from '@/components/SocialMediaEmbedForm';
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
@@ -453,6 +455,7 @@ export default function GalleryManagementPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [uploadMode, setUploadMode] = useState<'file' | 'link'>('file');
   const [editingImage, setEditingImage] = useState<GalleryMedia | null>(null);
   const [uploading, setUploading] = useState(false);
   const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -636,6 +639,77 @@ export default function GalleryManagementPage() {
       loadImages();
     }
   }, [canManageGallery, loadImages]);
+
+  // Handle social media embed submission
+  const handleSocialMediaEmbed = async (embedData: EmbedFormData) => {
+    if (!user) return;
+
+    setUploading(true);
+    try {
+      // Create Firestore document for embed
+      await addDoc(collection(db, 'gallery_media'), {
+        // Basic info
+        title: embedData.title,
+        description: embedData.description,
+        category: embedData.category,
+        tags: embedData.tags,
+        date: new Date().toISOString().split('T')[0],
+        
+        // Media type
+        mediaType: 'embed',
+        src: embedData.embedUrl, // Store original URL
+        
+        // Social media embed fields
+        embedUrl: embedData.embedUrl,
+        embedType: embedData.embedType,
+        embedId: embedData.embedId,
+        embedUsername: embedData.embedUsername,
+        
+        // Angels page specific
+        isAngelsVideo: embedData.isAngelsVideo,
+        angelsOrder: embedData.angelsOrder,
+        
+        // Visibility flags
+        isPublic: embedData.isPublic,
+        isPrivate: false,
+        isHero: false,
+        isLandingHero: false,
+        isFoundersGallery: false,
+        isInvestorDataRoom: false,
+        
+        // Metadata
+        aspectRatio: embedData.aspectRatio,
+        width: embedData.aspectRatio === '9:16' ? 1080 : 1920,
+        height: embedData.aspectRatio === '9:16' ? 1920 : 1080,
+        
+        // Timestamps
+        uploadedBy: user.uid,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        order: images.length, // Add to end
+      });
+
+      // Reload gallery
+      await loadImages();
+      
+      // Close dialog and reset
+      setUploadDialogOpen(false);
+      setUploadMode('file');
+      
+      setAlert({
+        type: 'success',
+        message: `✅ ${embedData.embedType.toUpperCase()} video added successfully!${embedData.isAngelsVideo ? ' Added to Angels page.' : ''}`,
+      });
+    } catch (error) {
+      console.error('Error adding social media embed:', error);
+      setAlert({
+        type: 'error',
+        message: 'Failed to add video. Please try again.',
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   // Handle file upload
   const handleFileUpload = async (file?: File) => {
@@ -1061,8 +1135,18 @@ export default function GalleryManagementPage() {
             </DialogTrigger>
             <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Upload New Media</DialogTitle>
+                <DialogTitle>Add New Media</DialogTitle>
               </DialogHeader>
+              
+              {/* Tabs for Upload Mode */}
+              <Tabs value={uploadMode} onValueChange={(value) => setUploadMode(value as 'file' | 'link')}>
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="file">Upload File</TabsTrigger>
+                  <TabsTrigger value="link">Link from Social Media</TabsTrigger>
+                </TabsList>
+                
+                {/* File Upload Tab */}
+                <TabsContent value="file" className="space-y-6 pb-24 sm:pb-6">
               <div className="space-y-6 pb-24 sm:pb-6">
                 {/* File Selection - Top Priority */}
                 <div className="space-y-3">
@@ -1339,6 +1423,17 @@ export default function GalleryManagementPage() {
                   </>
                 )}
               </div>
+                </TabsContent>
+                
+                {/* Social Media Link Tab */}
+                <TabsContent value="link" className="space-y-6 pb-24 sm:pb-6">
+                  <SocialMediaEmbedForm
+                    categories={categories}
+                    onSubmit={handleSocialMediaEmbed}
+                    onCancel={() => setUploadDialogOpen(false)}
+                  />
+                </TabsContent>
+              </Tabs>
             </DialogContent>
           </Dialog>
         </div>

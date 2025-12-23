@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
-import { Mail, MessageCircle, Send, ExternalLink, Github, FileText, Sparkles, Users, Heart } from 'lucide-react';
+import { Mail, MessageCircle, Send, ExternalLink, Github, FileText, Sparkles, Users, Heart, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,6 +15,7 @@ import Head from 'next/head';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { toast } from 'sonner';
+import { MeetingScheduler } from '@/components/MeetingScheduler';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [showScheduler, setShowScheduler] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -212,6 +214,27 @@ export default function ContactPage() {
                         <p className="text-sm text-muted-foreground">
                           Use the chat widget in the bottom-right corner →
                         </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="hover:shadow-lg transition-shadow border-2 border-emerald-500/20">
+                    <CardContent className="flex items-start space-x-4 p-6">
+                      <div className="w-12 h-12 bg-emerald-600/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Calendar className="h-6 w-6 text-emerald-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-2">Schedule a Meeting</h3>
+                        <p className="text-muted-foreground mb-3">
+                          Book a 45-minute video call with our team
+                        </p>
+                        <Button 
+                          onClick={() => setShowScheduler(true)}
+                          className="bg-emerald-600 hover:bg-emerald-700"
+                        >
+                          <Calendar className="h-4 w-4 mr-2" />
+                          Schedule Meeting
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -428,6 +451,13 @@ export default function ContactPage() {
 
         <Footer />
         <PublicChatbot />
+        
+        {/* Meeting Scheduler Modal */}
+        <MeetingScheduler 
+          isOpen={showScheduler}
+          onClose={() => setShowScheduler(false)}
+          variant="general"
+        />
       </div>
     </>
   );

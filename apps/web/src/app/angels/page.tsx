@@ -21,12 +21,12 @@ import { StandardHero } from '@/components/StandardHero';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// Interface for social media video embeds
+// Interface for social media video embeds and regular videos
 interface SocialMediaVideo {
   id: string;
-  embedId: string;
-  embedUrl: string;
-  embedType: 'tiktok' | 'twitter' | 'youtube';
+  embedId?: string;
+  embedUrl?: string;
+  embedType?: 'tiktok' | 'twitter' | 'youtube';
   embedUsername?: string;
   title: string;
   description: string;
@@ -36,12 +36,30 @@ interface SocialMediaVideo {
   displayName?: string;
   username?: string;
   url?: string;
+  // For regular uploaded videos
+  mediaType?: 'image' | 'video' | 'embed';
+  src?: string;
 }
 
-// Helper to render social media embed iframe
-const renderEmbed = (video: SocialMediaVideo) => {
+// Helper to render social media embed iframe OR regular video
+const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: string }) => {
   const embedId = video.embedId || video.id;
   
+  // Handle regular uploaded videos (not embeds)
+  if (!video.embedType || video.mediaType === 'video') {
+    return (
+      <video
+        src={video.embedUrl || video.src}
+        controls
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ border: 'none', borderRadius: '0' }}
+      >
+        Your browser does not support the video tag.
+      </video>
+    );
+  }
+  
+  // Handle social media embeds
   switch (video.embedType) {
     case 'tiktok':
       return (
@@ -244,12 +262,14 @@ export default function AngelsPage() {
             id: data.embedId || doc.id,
             embedId: data.embedId,
             embedUrl: data.embedUrl || data.src,
-            embedType: data.embedType || 'tiktok',
+            embedType: data.embedType,
             embedUsername: data.embedUsername,
             title: data.title,
             description: data.description,
             tags: data.tags || [],
             angelsOrder: data.angelsOrder || 0,
+            mediaType: data.mediaType, // Include mediaType for regular videos
+            src: data.src, // Include src for regular videos
           };
         });
         
@@ -720,10 +740,10 @@ export default function AngelsPage() {
               </div>
             )}
             
-            {/* Desktop Grid View - Hidden on Mobile */}
+            {/* Desktop Grid View - Hidden on Mobile - Shows ALL videos */}
             {!isLoadingVideos && (
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {displayVideos.slice(0, 6).map((video) => (
+                {displayVideos.map((video) => (
                 <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800"
                 >
                   <div className="aspect-[9/16] relative overflow-hidden">

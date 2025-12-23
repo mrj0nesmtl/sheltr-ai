@@ -1739,6 +1739,45 @@ export default function GalleryManagementPage() {
                       </p>
                     </div>
                   </div>
+                  
+                  {/* Angels Page Toggle */}
+                  <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg border-2 border-amber-200 dark:border-amber-800">
+                    <input
+                      type="checkbox"
+                      id="editIsAngelsVideo"
+                      checked={(editingImage as any).isAngelsVideo || false}
+                      onChange={(e) => {
+                        setEditingImage(prev => prev ? { ...prev, isAngelsVideo: e.target.checked, angelsOrder: (prev as any).angelsOrder || 0 } as any : null);
+                      }}
+                      className="h-4 w-4"
+                    />
+                    <div className="flex-1">
+                      <label htmlFor="editIsAngelsVideo" className="text-sm font-semibold text-amber-900 dark:text-amber-100 cursor-pointer">
+                        😇 Add to Angels Page Carousel
+                      </label>
+                      <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
+                        Show in "Because the System is Broken" section
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Angels Order Input - Only show if Angels is enabled */}
+                  {(editingImage as any).isAngelsVideo && (
+                    <div className="ml-6 space-y-2">
+                      <label className="text-sm font-medium">Display Order</label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={(editingImage as any).angelsOrder || 0}
+                        onChange={(e) => setEditingImage(prev => prev ? { ...prev, angelsOrder: parseInt(e.target.value) || 0 } as any : null)}
+                        placeholder="0"
+                        className="w-32"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Lower numbers appear first (0 = first position)
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Hero Image Pages Selector */}

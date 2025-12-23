@@ -36,34 +36,29 @@ interface SocialMediaVideo {
   displayName?: string;
   username?: string;
   url?: string;
+  thumbnail?: string;
+  thumbnailUrl?: string;
   // For regular uploaded videos
   mediaType?: 'image' | 'video' | 'embed';
   src?: string;
 }
 
 // Helper to render social media embed iframe OR regular video
-const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: string }, isHovered: boolean = false) => {
+const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: string }) => {
   const embedId = video.embedId || video.id;
+  const posterImage = video.thumbnailUrl || video.thumbnail;
   
   // Handle regular uploaded videos (not embeds)
   if (!video.embedType || video.mediaType === 'video') {
     return (
       <video
         src={video.embedUrl || video.src}
+        poster={posterImage}
         controls
         preload="metadata"
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover cursor-pointer"
         style={{ border: 'none', borderRadius: '0' }}
-        onMouseEnter={(e) => {
-          const vid = e.currentTarget;
-          vid.play().catch(() => {});
-        }}
-        onMouseLeave={(e) => {
-          const vid = e.currentTarget;
-          vid.pause();
-          vid.currentTime = 0;
-        }}
       >
         Your browser does not support the video tag.
       </video>
@@ -73,23 +68,51 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
   // Handle social media embeds
   switch (video.embedType) {
     case 'tiktok':
-      // Use TikTok oEmbed API to get playable embed (less invasive)
       return (
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900">
-          <a
-            href={video.embedUrl || `https://www.tiktok.com/@${video.embedUsername}/video/${embedId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="absolute inset-0 flex items-center justify-center hover:bg-black/20 transition-colors"
-          >
-            <div className="bg-white/10 backdrop-blur-sm rounded-full p-6 hover:bg-white/20 transition-all">
-              <Play className="w-12 h-12 text-white fill-white" />
-            </div>
-          </a>
-          <div className="absolute bottom-4 left-4 right-4 text-white">
-            <p className="text-sm font-semibold mb-1">{video.title}</p>
-            <p className="text-xs opacity-90">{video.description}</p>
-          </div>
+        <div className="absolute inset-0 w-full h-full">
+          {/* Background thumbnail */}
+          {posterImage && (
+            <img 
+              src={posterImage}
+              alt={video.title}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
+          {/* TikTok iframe with error suppression */}
+          <iframe
+            src={`https://www.tiktok.com/embed/v2/${embedId}?lang=en-US`}
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            scrolling="no"
+            allowFullScreen
+            allow="encrypted-media;"
+            className="absolute inset-0 w-full h-full pointer-events-auto"
+            style={{ 
+              border: 'none', 
+              borderRadius: '0',
+              backgroundColor: posterImage ? 'transparent' : '#000'
+            }}
+            onError={(e) => {
+              // Suppress console errors by stopping propagation
+              e.stopPropagation();
+              console.log(`TikTok embed ${embedId} blocked - this is expected with ad blockers`);
+            }}
+          />
+          {/* Fallback play button overlay if iframe fails */}
+          {!posterImage && (
+            <a
+              href={video.embedUrl || `https://www.tiktok.com/@${video.embedUsername}/video/${embedId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900 hover:opacity-90 transition-opacity z-10"
+              style={{ pointerEvents: 'auto' }}
+            >
+              <div className="bg-white/10 backdrop-blur-sm rounded-full p-6 hover:bg-white/20 transition-all">
+                <Play className="w-12 h-12 text-white fill-white" />
+              </div>
+            </a>
+          )}
         </div>
       );
     
@@ -102,7 +125,6 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
           frameBorder="0"
           scrolling="no"
           allowFullScreen
-          sandbox="allow-scripts allow-same-origin allow-popups"
           className="absolute inset-0 w-full h-full pointer-events-auto"
           style={{ border: 'none', borderRadius: '0' }}
         />
@@ -117,7 +139,6 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
           frameBorder="0"
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          sandbox="allow-scripts allow-same-origin allow-presentation"
           className="absolute inset-0 w-full h-full pointer-events-auto"
           style={{ border: 'none', borderRadius: '0' }}
         />
@@ -284,6 +305,7 @@ export default function AngelsPage() {
               angelsOrder: data.angelsOrder || 999,
               mediaType: data.mediaType || (data.duration ? 'video' : 'image'),
               src: data.src,
+              thumbnailUrl: data.thumbnailUrl || data.thumbnail,
             });
           });
           console.log(`✅ Loaded ${legacySnapshot.size} videos from gallery_images`);
@@ -315,6 +337,7 @@ export default function AngelsPage() {
               angelsOrder: data.angelsOrder || 999,
               mediaType: data.mediaType,
               src: data.src,
+              thumbnailUrl: data.thumbnailUrl || data.thumbnail,
             });
           });
           console.log(`✅ Loaded ${mediaSnapshot.size} videos from gallery_media`);

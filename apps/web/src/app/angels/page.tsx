@@ -240,25 +240,55 @@ export default function AngelsPage() {
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  // Load Angels videos from Firestore
+  // Load Angels videos from Firestore (from BOTH collections)
   useEffect(() => {
     const loadAngelsVideos = async () => {
       try {
         setIsLoadingVideos(true);
         setLoadError(null);
         
-        const q = query(
+        const loadedVideos: SocialMediaVideo[] = [];
+        
+        // Load from gallery_images (legacy collection - regular uploaded videos)
+        const legacyQuery = query(
+          collection(db, 'gallery_images'),
+          where('isAngelsVideo', '==', true),
+          where('isPublic', '==', true),
+          orderBy('angelsOrder', 'asc')
+        );
+        
+        const legacySnapshot = await getDocs(legacyQuery);
+        
+        legacySnapshot.docs.forEach(doc => {
+          const data = doc.data();
+          loadedVideos.push({
+            id: doc.id,
+            embedId: data.embedId,
+            embedUrl: data.embedUrl || data.src,
+            embedType: data.embedType,
+            embedUsername: data.embedUsername,
+            title: data.title,
+            description: data.description,
+            tags: data.tags || [],
+            angelsOrder: data.angelsOrder || 0,
+            mediaType: data.mediaType || (data.duration ? 'video' : 'image'),
+            src: data.src,
+          });
+        });
+        
+        // Load from gallery_media (new unified collection - embeds and new uploads)
+        const mediaQuery = query(
           collection(db, 'gallery_media'),
           where('isAngelsVideo', '==', true),
           where('isPublic', '==', true),
           orderBy('angelsOrder', 'asc')
         );
         
-        const snapshot = await getDocs(q);
+        const mediaSnapshot = await getDocs(mediaQuery);
         
-        const loadedVideos: SocialMediaVideo[] = snapshot.docs.map(doc => {
+        mediaSnapshot.docs.forEach(doc => {
           const data = doc.data();
-          return {
+          loadedVideos.push({
             id: data.embedId || doc.id,
             embedId: data.embedId,
             embedUrl: data.embedUrl || data.src,
@@ -268,13 +298,16 @@ export default function AngelsPage() {
             description: data.description,
             tags: data.tags || [],
             angelsOrder: data.angelsOrder || 0,
-            mediaType: data.mediaType, // Include mediaType for regular videos
-            src: data.src, // Include src for regular videos
-          };
+            mediaType: data.mediaType,
+            src: data.src,
+          });
         });
         
+        // Sort by angelsOrder after combining both collections
+        loadedVideos.sort((a, b) => (a.angelsOrder || 0) - (b.angelsOrder || 0));
+        
         setVideos(loadedVideos);
-        console.log(`✅ Loaded ${loadedVideos.length} Angels videos from Firestore`);
+        console.log(`✅ Loaded ${legacySnapshot.size} from gallery_images + ${mediaSnapshot.size} from gallery_media = ${loadedVideos.length} Angels videos`);
       } catch (error) {
         console.error('❌ Error loading Angels videos:', error);
         setLoadError('Failed to load videos');

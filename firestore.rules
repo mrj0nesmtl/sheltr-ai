@@ -760,7 +760,7 @@ service cloud.firestore {
     }
     
     // =================================================================
-    // GALLERY IMAGES COLLECTION - Public gallery management
+    // GALLERY IMAGES COLLECTION - Public gallery management (LEGACY)
     // =================================================================
     match /gallery_images/{imageId} {
       // Read: Public images (check both isPublic and public fields), admins, founders portal users, and investors
@@ -781,6 +781,32 @@ service cloud.firestore {
       allow create: if isSuperAdmin() || isPlatformAdmin();
       
       // Delete: Super Admin and Platform Admin can delete images
+      allow delete: if isSuperAdmin() || isPlatformAdmin();
+    }
+    
+    // =================================================================
+    // GALLERY MEDIA COLLECTION - Unified gallery management (images, videos, embeds)
+    // =================================================================
+    match /gallery_media/{mediaId} {
+      // Read: Public media, admins, founders portal users, investors, and Angels page videos
+      allow read: if resource.data.isPublic == true || 
+                     resource.data.public == true ||
+                     resource.data.isAngelsVideo == true ||
+                     isSuperAdmin() || 
+                     isPlatformAdmin() ||
+                     (hasFoundersPortalAccess() && resource.data.isFoundersGallery == true) ||
+                     (isInvestor() && resource.data.isInvestorDataRoom == true);
+      
+      // List/Query: Allow authenticated users to query gallery, OR allow unauthenticated for public content
+      allow list: if true;
+      
+      // Write: Super Admin and Platform Admin can manage gallery
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can upload media
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin and Platform Admin can delete media
       allow delete: if isSuperAdmin() || isPlatformAdmin();
     }
     

@@ -824,13 +824,21 @@ export default function AngelsPage() {
                 <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800"
                 >
                   <div className="aspect-[9/16] relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
-                    <div className="absolute top-4 right-4 z-20">
+                    {/* Social Media Embed - MUST BE FIRST for proper layering */}
+                    {renderEmbed(video)}
+                    
+                    {/* Gradient overlays - pointer-events-none to allow clicks through */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10 pointer-events-none" />
+                    
+                    {/* Play icon - pointer-events-none */}
+                    <div className="absolute top-4 right-4 z-20 pointer-events-none">
                       <div className="bg-black/70 rounded-full p-2">
                         <Play className="w-6 h-6 text-white" />
                       </div>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
+                    
+                    {/* Text overlay - pointer-events-none */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white pointer-events-none">
                       <p className="font-semibold text-sm mb-1">{video.displayName}</p>
                       <p className="text-xs opacity-90 mb-2 line-clamp-3">{video.description}</p>
                       <div className="flex flex-wrap gap-1">
@@ -841,8 +849,7 @@ export default function AngelsPage() {
                         ))}
                       </div>
                     </div>
-                    {/* Social Media Embed */}
-                    {renderEmbed(video)}
+                    
                     {/* Fallback gradient (hidden by default) */}
                     <div className="embed-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
                     <div className="embed-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
@@ -873,13 +880,21 @@ export default function AngelsPage() {
                       <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-b from-slate-900 to-black border-slate-800 mx-2"
                       >
                         <div className="aspect-[9/16] relative overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
-                          <div className="absolute top-4 right-4 z-20">
+                          {/* Social Media Embed - MUST BE FIRST for proper layering */}
+                          {renderEmbed(video)}
+                          
+                          {/* Gradient overlays - pointer-events-none to allow clicks through */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10 pointer-events-none" />
+                          
+                          {/* Play icon - pointer-events-none */}
+                          <div className="absolute top-4 right-4 z-20 pointer-events-none">
                             <div className="bg-black/70 rounded-full p-2">
                               <Play className="w-5 h-5 text-white" />
                             </div>
                           </div>
-                          <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
+                          
+                          {/* Text overlay - pointer-events-none */}
+                          <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white pointer-events-none">
                             <p className="font-semibold text-sm mb-1">{video.displayName}</p>
                             <p className="text-xs opacity-90 mb-2 line-clamp-2">{video.description}</p>
                             <div className="flex flex-wrap gap-1">
@@ -890,8 +905,7 @@ export default function AngelsPage() {
                               ))}
                             </div>
                           </div>
-                          {/* Social Media Embed */}
-                          {renderEmbed(video)}
+                          
                           {/* Fallback gradient (hidden by default) */}
                           <div className="embed-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
                           <div className="embed-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
@@ -904,15 +918,15 @@ export default function AngelsPage() {
                       </Card>
                     </CarouselItem>
                   ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
-                <CarouselNext className="right-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
+                  </CarouselContent>
+                  <CarouselPrevious className="left-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
+                  <CarouselNext className="right-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
               </Carousel>
               
               {/* Carousel Info */}
               <div className="text-center mt-6">
                 <p className="text-sm text-muted-foreground">
-                  Swipe to navigate • {displayVideos.length} powerful stories
+                  Swipe to navigate • Tap video to play • {displayVideos.length} powerful stories
                 </p>
               </div>
             </div>

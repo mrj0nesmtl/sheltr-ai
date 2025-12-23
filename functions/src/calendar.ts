@@ -414,3 +414,203 @@ Visit our solutions page: https://sheltr-ai.web.app/solutions/organizations
     );
   }
 });
+
+// General Meeting Request Interface (for contact page)
+interface GeneralMeetingRequest {
+  fullName: string;
+  email: string;
+  company?: string;
+  meetingType: string;
+  preferredDate: string;
+  preferredTime: string;
+  additionalNotes?: string;
+}
+
+export const createGeneralMeeting = functions.https.onCall(async (request) => {
+  const data = request.data as GeneralMeetingRequest;
+  
+  // Get Firestore instance
+  const db = getFirestore();
+
+  const { 
+    fullName,
+    email, 
+    company,
+    meetingType,
+    preferredDate,
+    preferredTime,
+    additionalNotes 
+  } = data;
+
+  // Validate required fields
+  if (!fullName || !email || !preferredDate || !preferredTime) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "Missing required fields: fullName, email, preferredDate, or preferredTime"
+    );
+  }
+
+  try {
+    // Combine date and time into ISO string
+    const dateTimeStr = `${preferredDate}T${preferredTime}:00`;
+    const startTime = new Date(dateTimeStr);
+    
+    // Validate date
+    if (isNaN(startTime.getTime())) {
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Invalid date/time format"
+      );
+    }
+
+    const endTime = new Date(startTime.getTime() + 45 * 60000); // 45 minutes
+
+    // Load service account credentials
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
+    const credentialsContent = readFileSync(credentialsPath, "utf8");
+    const serviceAccountKey = JSON.parse(credentialsContent);
+
+    // Create auth client
+    const auth = new google.auth.JWT({
+      email: serviceAccountKey.client_email,
+      key: serviceAccountKey.private_key,
+      scopes: ["https://www.googleapis.com/auth/calendar"],
+    });
+
+    const calendar = google.calendar("v3");
+
+    // Create calendar event
+    const event = {
+      summary: `SHELTR General Meeting - ${meetingType}`,
+      description: `
+General Meeting Request
+
+Name: ${fullName}
+Email: ${email}
+${company ? `Company/Organization: ${company}` : ""}
+Meeting Type: ${meetingType}
+
+${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
+
+This is a general inquiry meeting scheduled through the SHELTR contact page.
+
+Visit SHELTR: https://sheltr-ai.web.app
+      `.trim(),
+      start: {
+        dateTime: startTime.toISOString(),
+        timeZone: "America/New_York",
+      },
+      end: {
+        dateTime: endTime.toISOString(),
+        timeZone: "America/New_York",
+      },
+      attendees: [],
+      colorId: "2", // Sage green for general meetings
+    };
+
+    functions.logger.info("Creating general meeting calendar event", { 
+      fullName, 
+      email, 
+      meetingType,
+      startTime: startTime.toISOString()
+    });
+
+    // Insert event into calendar
+    const response = await calendar.events.insert({
+      auth,
+      calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
+      requestBody: event,
+      sendUpdates: "none",
+    });
+
+    const meetingLink = "https://meet.google.com/new";
+    
+    functions.logger.info("General meeting calendar event created successfully", { 
+      eventId: response.data.id,
+      meetingLink 
+    });
+
+    // Store meeting record in Firestore
+    const meetingRecord = {
+      eventId: response.data.id,
+      fullName,
+      email,
+      company: company || null,
+      meetingType,
+      scheduledAt: new Date().toISOString(),
+      meetingDateTime: startTime.toISOString(),
+      meetingLink,
+      status: "scheduled",
+      additionalNotes: additionalNotes || null,
+      createdAt: new Date().toISOString(),
+      attendees: [
+        email,
+        "joel@arcanaconcept.com"
+      ],
+      emailNotificationsSent: false,
+    };
+
+    const docRef = await db.collection("general_meetings").add(meetingRecord);
+
+    functions.logger.info("General meeting record saved to Firestore", { docId: docRef.id });
+
+    // Create notifications for Super Admins and Platform Admins
+    try {
+      const usersSnapshot = await db.collection("users")
+        .where("role", "in", ["super_admin", "platform_admin"])
+        .get();
+
+      functions.logger.info(`Creating notifications for ${usersSnapshot.size} admins`);
+
+      const notificationPromises = usersSnapshot.docs.map(async (userDoc) => {
+        const userData = userDoc.data();
+        const notification = {
+          recipient_id: userDoc.id,
+          recipient_role: userData.role,
+          type: "general_meeting_scheduled",
+          title: "New General Meeting Scheduled",
+          message: `${fullName} (${company || "Individual"}) scheduled a ${meetingType} meeting for ${startTime.toLocaleDateString()} at ${startTime.toLocaleTimeString()}`,
+          priority: "normal",
+          category: "application",
+          isRead: false,
+          created_at: new Date().toISOString(),
+          data: {
+            meetingId: docRef.id,
+            email,
+            fullName,
+            company,
+            meetingType,
+            meetingDateTime: startTime.toISOString(),
+            eventId: response.data.id
+          }
+        };
+
+        return db.collection("admin_notifications").add(notification);
+      });
+
+      await Promise.all(notificationPromises);
+      functions.logger.info(`✅ Created ${usersSnapshot.size} admin notifications`);
+    } catch (notificationError) {
+      functions.logger.error("Failed to create admin notifications", notificationError);
+      // Don't fail the entire function if notifications fail
+    }
+
+    return {
+      success: true,
+      meetingLink,
+      eventId: response.data.id,
+      message: "Meeting scheduled successfully! You will receive a confirmation email with meeting details.",
+    };
+
+  } catch (error) {
+    functions.logger.error("Failed to create general meeting calendar event", error);
+    
+    throw new functions.https.HttpsError(
+      "internal",
+      `Failed to schedule meeting: ${error instanceof Error ? error.message : "Unknown error"}`,
+      error
+    );
+  }
+});

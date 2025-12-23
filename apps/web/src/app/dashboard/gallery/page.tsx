@@ -590,22 +590,39 @@ export default function GalleryManagementPage() {
   // Check permissions
   const canManageGallery = hasRole('super_admin') || hasRole('platform_admin');
 
-  // Load media from Firestore
+  // Load media from Firestore (from BOTH collections for backward compatibility)
   const loadImages = useCallback(async () => {
     try {
-      const imagesQuery = query(
-        collection(db, 'gallery_media')
-      );
-      const snapshot = await getDocs(imagesQuery);
       const loadedImages: GalleryMedia[] = [];
       
-      snapshot.forEach((doc) => {
+      // Load from gallery_images (legacy collection with existing media)
+      const legacyQuery = query(collection(db, 'gallery_images'));
+      const legacySnapshot = await getDocs(legacyQuery);
+      
+      legacySnapshot.forEach((doc) => {
+        const data = doc.data();
+        loadedImages.push({
+          id: doc.id,
+          ...data,
+          mediaType: data.mediaType || (data.duration ? 'video' : 'image'), // Infer type for old data
+          createdAt: data.createdAt?.toDate() || new Date(),
+          updatedAt: data.updatedAt?.toDate() || new Date(),
+          _collection: 'gallery_images' // Track source collection
+        } as GalleryMedia);
+      });
+      
+      // Load from gallery_media (new unified collection)
+      const mediaQuery = query(collection(db, 'gallery_media'));
+      const mediaSnapshot = await getDocs(mediaQuery);
+      
+      mediaSnapshot.forEach((doc) => {
         const data = doc.data();
         loadedImages.push({
           id: doc.id,
           ...data,
           createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date()
+          updatedAt: data.updatedAt?.toDate() || new Date(),
+          _collection: 'gallery_media' // Track source collection
         } as GalleryMedia);
       });
       
@@ -614,6 +631,8 @@ export default function GalleryManagementPage() {
       
       setImages(loadedImages);
       setFilteredImages(loadedImages);
+      
+      console.log(`📊 Loaded ${legacySnapshot.size} from gallery_images + ${mediaSnapshot.size} from gallery_media = ${loadedImages.length} total`);
     } catch (error) {
       console.error('Error loading images:', error);
       showAlert('error', 'Failed to load gallery images');
@@ -900,7 +919,9 @@ export default function GalleryManagementPage() {
         console.log('✅ New thumbnail uploaded successfully');
       }
       
-      const imageRef = doc(db, 'gallery_media', imageId);
+      // Use correct collection based on where the image is stored
+      const collectionName = (editingImage as any)?._collection || 'gallery_media';
+      const imageRef = doc(db, collectionName, imageId);
       await updateDoc(imageRef, {
         ...updatedData,
         updatedAt: new Date()
@@ -973,18 +994,21 @@ export default function GalleryManagementPage() {
     }
 
     try {
-      // Delete from Storage
-      const storageRef = ref(storage, image.src);
-      await deleteObject(storageRef);
+      // Delete from Storage (only if it's a file upload, not an embed)
+      if (image.mediaType !== 'embed' && image.src) {
+        const storageRef = ref(storage, image.src);
+        await deleteObject(storageRef);
+      }
       
-      // Delete from Firestore
-      await deleteDoc(doc(db, 'gallery_media', image.id));
+      // Delete from Firestore (use correct collection)
+      const collectionName = (image as any)._collection || 'gallery_media';
+      await deleteDoc(doc(db, collectionName, image.id));
       
-      showAlert('success', 'Image deleted successfully!');
+      showAlert('success', 'Media deleted successfully!');
       loadImages();
     } catch (error) {
-      console.error('Error deleting image:', error);
-      showAlert('error', 'Failed to delete image');
+      console.error('Error deleting media:', error);
+      showAlert('error', 'Failed to delete media');
     }
   };
 
@@ -1015,13 +1039,14 @@ export default function GalleryManagementPage() {
         return matchesSearch && matchesCategory;
       }));
 
-      // Update all affected images' order values in Firebase
-      const updatePromises = newImages.map((image, index) => 
-        updateDoc(doc(db, 'gallery_media', image.id), { 
+      // Update all affected images' order values in Firebase (use correct collection)
+      const updatePromises = newImages.map((image, index) => {
+        const collectionName = (image as any)._collection || 'gallery_media';
+        return updateDoc(doc(db, collectionName, image.id), { 
           order: index,
           updatedAt: new Date()
-        })
-      );
+        });
+      });
 
       await Promise.all(updatePromises);
       
@@ -1047,12 +1072,13 @@ export default function GalleryManagementPage() {
       // Sort by creation date and update order
       const sortedImages = [...images].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
       
-      const updatePromises = sortedImages.map((image, index) => 
-        updateDoc(doc(db, 'gallery_media', image.id), { 
+      const updatePromises = sortedImages.map((image, index) => {
+        const collectionName = (image as any)._collection || 'gallery_media';
+        return updateDoc(doc(db, collectionName, image.id), { 
           order: index,
           updatedAt: new Date()
-        })
-      );
+        });
+      });
 
       await Promise.all(updatePromises);
       

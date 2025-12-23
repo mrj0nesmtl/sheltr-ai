@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { Heart, Users, TrendingUp, ExternalLink, Play, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -44,7 +44,10 @@ interface SocialMediaVideo {
 }
 
 // Helper to render social media embed iframe OR regular video
-const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: string }) => {
+const renderEmbed = (
+  video: SocialMediaVideo & { mediaType?: string; src?: string },
+  onVideoRef?: (videoElement: HTMLVideoElement | null) => void
+) => {
   const embedId = video.embedId || video.id;
   const posterImage = video.thumbnailUrl || video.thumbnail;
   
@@ -56,6 +59,7 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
     return (
       <div className="absolute inset-0 w-full h-full bg-black">
         <video
+          ref={onVideoRef}
           src={videoSrc}
           poster={posterImage}
           controls
@@ -272,6 +276,36 @@ export default function AngelsPage() {
   const [videos, setVideos] = useState<SocialMediaVideo[]>([]);
   const [isLoadingVideos, setIsLoadingVideos] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+
+  // Track all video elements for pause-others-on-play functionality
+  const videoElementsRef = useRef<Set<HTMLVideoElement>>(new Set());
+
+  // Callback to register video elements
+  const registerVideoElement = useCallback((videoElement: HTMLVideoElement | null) => {
+    if (!videoElement) return;
+
+    // Add to tracking set
+    videoElementsRef.current.add(videoElement);
+
+    // Add play event listener to pause all other videos
+    const handlePlay = () => {
+      console.log('▶️ Video started playing, pausing others...');
+      videoElementsRef.current.forEach((vid) => {
+        if (vid !== videoElement && !vid.paused) {
+          console.log('⏸️ Pausing video:', vid.src);
+          vid.pause();
+        }
+      });
+    };
+
+    videoElement.addEventListener('play', handlePlay);
+
+    // Cleanup function
+    return () => {
+      videoElement.removeEventListener('play', handlePlay);
+      videoElementsRef.current.delete(videoElement);
+    };
+  }, []);
 
   // Load Angels videos from Firestore (from BOTH collections)
   useEffect(() => {
@@ -825,7 +859,7 @@ export default function AngelsPage() {
                 >
                   <div className="aspect-[9/16] relative overflow-hidden">
                     {/* Social Media Embed - MUST BE FIRST for proper layering */}
-                    {renderEmbed(video)}
+                    {renderEmbed(video, registerVideoElement)}
                     
                     {/* Gradient overlays - pointer-events-none to allow clicks through */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10 pointer-events-none" />
@@ -881,7 +915,7 @@ export default function AngelsPage() {
                       >
                         <div className="aspect-[9/16] relative overflow-hidden">
                           {/* Social Media Embed - MUST BE FIRST for proper layering */}
-                          {renderEmbed(video)}
+                          {renderEmbed(video, registerVideoElement)}
                           
                           {/* Gradient overlays - pointer-events-none to allow clicks through */}
                           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10 pointer-events-none" />

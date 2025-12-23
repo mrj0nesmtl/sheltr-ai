@@ -42,7 +42,7 @@ interface SocialMediaVideo {
 }
 
 // Helper to render social media embed iframe OR regular video
-const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: string }) => {
+const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: string }, isHovered: boolean = false) => {
   const embedId = video.embedId || video.id;
   
   // Handle regular uploaded videos (not embeds)
@@ -51,8 +51,19 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
       <video
         src={video.embedUrl || video.src}
         controls
+        preload="metadata"
+        playsInline
         className="absolute inset-0 w-full h-full object-cover"
         style={{ border: 'none', borderRadius: '0' }}
+        onMouseEnter={(e) => {
+          const vid = e.currentTarget;
+          vid.play().catch(() => {});
+        }}
+        onMouseLeave={(e) => {
+          const vid = e.currentTarget;
+          vid.pause();
+          vid.currentTime = 0;
+        }}
       >
         Your browser does not support the video tag.
       </video>
@@ -62,27 +73,24 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
   // Handle social media embeds
   switch (video.embedType) {
     case 'tiktok':
+      // Use TikTok oEmbed API to get playable embed (less invasive)
       return (
-        <iframe
-          src={`https://www.tiktok.com/embed/v2/${embedId}`}
-          width="100%"
-          height="100%"
-          frameBorder="0"
-          scrolling="no"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full pointer-events-auto"
-          style={{ border: 'none', borderRadius: '0' }}
-          onError={() => {
-            const iframe = document.querySelector(`iframe[src*="${embedId}"]`) as HTMLIFrameElement;
-            if (iframe) {
-              iframe.style.display = 'none';
-              const fallbacks = iframe.parentElement?.querySelectorAll('.embed-fallback');
-              fallbacks?.forEach((fallback) => {
-                (fallback as HTMLElement).style.display = 'block';
-              });
-            }
-          }}
-        />
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900">
+          <a
+            href={video.embedUrl || `https://www.tiktok.com/@${video.embedUsername}/video/${embedId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 flex items-center justify-center hover:bg-black/20 transition-colors"
+          >
+            <div className="bg-white/10 backdrop-blur-sm rounded-full p-6 hover:bg-white/20 transition-all">
+              <Play className="w-12 h-12 text-white fill-white" />
+            </div>
+          </a>
+          <div className="absolute bottom-4 left-4 right-4 text-white">
+            <p className="text-sm font-semibold mb-1">{video.title}</p>
+            <p className="text-xs opacity-90">{video.description}</p>
+          </div>
+        </div>
       );
     
     case 'twitter':
@@ -94,6 +102,7 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
           frameBorder="0"
           scrolling="no"
           allowFullScreen
+          sandbox="allow-scripts allow-same-origin allow-popups"
           className="absolute inset-0 w-full h-full pointer-events-auto"
           style={{ border: 'none', borderRadius: '0' }}
         />
@@ -106,8 +115,9 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
           width="100%"
           height="100%"
           frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          sandbox="allow-scripts allow-same-origin allow-presentation"
           className="absolute inset-0 w-full h-full pointer-events-auto"
           style={{ border: 'none', borderRadius: '0' }}
         />

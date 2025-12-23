@@ -250,64 +250,73 @@ export default function AngelsPage() {
         const loadedVideos: SocialMediaVideo[] = [];
         
         // Load from gallery_images (legacy collection - regular uploaded videos)
+        // Simplified query without orderBy to avoid composite index requirement
         const legacyQuery = query(
           collection(db, 'gallery_images'),
           where('isAngelsVideo', '==', true),
-          where('isPublic', '==', true),
-          orderBy('angelsOrder', 'asc')
+          where('isPublic', '==', true)
         );
         
-        const legacySnapshot = await getDocs(legacyQuery);
-        
-        legacySnapshot.docs.forEach(doc => {
-          const data = doc.data();
-          loadedVideos.push({
-            id: doc.id,
-            embedId: data.embedId,
-            embedUrl: data.embedUrl || data.src,
-            embedType: data.embedType,
-            embedUsername: data.embedUsername,
-            title: data.title,
-            description: data.description,
-            tags: data.tags || [],
-            angelsOrder: data.angelsOrder || 0,
-            mediaType: data.mediaType || (data.duration ? 'video' : 'image'),
-            src: data.src,
+        try {
+          const legacySnapshot = await getDocs(legacyQuery);
+          
+          legacySnapshot.docs.forEach(doc => {
+            const data = doc.data();
+            loadedVideos.push({
+              id: doc.id,
+              embedId: data.embedId,
+              embedUrl: data.embedUrl || data.src,
+              embedType: data.embedType,
+              embedUsername: data.embedUsername,
+              title: data.title,
+              description: data.description,
+              tags: data.tags || [],
+              angelsOrder: data.angelsOrder || 999,
+              mediaType: data.mediaType || (data.duration ? 'video' : 'image'),
+              src: data.src,
+            });
           });
-        });
+          console.log(`✅ Loaded ${legacySnapshot.size} videos from gallery_images`);
+        } catch (legacyError) {
+          console.error('⚠️ Error loading from gallery_images:', legacyError);
+        }
         
         // Load from gallery_media (new unified collection - embeds and new uploads)
         const mediaQuery = query(
           collection(db, 'gallery_media'),
           where('isAngelsVideo', '==', true),
-          where('isPublic', '==', true),
-          orderBy('angelsOrder', 'asc')
+          where('isPublic', '==', true)
         );
         
-        const mediaSnapshot = await getDocs(mediaQuery);
-        
-        mediaSnapshot.docs.forEach(doc => {
-          const data = doc.data();
-          loadedVideos.push({
-            id: data.embedId || doc.id,
-            embedId: data.embedId,
-            embedUrl: data.embedUrl || data.src,
-            embedType: data.embedType,
-            embedUsername: data.embedUsername,
-            title: data.title,
-            description: data.description,
-            tags: data.tags || [],
-            angelsOrder: data.angelsOrder || 0,
-            mediaType: data.mediaType,
-            src: data.src,
+        try {
+          const mediaSnapshot = await getDocs(mediaQuery);
+          
+          mediaSnapshot.docs.forEach(doc => {
+            const data = doc.data();
+            loadedVideos.push({
+              id: data.embedId || doc.id,
+              embedId: data.embedId,
+              embedUrl: data.embedUrl || data.src,
+              embedType: data.embedType,
+              embedUsername: data.embedUsername,
+              title: data.title,
+              description: data.description,
+              tags: data.tags || [],
+              angelsOrder: data.angelsOrder || 999,
+              mediaType: data.mediaType,
+              src: data.src,
+            });
           });
-        });
+          console.log(`✅ Loaded ${mediaSnapshot.size} videos from gallery_media`);
+        } catch (mediaError) {
+          console.error('⚠️ Error loading from gallery_media:', mediaError);
+        }
         
-        // Sort by angelsOrder after combining both collections
-        loadedVideos.sort((a, b) => (a.angelsOrder || 0) - (b.angelsOrder || 0));
+        // Sort by angelsOrder after combining both collections (client-side sorting)
+        loadedVideos.sort((a, b) => (a.angelsOrder || 999) - (b.angelsOrder || 999));
         
         setVideos(loadedVideos);
-        console.log(`✅ Loaded ${legacySnapshot.size} from gallery_images + ${mediaSnapshot.size} from gallery_media = ${loadedVideos.length} Angels videos`);
+        console.log(`✅ TOTAL: ${loadedVideos.length} Angels videos loaded and sorted`);
       } catch (error) {
         console.error('❌ Error loading Angels videos:', error);
         setLoadError('Failed to load videos');

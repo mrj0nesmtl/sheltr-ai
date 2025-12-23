@@ -50,72 +50,74 @@ const renderEmbed = (video: SocialMediaVideo & { mediaType?: string; src?: strin
   
   // Handle regular uploaded videos (not embeds)
   if (!video.embedType || video.mediaType === 'video') {
+    const videoSrc = video.embedUrl || video.src;
+    console.log('🎥 Rendering video:', { title: video.title, src: videoSrc, poster: posterImage });
+    
     return (
-      <video
-        src={video.embedUrl || video.src}
-        poster={posterImage}
-        controls
-        preload="metadata"
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover cursor-pointer"
-        style={{ border: 'none', borderRadius: '0' }}
-      >
-        Your browser does not support the video tag.
-      </video>
+      <div className="absolute inset-0 w-full h-full bg-black">
+        <video
+          src={videoSrc}
+          poster={posterImage}
+          controls
+          controlsList="nodownload"
+          preload="metadata"
+          playsInline
+          webkit-playsinline="true"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ 
+            border: 'none', 
+            borderRadius: '0',
+            zIndex: 10
+          }}
+          onError={(e) => {
+            console.error('❌ Video load error:', videoSrc, e);
+          }}
+          onLoadedMetadata={(e) => {
+            console.log('✅ Video loaded:', videoSrc);
+          }}
+        >
+          Your browser does not support the video tag.
+        </video>
+      </div>
     );
   }
   
-  // Handle social media embeds
-  switch (video.embedType) {
-    case 'tiktok':
-      return (
-        <div className="absolute inset-0 w-full h-full">
-          {/* Background thumbnail */}
-          {posterImage && (
-            <img 
-              src={posterImage}
-              alt={video.title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
-          {/* TikTok iframe with error suppression */}
-          <iframe
-            src={`https://www.tiktok.com/embed/v2/${embedId}?lang=en-US`}
-            width="100%"
-            height="100%"
-            frameBorder="0"
-            scrolling="no"
-            allowFullScreen
-            allow="encrypted-media;"
-            className="absolute inset-0 w-full h-full pointer-events-auto"
-            style={{ 
-              border: 'none', 
-              borderRadius: '0',
-              backgroundColor: posterImage ? 'transparent' : '#000'
-            }}
-            onError={(e) => {
-              // Suppress console errors by stopping propagation
-              e.stopPropagation();
-              console.log(`TikTok embed ${embedId} blocked - this is expected with ad blockers`);
-            }}
+  // TIKTOK EMBEDS DISABLED - Causing console floods
+  // Users should manually disable TikTok videos in dashboard
+  if (video.embedType === 'tiktok') {
+    return (
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900 flex items-center justify-center">
+        {posterImage && (
+          <img 
+            src={posterImage}
+            alt={video.title}
+            className="absolute inset-0 w-full h-full object-cover opacity-50"
           />
-          {/* Fallback play button overlay if iframe fails */}
-          {!posterImage && (
-            <a
-              href={video.embedUrl || `https://www.tiktok.com/@${video.embedUsername}/video/${embedId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900 hover:opacity-90 transition-opacity z-10"
-              style={{ pointerEvents: 'auto' }}
-            >
-              <div className="bg-white/10 backdrop-blur-sm rounded-full p-6 hover:bg-white/20 transition-all">
-                <Play className="w-12 h-12 text-white fill-white" />
-              </div>
-            </a>
-          )}
+        )}
+        <div className="relative z-10 text-center text-white p-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-full p-6 mx-auto w-24 h-24 flex items-center justify-center mb-4">
+            <Play className="w-12 h-12 text-white fill-white" />
+          </div>
+          <p className="text-lg font-semibold mb-2">{video.title}</p>
+          <p className="text-sm opacity-90 mb-4">{video.description}</p>
+          <a
+            href={video.embedUrl || `https://www.tiktok.com/@${video.embedUsername}/video/${embedId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white/20 hover:bg-white/30 px-6 py-2 rounded-full transition-colors"
+          >
+            Watch on TikTok →
+          </a>
+          <p className="text-xs mt-4 opacity-75">
+            TikTok embeds disabled to prevent console errors
+          </p>
         </div>
-      );
-    
+      </div>
+    );
+  }
+  
+  // Handle other social media embeds
+  switch (video.embedType) {
     case 'twitter':
       return (
         <iframe

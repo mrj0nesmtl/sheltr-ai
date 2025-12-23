@@ -38,24 +38,54 @@ export function useHeroImage(pagePath: string, fallbackUrl: string = '/og-image.
       try {
         setLoading(true);
         
-        // Query gallery_images collection for images with this page in heroPages array
-        const galleryRef = collection(db, 'gallery_images');
-        const q = query(
-          galleryRef,
+        // Query BOTH collections for hero images
+        // 1. Check gallery_images (legacy)
+        const galleryImagesRef = collection(db, 'gallery_images');
+        const galleryImagesQuery = query(
+          galleryImagesRef,
           where('heroPages', 'array-contains', pagePath),
           where('isPublic', '==', true),
           orderBy('order', 'asc'),
           limit(1)
         );
 
-        const snapshot = await getDocs(q);
+        // 2. Check gallery_media (new)
+        const galleryMediaRef = collection(db, 'gallery_media');
+        const galleryMediaQuery = query(
+          galleryMediaRef,
+          where('heroPages', 'array-contains', pagePath),
+          where('isPublic', '==', true),
+          orderBy('order', 'asc'),
+          limit(1)
+        );
 
-        if (!snapshot.empty) {
-          const doc = snapshot.docs[0];
+        const [imagesSnapshot, mediaSnapshot] = await Promise.all([
+          getDocs(galleryImagesQuery),
+          getDocs(galleryMediaQuery)
+        ]);
+
+        console.log(`🔍 Hero search for ${pagePath}:`, {
+          gallery_images: imagesSnapshot.size,
+          gallery_media: mediaSnapshot.size
+        });
+
+        // Prefer gallery_media if found, otherwise use gallery_images
+        const doc = !mediaSnapshot.empty ? mediaSnapshot.docs[0] : 
+                    !imagesSnapshot.empty ? imagesSnapshot.docs[0] : null;
+
+        if (doc) {
           const data = doc.data();
+          const collection = !mediaSnapshot.empty ? 'gallery_media' : 'gallery_images';
 
           // Determine if this is a video or image
           const mediaType = data.mediaType || data.type?.startsWith('video') ? 'video' : 'image';
+
+          console.log(`✅ Hero found in ${collection}:`, {
+            src: data.src,
+            url: data.url,
+            title: data.title,
+            mediaType
+          });
 
           setHeroImage({
             url: data.src || data.url || fallbackUrl,
@@ -66,7 +96,7 @@ export function useHeroImage(pagePath: string, fallbackUrl: string = '/og-image.
             type: data.type || (mediaType === 'video' ? 'video/mp4' : 'image/jpeg'),
           });
         } else {
-          console.log(`No hero media found for page: ${pagePath}, using fallback`);
+          console.log(`⚠️ No hero media found for page: ${pagePath}, using fallback`);
           setHeroImage({
             url: fallbackUrl,
             alt: `SHELTR ${pagePath.replace('/', '')} hero image`,
@@ -74,7 +104,7 @@ export function useHeroImage(pagePath: string, fallbackUrl: string = '/og-image.
           });
         }
       } catch (err) {
-        console.error(`Error fetching hero media for ${pagePath}:`, err);
+        console.error(`❌ Error fetching hero media for ${pagePath}:`, err);
         setError(err as Error);
         setHeroImage({
           url: fallbackUrl,

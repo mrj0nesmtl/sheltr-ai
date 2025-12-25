@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 23, 2025 (1:00 AM)  
+**Last Updated**: December 25, 2025 (3:20 AM)  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -10,14 +10,47 @@
 
 ## 🎯 Quick Stats (Last 30 Days)
 
-- **Versions Released**: 3.2.0 → 2.140.0 (24 releases)
-- **Major Features**: 26 new features (Video system, Hero images, Gemini, Basecamp!)
-- **Bug Fixes**: 52+ critical fixes
+- **Versions Released**: 3.3.0 → 2.140.0 (25 releases)
+- **Major Features**: 27 new features (OAuth Meet, Snow effect, Video system, Hero images, Gemini, Basecamp!)
+- **Bug Fixes**: 55+ critical fixes
 - **Cost Optimization**: **95% LLM cost reduction** 💰
 - **Code Quality**: **Zero TypeScript errors** ✅
-- **Documentation**: 60+ docs updated/created (+3,000 lines)
-- **UX Improvements**: 12+ major enhancements
+- **Documentation**: 62+ docs updated/created (+3,200 lines)
+- **UX Improvements**: 13+ major enhancements
 - **MCP Servers**: 8 integrated (GitHub, Firebase, Google Cloud, Shadcn, Playwright, Context7)
+
+---
+
+## [3.3.0] - 2025-12-25 (OAuth Meet Integration & Festive Features) 🎄🎥
+
+### 🎯 **Session Summary**
+OAuth 2.0 flow for automatic Google Meet links in calendar events. Festive snow effect with header toggle. Fixed meeting scheduler errors. Removed secrets from git history.
+
+### 🎥 **Google Meet OAuth**
+- **Feature**: Automatic Meet links for all calendar meetings
+- **OAuth Flow**: Token storage, auto-refresh, secure handling
+- **Admin Page**: `/admin/oauth-setup` for easy setup
+- **Fallback**: Service account if OAuth not configured
+- **Impact**: Real Meet links in every calendar invite ✅
+
+### ❄️ **Festive Snow Effect**
+- **Feature**: Beautiful snowfall animation
+- **Toggle**: Header button (next to theme toggle)
+- **State**: Persistent localStorage
+- **Theme-Aware**: Adapts to light/dark mode
+- **Fixed**: Enable/disable works correctly
+
+### 🐛 **Fixes**
+1. ✅ Meeting scheduler CORS errors
+2. ✅ Missing fields error (field name fixes)
+3. ✅ Snow toggle enable/disable
+4. ✅ Secrets removed from git history
+
+### 💻 **Technical**
+- **OAuth**: Full 2.0 flow with Firestore token storage
+- **Security**: Credentials properly secured
+- **Git**: History rewritten, force-pushed safely
+- **Build**: Production builds verified
 
 ---
 

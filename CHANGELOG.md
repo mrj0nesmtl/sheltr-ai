@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.3.0] - 2025-12-25 (OAuth Meet Integration & Festive Features) 🎄🎥
+
+### 🎯 **Session Highlights - December 25, 2025 (3:20 AM)**
+Implemented OAuth 2.0 flow for automatic Google Meet link generation in calendar events. Added festive snow effect with header toggle. Fixed meeting scheduler errors and removed sensitive credentials from git history.
+
+### 🎥 **Google Meet OAuth Integration**
+- **Feature**: Automatic Google Meet link generation for all calendar meetings
+- **Implementation**: Full OAuth 2.0 flow with token storage in Firestore
+- **Functions Added**: `getOAuthUrl`, `oauthCallback` for OAuth authorization
+- **Admin Page**: `/admin/oauth-setup` for easy OAuth configuration
+- **Fallback**: Graceful service account fallback if OAuth not configured
+- **Security**: OAuth credentials properly secured, not committed to git
+- **Impact**: All future meetings automatically include real Google Meet links
+
+### ❄️ **Festive Snow Effect**
+- **Feature**: Beautiful snowfall animation across entire app
+- **Toggle**: Snowflake button in header navigation (next to theme toggle)
+- **State**: Persistent localStorage, works on mobile and desktop
+- **Theme-Aware**: White snow for dark mode, blue for light mode
+- **Performance**: Zero impact (`pointer-events: none`)
+- **Fixed**: Enable/disable toggle now works correctly
+
+### 🐛 **Meeting Scheduler Fixes**
+- **Fixed**: CORS errors on contact page meeting booking
+- **Fixed**: "Missing required fields" error (field name mismatches)
+- **Fixed**: Service account limitation for Meet links (now uses OAuth)
+- **Impact**: Contact page meeting scheduler fully functional
+
+### 🔒 **Security & Code Quality**
+- **Fixed**: Removed OAuth credentials from git history (interactive rebase)
+- **Fixed**: All TypeScript compilation errors resolved
+- **Fixed**: ESLint warnings cleaned up
+- **Build**: Production builds verified for web app and functions
+
+### 💻 **Technical**
+- **OAuth Flow**: Token refresh, secure storage, automatic renewal
+- **React**: Event-based communication between components
+- **Git**: History rewritten to remove secrets, force-pushed safely
+- **Deployment**: All functions deployed successfully
+
+---
+
 ## [3.2.0] - 2025-12-23 (Angels Page Video System & Hero Image Fixes) 🎥✨
 
 ### 🎯 **Session Highlights - December 23, 2025 (1:00 AM)**

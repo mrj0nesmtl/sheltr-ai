@@ -5,6 +5,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { getAuthenticatedClient, getStoredTokens } from "./oauth.js";
 
 // Initialize Firebase Admin App
 initializeApp();
@@ -462,26 +463,41 @@ export const createGeneralMeeting = functions.https.onCall(async (request) => {
 
     const endTime = new Date(startTime.getTime() + 45 * 60000); // 45 minutes
 
-    // Load service account credentials
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
-    const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
-    const credentialsContent = readFileSync(credentialsPath, "utf8");
-    const serviceAccountKey = JSON.parse(credentialsContent);
+    // Try to use OAuth client first (for Meet link generation)
+    // Fall back to service account if OAuth not configured
+    let auth;
+    let useOAuth = false;
+    
+    try {
+      const oauthTokens = await getStoredTokens();
+      if (oauthTokens) {
+        auth = await getAuthenticatedClient();
+        useOAuth = true;
+        functions.logger.info('Using OAuth client for Meet link generation');
+      }
+    } catch (oauthError) {
+      functions.logger.warn('OAuth not available, using service account:', oauthError);
+    }
+    
+    // Fall back to service account if OAuth not available
+    if (!auth) {
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
+      const credentialsContent = readFileSync(credentialsPath, "utf8");
+      const serviceAccountKey = JSON.parse(credentialsContent);
 
-    // Create auth client
-    const auth = new google.auth.JWT({
-      email: serviceAccountKey.client_email,
-      key: serviceAccountKey.private_key,
-      scopes: ["https://www.googleapis.com/auth/calendar"],
-    });
+      auth = new google.auth.JWT({
+        email: serviceAccountKey.client_email,
+        key: serviceAccountKey.private_key,
+        scopes: ["https://www.googleapis.com/auth/calendar"],
+      });
+    }
 
     const calendar = google.calendar("v3");
 
-    // Create calendar event
-    // Note: Service accounts cannot create Google Meet links automatically
-    // Meet links must be added manually or via OAuth user credentials
-    const event = {
+    // Create calendar event with optional Meet link (if using OAuth)
+    const event: any = {
       summary: `SHELTR General Meeting - ${meetingType}`,
       description: `
 General Meeting Request
@@ -494,7 +510,7 @@ Meeting Type: ${meetingType}
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
 
 This is a general inquiry meeting scheduled through the SHELTR contact page.
-A Google Meet link will be added to this event shortly.
+${useOAuth ? 'A Google Meet link will be automatically generated.' : 'A Google Meet link will be added to this event shortly.'}
 
 Visit SHELTR: https://sheltr-ai.web.app
       `.trim(),
@@ -510,24 +526,53 @@ Visit SHELTR: https://sheltr-ai.web.app
       colorId: "2", // Sage green for general meetings
     };
 
+    // Add conferenceData if using OAuth (enables automatic Meet link)
+    if (useOAuth) {
+      event.conferenceData = {
+        createRequest: {
+          requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+          conferenceSolutionKey: {
+            type: "hangoutsMeet"
+          }
+        }
+      };
+    }
+
     functions.logger.info("Creating general meeting calendar event", { 
       fullName, 
       email, 
       meetingType,
-      startTime: startTime.toISOString()
+      startTime: startTime.toISOString(),
+      useOAuth,
+      willCreateMeetLink: useOAuth
     });
 
     // Insert event into calendar
-    const response = await calendar.events.insert({
+    const insertOptions: any = {
       auth,
       calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none",
-    });
+    };
 
-    // Generate a Google Meet link that can be manually added
-    // Service accounts can't auto-create Meet links, so we provide a placeholder
-    const meetingLink = `https://meet.google.com/new?authuser=${email}`;
+    // Add conferenceDataVersion if using OAuth
+    if (useOAuth) {
+      insertOptions.conferenceDataVersion = 1;
+    }
+
+    const response = await calendar.events.insert(insertOptions);
+
+    // Extract Meet link if available, otherwise provide placeholder
+    let meetingLink;
+    if (useOAuth && response.data.conferenceData?.entryPoints) {
+      meetingLink = response.data.conferenceData.entryPoints.find(
+        (entry: any) => entry.entryPointType === "video"
+      )?.uri || response.data.hangoutLink;
+    }
+    
+    if (!meetingLink) {
+      meetingLink = `https://meet.google.com/new?authuser=${email}`;
+    }
     
     functions.logger.info("General meeting calendar event created successfully", { 
       eventId: response.data.id,

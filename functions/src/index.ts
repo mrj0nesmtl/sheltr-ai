@@ -14,6 +14,9 @@ import * as logger from "firebase-functions/logger";
 // Import calendar functions
 export * from "./calendar.js";
 
+// Import OAuth functions
+export * from "./oauth.js";
+
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 

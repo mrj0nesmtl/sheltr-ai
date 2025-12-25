@@ -8,3 +8,10 @@ typings/
 # Node.js dependency directory
 node_modules/
 *.local
+
+# Google Cloud credentials (DO NOT COMMIT!)
+google-calendar-credentials.json
+google-oauth-credentials.json
+oauth-tokens.json
+*.pem
+*.key

@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { SnowToggle } from '@/components/SnowToggle';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -101,7 +102,8 @@ export default function PublicNavigation() {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-2">
+            <SnowToggle />
             <ThemeToggle />
             {isAuthenticated ? (
               <>
@@ -160,6 +162,7 @@ export default function PublicNavigation() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
+            <SnowToggle />
             <ThemeToggle />
             <button
               onClick={() => {

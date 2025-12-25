@@ -530,19 +530,17 @@ Visit SHELTR: https://sheltr-ai.web.app
       },
       attendees: [],
       colorId: "2", // Sage green for general meetings
-    };
-
-    // Add conferenceData if using OAuth (enables automatic Meet link)
-    if (useOAuth) {
-      event.conferenceData = {
-        createRequest: {
-          requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-          conferenceSolutionKey: {
-            type: "hangoutsMeet",
+      ...(useOAuth && {
+        conferenceData: {
+          createRequest: {
+            requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+            conferenceSolutionKey: {
+              type: "hangoutsMeet",
+            },
           },
         },
-      };
-    }
+      }),
+    };
 
     functions.logger.info("Creating general meeting calendar event", { 
       fullName, 

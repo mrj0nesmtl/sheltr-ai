@@ -11,6 +11,11 @@ import { getAuthenticatedClient, getStoredTokens } from "./oauth.js";
 initializeApp();
 
 // Type definitions for calendar events
+interface ServiceAccountKey {
+  client_email: string;
+  private_key: string;
+}
+
 interface CalendarEventAttendee {
   email: string;
 }
@@ -43,6 +48,14 @@ interface CalendarEvent {
       minutes: number;
     }>;
   };
+}
+
+interface CalendarInsertOptions {
+  auth: unknown;
+  calendarId: string;
+  requestBody: CalendarEvent;
+  sendUpdates: string;
+  conferenceDataVersion?: number;
 }
 
 interface MeetingRequest {
@@ -304,7 +317,7 @@ export const createShelterPartnershipMeeting = functions.https.onCall(async (req
     const __dirname = dirname(__filename);
     const credentialsPath = join(__dirname, "..", "shelter-calendar-service.json");
     const credentialsContent = readFileSync(credentialsPath, "utf8");
-    const serviceAccountKey = JSON.parse(credentialsContent);
+    const serviceAccountKey = JSON.parse(credentialsContent) as ServiceAccountKey;
 
     // Create auth client
     const auth = new google.auth.JWT({
@@ -520,7 +533,7 @@ export const createGeneralMeeting = functions.https.onCall(async (request) => {
       const __dirname = dirname(__filename);
       const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
       const credentialsContent = readFileSync(credentialsPath, "utf8");
-      const serviceAccountKey = JSON.parse(credentialsContent);
+      const serviceAccountKey = JSON.parse(credentialsContent) as ServiceAccountKey;
 
       auth = new google.auth.JWT({
         email: serviceAccountKey.client_email,

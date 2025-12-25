@@ -11,6 +11,10 @@ import { getAuthenticatedClient, getStoredTokens } from "./oauth.js";
 initializeApp();
 
 // Type definitions for calendar events
+interface CalendarEventAttendee {
+  email: string;
+}
+
 interface CalendarEvent {
   summary: string;
   description: string;
@@ -22,7 +26,7 @@ interface CalendarEvent {
     dateTime: string;
     timeZone: string;
   };
-  attendees: string[];
+  attendees: CalendarEventAttendee[];
   colorId?: string;
   conferenceData?: {
     createRequest: {
@@ -39,14 +43,6 @@ interface CalendarEvent {
       minutes: number;
     }>;
   };
-}
-
-interface CalendarInsertOptions {
-  auth: any;
-  calendarId: string;
-  requestBody: CalendarEvent;
-  sendUpdates: string;
-  conferenceDataVersion?: number;
 }
 
 interface MeetingRequest {
@@ -512,7 +508,7 @@ export const createGeneralMeeting = functions.https.onCall(async (request) => {
       if (oauthTokens) {
         auth = await getAuthenticatedClient();
         useOAuth = true;
-        functions.logger.info('Using OAuth client for Meet link generation');
+        functions.logger.info("Using OAuth client for Meet link generation");
       }
     } catch (oauthError) {
       functions.logger.warn("OAuth not available, using service account:", oauthError);
@@ -549,7 +545,7 @@ Meeting Type: ${meetingType}
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
 
 This is a general inquiry meeting scheduled through the SHELTR contact page.
-${useOAuth ? 'A Google Meet link will be automatically generated.' : 'A Google Meet link will be added to this event shortly.'}
+${useOAuth ? "A Google Meet link will be automatically generated." : "A Google Meet link will be added to this event shortly."}
 
 Visit SHELTR: https://sheltr-ai.web.app
       `.trim(),

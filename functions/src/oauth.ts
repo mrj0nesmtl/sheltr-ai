@@ -7,23 +7,23 @@
  * - Google Meet link generation via OAuth credentials
  */
 
-import * as functions from 'firebase-functions';
-import { google } from 'googleapis';
-import { getFirestore } from 'firebase-admin/firestore';
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import * as functions from "firebase-functions";
+import { google } from "googleapis";
+import { getFirestore } from "firebase-admin/firestore";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load OAuth credentials
-const oauthCredentialsPath = join(__dirname, '..', 'google-oauth-credentials.json');
-const oauthCredentials = JSON.parse(readFileSync(oauthCredentialsPath, 'utf8'));
+const oauthCredentialsPath = join(__dirname, "..", "google-oauth-credentials.json");
+const oauthCredentials = JSON.parse(readFileSync(oauthCredentialsPath, "utf8"));
 
 const SCOPES = [
-  'https://www.googleapis.com/auth/calendar',
-  'https://www.googleapis.com/auth/calendar.events',
+  "https://www.googleapis.com/auth/calendar",
+  "https://www.googleapis.com/auth/calendar.events",
 ];
 
 const REDIRECT_URI = oauthCredentials.web.redirect_uris[0]; // Use production URI
@@ -44,7 +44,7 @@ export function createOAuth2Client() {
  */
 export async function getStoredTokens() {
   const db = getFirestore();
-  const tokenDoc = await db.collection('system_config').doc('oauth_tokens').get();
+  const tokenDoc = await db.collection("system_config").doc("oauth_tokens").get();
   
   if (!tokenDoc.exists) {
     return null;
@@ -58,7 +58,7 @@ export async function getStoredTokens() {
  */
 export async function storeTokens(tokens: any) {
   const db = getFirestore();
-  await db.collection('system_config').doc('oauth_tokens').set({
+  await db.collection("system_config").doc("oauth_tokens").set({
     ...tokens,
     updated_at: new Date().toISOString(),
   });
@@ -73,8 +73,8 @@ export async function getAuthenticatedClient() {
   
   if (!tokens) {
     throw new functions.https.HttpsError(
-      'unauthenticated',
-      'OAuth tokens not found. Please complete OAuth authorization first.'
+      "unauthenticated",
+      "OAuth tokens not found. Please complete OAuth authorization first."
     );
   }
   
@@ -82,7 +82,7 @@ export async function getAuthenticatedClient() {
   
   // Refresh token if expired
   if (tokens.expiry_date && Date.now() >= tokens.expiry_date) {
-    functions.logger.info('OAuth token expired, refreshing...');
+    functions.logger.info("OAuth token expired, refreshing...");
     const { credentials } = await oauth2Client.refreshAccessToken();
     await storeTokens(credentials);
     oauth2Client.setCredentials(credentials);
@@ -97,24 +97,24 @@ export async function getAuthenticatedClient() {
  */
 export const getOAuthUrl = functions.https.onCall(async (request) => {
   // Only allow super_admin to generate OAuth URL
-  if (!request.auth || request.auth.token.role !== 'super_admin') {
+  if (!request.auth || request.auth.token.role !== "super_admin") {
     throw new functions.https.HttpsError(
-      'permission-denied',
-      'Only super admins can initiate OAuth flow'
+      "permission-denied",
+      "Only super admins can initiate OAuth flow"
     );
   }
   
   const oauth2Client = createOAuth2Client();
   
   const authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
+    access_type: "offline",
     scope: SCOPES,
-    prompt: 'consent', // Force consent to get refresh token
+    prompt: "consent", // Force consent to get refresh token
   });
   
   return {
     authUrl,
-    message: 'Visit this URL to authorize the application',
+    message: "Visit this URL to authorize the application",
   };
 });
 
@@ -126,7 +126,7 @@ export const oauthCallback = functions.https.onRequest(async (req, res) => {
   const code = req.query.code as string;
   
   if (!code) {
-    res.status(400).send('Missing authorization code');
+    res.status(400).send("Missing authorization code");
     return;
   }
   
@@ -137,7 +137,7 @@ export const oauthCallback = functions.https.onRequest(async (req, res) => {
     // Store tokens in Firestore
     await storeTokens(tokens);
     
-    functions.logger.info('OAuth tokens stored successfully');
+    functions.logger.info("OAuth tokens stored successfully");
     
     res.send(`
       <!DOCTYPE html>
@@ -191,7 +191,7 @@ export const oauthCallback = functions.https.onRequest(async (req, res) => {
       </html>
     `);
   } catch (error) {
-    functions.logger.error('OAuth callback error:', error);
+    functions.logger.error("OAuth callback error:", error);
     res.status(500).send(`
       <!DOCTYPE html>
       <html>
@@ -237,7 +237,7 @@ export const oauthCallback = functions.https.onRequest(async (req, res) => {
               There was an error during the authorization process.
             </p>
             <p>
-              Error: ${error instanceof Error ? error.message : 'Unknown error'}
+              Error: ${error instanceof Error ? error.message : "Unknown error"}
             </p>
             <p>
               Please try again or contact support.

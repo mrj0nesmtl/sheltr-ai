@@ -10,6 +10,45 @@ import { getAuthenticatedClient, getStoredTokens } from "./oauth.js";
 // Initialize Firebase Admin App
 initializeApp();
 
+// Type definitions for calendar events
+interface CalendarEvent {
+  summary: string;
+  description: string;
+  start: {
+    dateTime: string;
+    timeZone: string;
+  };
+  end: {
+    dateTime: string;
+    timeZone: string;
+  };
+  attendees: string[];
+  colorId?: string;
+  conferenceData?: {
+    createRequest: {
+      requestId: string;
+      conferenceSolutionKey: {
+        type: string;
+      };
+    };
+  };
+  reminders?: {
+    useDefault: boolean;
+    overrides: Array<{
+      method: string;
+      minutes: number;
+    }>;
+  };
+}
+
+interface CalendarInsertOptions {
+  auth: any;
+  calendarId: string;
+  requestBody: CalendarEvent;
+  sendUpdates: string;
+  conferenceDataVersion?: number;
+}
+
 interface MeetingRequest {
   investorEmail: string;
   investorName: string;
@@ -476,7 +515,7 @@ export const createGeneralMeeting = functions.https.onCall(async (request) => {
         functions.logger.info('Using OAuth client for Meet link generation');
       }
     } catch (oauthError) {
-      functions.logger.warn('OAuth not available, using service account:', oauthError);
+      functions.logger.warn("OAuth not available, using service account:", oauthError);
     }
     
     // Fall back to service account if OAuth not available
@@ -532,9 +571,9 @@ Visit SHELTR: https://sheltr-ai.web.app
         createRequest: {
           requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
           conferenceSolutionKey: {
-            type: "hangoutsMeet"
-          }
-        }
+            type: "hangoutsMeet",
+          },
+        },
       };
     }
 
@@ -548,7 +587,7 @@ Visit SHELTR: https://sheltr-ai.web.app
     });
 
     // Insert event into calendar
-    const insertOptions: any = {
+    const insertOptions: CalendarInsertOptions = {
       auth,
       calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
       requestBody: event,

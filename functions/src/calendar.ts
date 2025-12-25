@@ -481,7 +481,7 @@ export const createGeneralMeeting = functions.https.onCall(async (request) => {
 
     const calendar = google.calendar("v3");
 
-    // Create calendar event
+    // Create calendar event with Google Meet conference
     const event = {
       summary: `SHELTR General Meeting - ${meetingType}`,
       description: `
@@ -508,6 +508,14 @@ Visit SHELTR: https://sheltr-ai.web.app
       },
       attendees: [],
       colorId: "2", // Sage green for general meetings
+      conferenceData: {
+        createRequest: {
+          requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+          conferenceSolutionKey: {
+            type: "hangoutsMeet"
+          }
+        }
+      }
     };
 
     functions.logger.info("Creating general meeting calendar event", { 
@@ -517,19 +525,24 @@ Visit SHELTR: https://sheltr-ai.web.app
       startTime: startTime.toISOString()
     });
 
-    // Insert event into calendar
+    // Insert event into calendar with conference data
     const response = await calendar.events.insert({
       auth,
       calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none",
+      conferenceDataVersion: 1, // Required to create Google Meet link
     });
 
-    const meetingLink = "https://meet.google.com/new";
+    // Extract the actual Google Meet link from the response
+    const meetingLink = response.data.conferenceData?.entryPoints?.find(
+      (entry: any) => entry.entryPointType === "video"
+    )?.uri || response.data.hangoutLink || "https://meet.google.com/new";
     
     functions.logger.info("General meeting calendar event created successfully", { 
       eventId: response.data.id,
-      meetingLink 
+      meetingLink,
+      hasConferenceData: !!response.data.conferenceData
     });
 
     // Store meeting record in Firestore

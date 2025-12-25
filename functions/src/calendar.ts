@@ -10,52 +10,10 @@ import { getAuthenticatedClient, getStoredTokens } from "./oauth.js";
 // Initialize Firebase Admin App
 initializeApp();
 
-// Type definitions for calendar events
+// Type definitions for service account
 interface ServiceAccountKey {
   client_email: string;
   private_key: string;
-}
-
-interface CalendarEventAttendee {
-  email: string;
-}
-
-interface CalendarEvent {
-  summary: string;
-  description: string;
-  start: {
-    dateTime: string;
-    timeZone: string;
-  };
-  end: {
-    dateTime: string;
-    timeZone: string;
-  };
-  attendees: CalendarEventAttendee[];
-  colorId?: string;
-  conferenceData?: {
-    createRequest: {
-      requestId: string;
-      conferenceSolutionKey: {
-        type: string;
-      };
-    };
-  };
-  reminders?: {
-    useDefault: boolean;
-    overrides: Array<{
-      method: string;
-      minutes: number;
-    }>;
-  };
-}
-
-interface CalendarInsertOptions {
-  auth: unknown;
-  calendarId: string;
-  requestBody: CalendarEvent;
-  sendUpdates: string;
-  conferenceDataVersion?: number;
 }
 
 interface MeetingRequest {
@@ -545,7 +503,7 @@ export const createGeneralMeeting = functions.https.onCall(async (request) => {
     const calendar = google.calendar("v3");
 
     // Create calendar event with optional Meet link (if using OAuth)
-    const event: any = {
+    const event = {
       summary: `SHELTR General Meeting - ${meetingType}`,
       description: `
 General Meeting Request
@@ -596,30 +554,25 @@ Visit SHELTR: https://sheltr-ai.web.app
     });
 
     // Insert event into calendar
-    const insertOptions: CalendarInsertOptions = {
+    const response = await calendar.events.insert({
       auth,
       calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none",
-    };
-
-    // Add conferenceDataVersion if using OAuth
-    if (useOAuth) {
-      insertOptions.conferenceDataVersion = 1;
-    }
-
-    const response = await calendar.events.insert(insertOptions);
+      conferenceDataVersion: useOAuth ? 1 : undefined,
+    });
 
     // Extract Meet link if available, otherwise provide placeholder
-    let meetingLink;
+    let meetingLink = `https://meet.google.com/new?authuser=${email}`;
     if (useOAuth && response.data.conferenceData?.entryPoints) {
-      meetingLink = response.data.conferenceData.entryPoints.find(
-        (entry: any) => entry.entryPointType === "video"
-      )?.uri || response.data.hangoutLink;
-    }
-    
-    if (!meetingLink) {
-      meetingLink = `https://meet.google.com/new?authuser=${email}`;
+      const videoEntry = response.data.conferenceData.entryPoints.find(
+        (entry) => entry.entryPointType === "video"
+      );
+      if (videoEntry?.uri) {
+        meetingLink = videoEntry.uri;
+      } else if (response.data.hangoutLink) {
+        meetingLink = response.data.hangoutLink;
+      }
     }
     
     functions.logger.info("General meeting calendar event created successfully", { 

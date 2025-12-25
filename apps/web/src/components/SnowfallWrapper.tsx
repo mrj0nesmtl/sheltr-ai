@@ -15,7 +15,7 @@ export function SnowfallWrapper({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch
+  // Avoid hydration mismatch and load initial state
   useEffect(() => {
     setMounted(true);
     // Check localStorage for saved snow preference
@@ -23,18 +23,22 @@ export function SnowfallWrapper({ children }: { children: React.ReactNode }) {
     if (savedSnowPref === 'true') {
       setSnowEnabled(true);
     }
+  }, []);
 
-    // Listen for snow toggle events from SnowToggle component
-    const handleSnowToggle = (event: CustomEvent<{ enabled: boolean }>) => {
-      setSnowEnabled(event.detail.enabled);
+  // Listen for snow toggle events from SnowToggle component
+  useEffect(() => {
+    const handleSnowToggle = (event: Event) => {
+      const customEvent = event as CustomEvent<{ enabled: boolean }>;
+      console.log('❄️ SnowfallWrapper received toggle event:', customEvent.detail.enabled);
+      setSnowEnabled(customEvent.detail.enabled);
     };
 
-    window.addEventListener('snow-toggle', handleSnowToggle as EventListener);
+    window.addEventListener('snow-toggle', handleSnowToggle);
     
     return () => {
-      window.removeEventListener('snow-toggle', handleSnowToggle as EventListener);
+      window.removeEventListener('snow-toggle', handleSnowToggle);
     };
-  }, []);
+  }, []); // Empty dependency array - listener stays consistent
 
   if (!mounted) {
     return <>{children}</>;

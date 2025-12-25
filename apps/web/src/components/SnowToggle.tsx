@@ -20,11 +20,14 @@ export function SnowToggle() {
 
   const toggleSnow = () => {
     const newState = !snowEnabled;
+    console.log('❄️ SnowToggle: Toggling snow to:', newState);
     setSnowEnabled(newState);
     localStorage.setItem('sheltr-snow-enabled', String(newState));
     
     // Dispatch custom event to notify SnowfallWrapper
-    window.dispatchEvent(new CustomEvent('snow-toggle', { detail: { enabled: newState } }));
+    const event = new CustomEvent('snow-toggle', { detail: { enabled: newState } });
+    console.log('❄️ SnowToggle: Dispatching event:', event.detail);
+    window.dispatchEvent(event);
   };
 
   if (!mounted) {

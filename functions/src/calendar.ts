@@ -67,7 +67,7 @@ export const createInvestorMeeting = functions.https.onCall(async (request) => {
     const startTime = new Date(selectedDateTime);
     const endTime = new Date(startTime.getTime() + 45 * 60000); // 45 minutes
 
-    // Create calendar event with Google Meet
+    // Create calendar event
     const event = {
       summary: "SHELTR-AI Investor Relations Meeting",
       description: `
@@ -88,6 +88,7 @@ Agenda:
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
 
 This meeting will cover SHELTR's disruptive approach to homelessness support through technology and our current investment opportunity.
+A Google Meet link will be added to this event shortly.
 
 Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/investor-relations
       `.trim(),
@@ -100,14 +101,6 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
         timeZone: "America/New_York",
       },
       attendees: [],
-      conferenceData: {
-        createRequest: {
-          requestId: `investor-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-          conferenceSolutionKey: {
-            type: "hangoutsMeet"
-          }
-        }
-      },
       reminders: {
         useDefault: false,
         overrides: [
@@ -128,20 +121,17 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       ]
     });
 
-    // Insert event into calendar with Google Meet link generation
+    // Insert event into calendar
     // Using the shared "SHELTR Investor Meetings" calendar
     const response = await calendar.events.insert({
       auth,
       calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none",
-      conferenceDataVersion: 1, // Required to create Google Meet link
     });
 
-    // Extract the actual Google Meet link from the response
-    const meetingLink = response.data.conferenceData?.entryPoints?.find(
-      (entry: any) => entry.entryPointType === "video"
-    )?.uri || response.data.hangoutLink || "https://meet.google.com/new";
+    // Generate a Google Meet link placeholder
+    const meetingLink = `https://meet.google.com/new?authuser=${investorEmail}`;
     
     functions.logger.info("Calendar event created successfully", { 
       eventId: response.data.id,
@@ -293,7 +283,7 @@ export const createShelterPartnershipMeeting = functions.https.onCall(async (req
     const startTime = new Date(selectedDateTime);
     const endTime = new Date(startTime.getTime() + 60 * 60000); // 60 minutes
 
-    // Create calendar event with Google Meet
+    // Create calendar event
     const event = {
       summary: `SHELTR Partnership Call - ${shelterName}`,
       description: `
@@ -317,6 +307,7 @@ Agenda:
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
 
 This meeting will explore how SHELTR can support ${shelterName} with innovative solutions for capacity management and operational excellence.
+A Google Meet link will be added to this event shortly.
 
 Visit our solutions page: https://sheltr-ai.web.app/solutions/organizations
       `.trim(),
@@ -329,29 +320,18 @@ Visit our solutions page: https://sheltr-ai.web.app/solutions/organizations
         timeZone: "America/New_York",
       },
       colorId: "9", // Blue color for shelter partnerships
-      conferenceData: {
-        createRequest: {
-          requestId: `shelter-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-          conferenceSolutionKey: {
-            type: "hangoutsMeet"
-          }
-        }
-      }
     };
 
-    // Insert event into Shelter Inquiries calendar with Google Meet
+    // Insert event into Shelter Inquiries calendar
     const response = await calendar.events.insert({
       auth,
       calendarId: "c_fd2371c84487cb8877a64151719edde2d7c2ff05fd4d695b6bd4ef8b444d6638@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none",
-      conferenceDataVersion: 1, // Required to create Google Meet link
     });
 
-    // Extract the actual Google Meet link from the response
-    const meetingLink = response.data.conferenceData?.entryPoints?.find(
-      (entry: any) => entry.entryPointType === "video"
-    )?.uri || response.data.hangoutLink || "https://meet.google.com/new";
+    // Generate a Google Meet link placeholder
+    const meetingLink = `https://meet.google.com/new?authuser=${contactEmail}`;
     
     functions.logger.info("Shelter partnership calendar event created successfully", { 
       eventId: response.data.id,
@@ -498,7 +478,9 @@ export const createGeneralMeeting = functions.https.onCall(async (request) => {
 
     const calendar = google.calendar("v3");
 
-    // Create calendar event with Google Meet conference
+    // Create calendar event
+    // Note: Service accounts cannot create Google Meet links automatically
+    // Meet links must be added manually or via OAuth user credentials
     const event = {
       summary: `SHELTR General Meeting - ${meetingType}`,
       description: `
@@ -512,6 +494,7 @@ Meeting Type: ${meetingType}
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
 
 This is a general inquiry meeting scheduled through the SHELTR contact page.
+A Google Meet link will be added to this event shortly.
 
 Visit SHELTR: https://sheltr-ai.web.app
       `.trim(),
@@ -525,14 +508,6 @@ Visit SHELTR: https://sheltr-ai.web.app
       },
       attendees: [],
       colorId: "2", // Sage green for general meetings
-      conferenceData: {
-        createRequest: {
-          requestId: `meeting-${Date.now()}-${Math.random().toString(36).substring(7)}`,
-          conferenceSolutionKey: {
-            type: "hangoutsMeet"
-          }
-        }
-      }
     };
 
     functions.logger.info("Creating general meeting calendar event", { 
@@ -542,19 +517,17 @@ Visit SHELTR: https://sheltr-ai.web.app
       startTime: startTime.toISOString()
     });
 
-    // Insert event into calendar with conference data
+    // Insert event into calendar
     const response = await calendar.events.insert({
       auth,
       calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none",
-      conferenceDataVersion: 1, // Required to create Google Meet link
     });
 
-    // Extract the actual Google Meet link from the response
-    const meetingLink = response.data.conferenceData?.entryPoints?.find(
-      (entry: any) => entry.entryPointType === "video"
-    )?.uri || response.data.hangoutLink || "https://meet.google.com/new";
+    // Generate a Google Meet link that can be manually added
+    // Service accounts can't auto-create Meet links, so we provide a placeholder
+    const meetingLink = `https://meet.google.com/new?authuser=${email}`;
     
     functions.logger.info("General meeting calendar event created successfully", { 
       eventId: response.data.id,

@@ -47,7 +47,7 @@ The next generation platform for transparent charitable giving and homelessness 
 - **💝 Make a Demo Donation** → [Scan & Give](https://sheltr-ai.web.app/scan-give) with real-time tracking
 - **📚 Explore Documentation** → [Complete Docs Hub](https://sheltr-ai.web.app/docs) (11+ guides)
 - **📝 Read Our Blog** → [SHELTR Blog](https://sheltr-ai.web.app/blog) with technical insights
-- **🏢 For Developers** → [Development Guide](docs/04-development/roadmap.md)
+- **🏢 For Developers** → [Development Guide](docs/development/roadmap.md)
 
 ---
 
@@ -181,7 +181,6 @@ Users can hold multiple roles simultaneously:
 ### 💻 [Development](docs/development/)
 - [Development Roadmap](docs/development/roadmap.md) - 180-day launch timeline
 - [Development Summary](docs/development/development-summary.md) - Overview and workflows
-- [Completed Work](docs/development/completed-work/) - Implementation histories (180+ docs)
 
 ### ✨ [Features](docs/features/)
 - [Knowledge Base](docs/features/knowledge-base/knowledge-architechture.md) - Complete RAG system
@@ -455,17 +454,6 @@ Every donation automatically distributes through dual-rail payment infrastructur
 - 🔄 **NEXT: PAYMENT INTEGRATION**: Adyen + x402 integration for live transaction processing
 - ⏳ Mobile app development and production launch preparation
 
-### **📅 Milestones**
-- **Week 3-4**: ✅ **COMPLETED EARLY** - Authentication system fully operational
-- **Week 5-6**: ✅ **COMPLETED** - Session 5.5 About & Solutions redesign  
-- **Week 7-8**: ✅ **COMPLETED** - Session 8 Core Business Logic + Mobile Dashboard Polish
-- **Week 9-10**: ✅ **COMPLETED** - Session 9 Data Connectivity Revolution + Complete User Guides
-- **Week 11-12**: ✅ **COMPLETED** - Session 11 AI Enhancement Series + Session 12 Technical Perfection
-- **Week 13-14**: ✅ **COMPLETED** - Session 13.1-13.2 Multi-tenant platform + User-awareness navigation
-- **Week 15-16**: ✅ **COMPLETED** - Session 14-22 Beta features + PODS ecosystem + Donation system
-- **Week 17-18**: ✅ **COMPLETED** - Session 22.23 FAQ Expansion (200x faster chatbot) + Chatbot debug complete
-- **Week 19-20**: 🔄 **CURRENT** - Payment integration (Adyen) + Mobile app development + Production polish
-- **Week 21-22**: Public launch + Stakeholder onboarding + Marketing campaigns
 
 **→ [Complete Roadmap](docs/development/roadmap.md)**
 

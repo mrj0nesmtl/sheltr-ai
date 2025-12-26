@@ -62,7 +62,7 @@ export default function HomePage() {
             <div className="max-w-5xl mx-auto">
               <div className="bg-gradient-to-br from-muted/50 via-background to-muted/30 rounded-2xl p-10 border-2 border-primary/10 text-center">
                 <p className="text-lg md:text-xl text-foreground/90 leading-relaxed mb-6">
-                  <strong className="text-primary text-2xl">SHELTR was born out of necessity—not ambition.</strong>
+                  <strong className="text-primary text-2xl">Born out of necessity—not ambition.</strong>
                 </p>
                 <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                   Built by technologists guided by field experts, we apply a <em>tech-for-good</em> ethos to <strong>amplify existing infrastructure, 

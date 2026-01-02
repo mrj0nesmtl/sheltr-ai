@@ -54,7 +54,7 @@ twilio==9.9.0
 
 # Image and QR Code Processing
 qrcode[pil]==8.2
-pillow==10.3.0
+pillow==12.1.0
 
 # Payment Processing (Adyen)
 Adyen==14.0.0
